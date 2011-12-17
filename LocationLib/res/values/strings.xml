@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SkyHookLib</string>
+    <string name="gps_fix">GPS Fix</string>
+    <string name="sorry_theres_trouble">We are having issues finding your location. Please be patient as we continue to try in the background.</string>
+</resources>

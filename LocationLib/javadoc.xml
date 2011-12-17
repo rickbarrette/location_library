@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="true" classpath="lib/wpsapi.jar" destdir="doc" doctitle="Twenty Codes, LLC SkyHook Library" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.6" sourcefiles="src/com/TwentyCodes/android/SkyHook/LocationReceiver.java,src/com/TwentyCodes/android/SkyHook/SkyHook.java,src/com/TwentyCodes/android/SkyHook/Receiver.java,src/com/TwentyCodes/android/SkyHook/SkyHookUserOverlay.java,src/com/TwentyCodes/android/SkyHook/GeoUtils.java,src/com/TwentyCodes/android/SkyHook/Location.java,src/com/TwentyCodes/android/SkyHook/XPSLocationListener.java,src/com/TwentyCodes/android/SkyHook/MapView.java,src/com/TwentyCodes/android/SkyHook/SkyHookService.java" sourcepath="gen:src" splitindex="true" use="true" version="true">
+            <link href="file:/home/ricky/Apps/android-sdk-linux_86/docs/reference"/>
+            <link href="http://tcdevsvn1/ShyHookdocumentation/index.html"/>
+        </javadoc>
+    </target>
+</project>

@@ -1,0 +1,5 @@
+refs #205
+
+merged with current main branch to update
+
+created SkyHookUserOverlay.setCompassDrawables() to allow client applications to set the compass drawables and location
