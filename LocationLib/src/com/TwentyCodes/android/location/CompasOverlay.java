@@ -7,11 +7,13 @@
 package com.TwentyCodes.android.location;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.util.TypedValue;
 
 import com.TwentyCodes.android.SkyHook.R;
 import com.google.android.maps.GeoPoint;
@@ -30,10 +32,10 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	private GeoPoint mLocation;
 	private boolean isEnabled;
 	private CompassSensor mCompassSensor;
-	private int mNeedleResId = R.drawable.needle;
-	private int mBackgroundResId = R.drawable.compass;
-	private int mX = 100;
-	private int mY = 100;
+	private int mNeedleResId = R.drawable.needle_sm;
+	private int mBackgroundResId = R.drawable.compass_sm;
+	private int mX;
+	private int mY;
 	private CompassListener mListener;
 
 	/**
@@ -43,6 +45,8 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	public CompasOverlay(Context context) {
 		mContext = context;
 		mCompassSensor = new CompassSensor(context);
+		mX = convertDipToPx(40);
+		mY = mX;
 	}
 	
 	/**
@@ -54,6 +58,24 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	public CompasOverlay(Context context, GeoPoint destination){
 		this(context);
 		mDestination = destination;
+	}
+
+	/**
+	 * Creates a new CompasOverlay
+	 * @param context
+	 * @param destination
+	 * @param needleResId
+	 * @param backgroundResId
+	 * @param x dip
+	 * @param y dip
+	 * @author ricky barrette
+	 */
+	public CompasOverlay(Context context, GeoPoint destination, int needleResId, int backgroundResId, int x, int y){
+		this(context, destination);
+		mX = convertDipToPx(x);
+		mY = convertDipToPx(y);
+		mNeedleResId = needleResId;
+		mBackgroundResId = backgroundResId;
 	}
 	
 	/**
@@ -70,24 +92,6 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	}
 
 	/**
-	 * Creates a new CompasOverlay
-	 * @param context
-	 * @param destination
-	 * @param needleResId
-	 * @param backgroundResId
-	 * @param x
-	 * @param y
-	 * @author ricky barrette
-	 */
-	public CompasOverlay(Context context, GeoPoint destination, int needleResId, int backgroundResId, int x, int y){
-		this(context, destination);
-		mX = x;
-		mY = y;
-		mNeedleResId = needleResId;
-		mBackgroundResId = backgroundResId;
-	}
-	
-	/**
 	 * Calculated the bearing from the current location to the current destination, or returns the bearing for north if there is no destination
 	 * @return bearing
 	 * @author ricky barrette
@@ -101,6 +105,17 @@ public class CompasOverlay extends Overlay implements CompassListener {
 			bearing = 360 - bearing;
 		
 		return bearing;
+	}
+	
+	/**
+	 * Converts dip to px
+	 * @param dip
+	 * @return px
+	 * @author ricky barrette
+	 */
+	private int convertDipToPx(int i) {
+		Resources r = mContext.getResources();
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, i, r.getDisplayMetrics());
 	}
 
 	/**
@@ -214,11 +229,13 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	/**
 	 * @param needleResId
 	 * @param backgroundResId
+	 * @param x dip
+	 * @param y dip
 	 * @author ricky barrette
 	 */
 	public void setDrawables(int needleResId, int backgroundResId, int x, int y){
-		mX = x;
-		mY = y;
+		mX = convertDipToPx(x);
+		mY = convertDipToPx(y);
 		mNeedleResId = needleResId;
 		mBackgroundResId = backgroundResId;
 	}
