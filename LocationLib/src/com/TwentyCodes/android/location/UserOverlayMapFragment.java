@@ -29,13 +29,38 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	}
 
 	/**
+	 * disables the GPS dialog
+	 * @author ricky barrette
+	 */
+	public void disableGPSDialog(){
+		mUserOverlay.disableGPSDialog();
+	}
+	
+	/**
+	 * enables the GPS dialog
+	 * @author ricky barrette
+	 */
+	public void enableGPSDialog(){
+		mUserOverlay.enableGPSDialog();
+	}
+	
+	/**
+	 * Tells the useroverlay to pan the map to follow the user
+	 * @param followUser
+	 * @author ricky barrette
+	 */
+	public void followUser(boolean followUser){
+		mUserOverlay.followUser(followUser);
+	}
+
+	/**
 	 * @return the users current location
 	 * @author ricky barrette
 	 */
 	public GeoPoint getUserLocation() {
 		return mUserOverlay.getUserLocation();
 	}
-
+	
 	/**
 	 * Called when the compass is updated
 	 * (non-Javadoc)
@@ -56,7 +81,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 		if(mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onLocationChanged(point, accuracy);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.location.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
@@ -72,16 +97,16 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 		
 		map.getOverlays().add(mUserOverlay);
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.location.MapFragmentBase#onPause()
 	 */
 	@Override
 	public void onPause() {
+		super.onPause();
 		mUserOverlay.disableMyLocation();
 		removeOverlay(mUserOverlay);
-		super.onPause();
 	}
 
 	/**
@@ -90,11 +115,31 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	 */
 	@Override
 	public void onResume() {
+		super.onResume();
 		if(mUserOverlay != null)
 			mUserOverlay.enableMyLocation();
-		super.onResume();
 	}
-
+	
+	/**
+	 * reorders the overlays to the UserOverlay always on top
+	 * @author ricky barrette
+	 */
+	public void reorderOverlays() {
+		getMap().getOverlays().remove(mUserOverlay);
+		getMap().getOverlays().add(mUserOverlay);
+	}
+	
+	/**
+	 * @param needleResId
+	 * @param backgroundResId
+	 * @param x
+	 * @param y
+	 * @author ricky barrette
+	 */
+	public void setCompassDrawables(int needleResId, int backgroundResId, int x, int y){
+		mUserOverlay.setCompassDrawables(needleResId, backgroundResId, x, y);
+	}
+	
 	/**
 	 * @param listener
 	 * @author ricky barrette
@@ -102,7 +147,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	public void setCompassListener(CompassListener listener){
 		mCompassListener = listener;
 	}
-	
+
 	/**
 	 * Sets the destination for the compass to point to
 	 * @param destination
@@ -111,7 +156,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	public void setDestination(GeoPoint destination){
 		mUserOverlay.setDestination(destination);
 	}
-	
+
 	/**
 	 * @param listener
 	 * @author ricky barrette
@@ -119,5 +164,4 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	public void setGeoPointLocationListener(GeoPointLocationListener listener){
 		mGeoPointLocationListener = listener;
 	}
-
 }

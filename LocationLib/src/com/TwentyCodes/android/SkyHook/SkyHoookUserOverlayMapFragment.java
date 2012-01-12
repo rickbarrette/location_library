@@ -33,13 +33,38 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	}
 
 	/**
+	 * disables the GPS dialog
+	 * @author ricky barrette
+	 */
+	public void disableGPSDialog(){
+		mUserOverlay.disableGPSDialog();
+	}
+
+	/**
+	 * enables the GPS dialog
+	 * @author ricky barrette
+	 */
+	public void enableGPSDialog(){
+		mUserOverlay.enableGPSDialog();
+	}
+	
+	/**
+	 * Tells the useroverlay to pan the map to follow the user
+	 * @param followUser
+	 * @author ricky barrette
+	 */
+	public void followUser(boolean followUser){
+		mUserOverlay.followUser(followUser);
+	}
+
+	/**
 	 * @return the users current location
 	 * @author ricky barrette
 	 */
 	public GeoPoint getUserLocation() {
 		return mUserOverlay.getUserLocation();
 	}
-
+	
 	/**
 	 * Called when the compass is updated
 	 * (non-Javadoc)
@@ -60,7 +85,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 		if(mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onLocationChanged(point, accuracy);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.location.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
@@ -83,22 +108,42 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	 */
 	@Override
 	public void onPause() {
+		super.onPause();
 		mUserOverlay.disableMyLocation();
 		removeOverlay(mUserOverlay);
-		super.onPause();
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.location.MapFragmentBase#onResume()
 	 */
 	@Override
 	public void onResume() {
+		super.onResume();
 		if(mUserOverlay != null)
 			mUserOverlay.enableMyLocation();
-		super.onResume();
 	}
-
+	
+	/**
+	 * reorders the overlays to the UserOverlay always on top
+	 * @author ricky barrette
+	 */
+	public void reorderOverlays() {
+		getMap().getOverlays().remove(mUserOverlay);
+		getMap().getOverlays().add(mUserOverlay);
+	}
+	
+	/**
+	 * @param needleResId
+	 * @param backgroundResId
+	 * @param x
+	 * @param y
+	 * @author ricky barrette
+	 */
+	public void setCompassDrawables(int needleResId, int backgroundResId, int x, int y){
+		mUserOverlay.setCompassDrawables(needleResId, backgroundResId, x, y);
+	}
+	
 	/**
 	 * @param listener
 	 * @author ricky barrette
@@ -115,7 +160,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	public void setDestination(GeoPoint destination){
 		mUserOverlay.setDestination(destination);
 	}
-	
+
 	/**
 	 * @param listener
 	 * @author ricky barrette

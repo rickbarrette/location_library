@@ -300,6 +300,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
     
     /**
      * Enables the Acquiring GPS dialog if the location has not been acquired
+     * 
+     * TODO fix funtion
      * @author ricky barrette
      */
     public void enableGPSDialog(){

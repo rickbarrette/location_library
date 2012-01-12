@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.Overlay;
 
 /**
  * This map fragment will maintain a map view and all its functions
@@ -30,7 +31,27 @@ public abstract class MapFragmentBase extends Fragment {
 	public MapFragmentBase() {
 		super();
 	}
+	
+	public void addOverlay(Overlay overlay){
+		mMapView.getOverlays().add(overlay);
+	}
+	
+	/**
+	 * changes the map mode
+	 * @author ricky barrette
+	 */
+	public void changeMapMode() {
+		mMapView.setSatellite(!mMapView.isSatellite());
+	}
 
+	/**
+	 * @return mapview
+	 * @author ricky barrette
+	 */
+	public MapView getMap(){
+		return mMapView;
+	}
+	
 	/**
 	 * Called when the fragment view is first created
 	 * (non-Javadoc)
@@ -60,7 +81,7 @@ public abstract class MapFragmentBase extends Fragment {
 	 * @param overlay
 	 * @author ricky barrette
 	 */
-	protected void removeOverlay(Object overlay){
+	public void removeOverlay(Object overlay){
 		mMapView.getOverlays().remove(overlay);
 	}
 	
@@ -69,7 +90,10 @@ public abstract class MapFragmentBase extends Fragment {
 	 * @param point
 	 * @author ricky barrette
 	 */
-	public void setMapCenter(GeoPoint point){
+	public boolean setMapCenter(GeoPoint point){
+		if(point == null)
+			return false;
 		mMapView.getController().setCenter(point);
+		return true;
 	}
 }
