@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	ricky beta release	0rKmsWMM0D-IRAEgcSZEqwZCs_8AUwxjYjj0bnA
+	ricky				0rKmsWMM0D-LWOndcfwrmW-S0OXlnQl2SJCMeTg
+	TWENTYCODES 		0rKmsWMM0D-K15bEM_kwabPbNhsn4dp4rcq2q5Q
+-->
+
+<com.TwentyCodes.android.location.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mapview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:apiKey="0rKmsWMM0D-LWOndcfwrmW-S0OXlnQl2SJCMeTg" />

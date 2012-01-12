@@ -5,6 +5,8 @@
  */
 package com.TwentyCodes.android.SkyHook;
 
+import com.TwentyCodes.android.location.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

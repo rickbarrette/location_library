@@ -15,7 +15,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.TypedValue;
 
-import com.TwentyCodes.android.SkyHook.R;
+import com.TwentyCodes.android.location.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;

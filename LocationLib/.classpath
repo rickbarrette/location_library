@@ -8,5 +8,6 @@
 			<attribute name="javadoc_location" value="http://tcdevsvn1/ShyHookdocumentation"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/app/android-sdk-linux_86/extras/android-support-v4-r6-googlemaps.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.TwentyCodes.android.SkyHook.R;
+import com.TwentyCodes.android.location.R;
 import com.TwentyCodes.android.debug.Debug;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
