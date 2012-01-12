@@ -52,6 +52,7 @@ public class UserOverlay extends Overlay implements GeoPointLocationListener, Co
 	private CompasOverlay mCompass;
 	private boolean isCompassEnabled;
 	private boolean isGPSDialogEnabled;
+	private CompassListener mCompassListener;
 	
 	/**
 	 * Construct a new SkyHookUserOverlaymFollowUser
@@ -262,20 +263,21 @@ public class UserOverlay extends Overlay implements GeoPointLocationListener, Co
 			new Handler().postAtTime(new Runnable() {
 				@Override
 				public void run() {
-					if (mGPSprogress.isShowing()) {
-						mGPSprogress.cancel();
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-						builder.setMessage(
-								mContext.getText(R.string.sorry_theres_trouble))
-								.setCancelable(false)
-								.setPositiveButton(mContext.getText(android.R.string.ok),
-										new DialogInterface.OnClickListener() {
-											public void onClick( DialogInterface dialog, int id) {
-												dialog.cancel();
-											}
-										});
-						builder.show();
-					}
+					if(mGPSprogress != null)
+						if (mGPSprogress.isShowing()) {
+							mGPSprogress.cancel();
+							AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+							builder.setMessage(
+									mContext.getText(R.string.sorry_theres_trouble))
+									.setCancelable(false)
+									.setPositiveButton(mContext.getText(android.R.string.ok),
+											new DialogInterface.OnClickListener() {
+												public void onClick( DialogInterface dialog, int id) {
+													dialog.cancel();
+												}
+											});
+							builder.show();
+						}
 				}
 			}, SystemClock.uptimeMillis()+90000L);
 		}
@@ -313,6 +315,8 @@ public class UserOverlay extends Overlay implements GeoPointLocationListener, Co
 	public void onCompassUpdate(float bearing) {
 		if(Debug.DEBUG)
 			Log.v(TAG, "onCompassUpdate()");
+		if(mCompassListener != null)
+			mCompassListener.onCompassUpdate(bearing);
 		mBearing = bearing;
 		mMapView.invalidate();
 	}
@@ -420,6 +424,14 @@ public class UserOverlay extends Overlay implements GeoPointLocationListener, Co
 		mCompass.setDrawables(needleResId, backgroundResId, x, y);
 	}
 	
+	/**
+	 * Sets the CompassListener
+	 * @param listener
+	 * @author ricky barrette
+	 */
+	public void setCompassListener(CompassListener listener){
+		mCompassListener = listener;
+	}
 	
 	/**
 	 * This thread is responsible for animating the user icon

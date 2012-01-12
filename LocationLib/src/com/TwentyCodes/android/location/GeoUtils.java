@@ -37,6 +37,30 @@ public class GeoUtils {
     
 	public static final int EARTH_RADIUS_KM = 6371;
     public static final double MILLION = 1000000;
+    
+    /**
+     * Calculates the bearing from the user location to the destination location, or returns the bearing for north if there is no destination.
+     * This method is awesome for make a compass point toward the destination rather than North.
+     * @param user location
+     * @param dest location
+     * @param bearing Degrees East from compass
+     * @return Degrees East of dest location
+     * @author ricky barrette
+     */
+	public static float calculateBearing(GeoPoint user, GeoPoint dest, float bearing) {
+		
+		if( (user == null) || (dest == null) )
+			return bearing;
+		
+		float heading = bearing(user, dest).floatValue();
+		
+		bearing =  (360 - heading) + bearing;
+		
+		if (bearing > 360)
+			return bearing - 360;
+		
+		return bearing;
+	}
 
     /**
      * computes the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East
@@ -44,7 +68,7 @@ public class GeoUtils {
      * @param lon1 source lon
      * @param lat2 destination lat
      * @param lon2 destination lon
-     * @return the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East
+     * @return the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East of true north
      * @author Google Inc.
      */
     public static double bearing(double lat1, double lon1, double lat2, double lon2) {
@@ -57,7 +81,7 @@ public class GeoUtils {
     }
     
     /**
-     * computes the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East
+     * computes the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East of true north
      * @param p1 source geopoint
      * @param p2 destination geopoint
      * @return the bearing of p2 in relationship from p1 in degrees East

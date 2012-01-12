@@ -16,19 +16,23 @@ public final class R {
         public static int compass_med=0x7f020002;
         public static int compass_sm=0x7f020003;
         public static int logoidea3=0x7f020004;
-        public static int needle=0x7f020005;
-        public static int needle_lrg=0x7f020006;
-        public static int needle_med=0x7f020007;
-        public static int needle_sm=0x7f020008;
-        public static int skyhook_logo=0x7f020009;
-        public static int skyhook_logo_alpha=0x7f02000a;
-        public static int skyhook_logo_alpha_small=0x7f02000b;
-        public static int tc_logo_complete=0x7f02000c;
-        public static int user=0x7f02000d;
-        public static int user_arrow_animation_1=0x7f02000e;
-        public static int user_arrow_animation_2=0x7f02000f;
-        public static int user_arrow_animation_3=0x7f020010;
-        public static int userarrow=0x7f020011;
+        public static int map_action_bar=0x7f020005;
+        public static int map_mode_action_bar=0x7f020006;
+        public static int mark_my_location_action_bar=0x7f020007;
+        public static int my_location_action_bar=0x7f020008;
+        public static int nav_action_bar=0x7f020009;
+        public static int needle=0x7f02000a;
+        public static int needle_lrg=0x7f02000b;
+        public static int needle_med=0x7f02000c;
+        public static int needle_sm=0x7f02000d;
+        public static int skyhook_logo=0x7f02000e;
+        public static int skyhook_logo_alpha=0x7f02000f;
+        public static int skyhook_logo_alpha_small=0x7f020010;
+        public static int tc_logo_complete=0x7f020011;
+        public static int user=0x7f020012;
+        public static int user_arrow_animation_1=0x7f020013;
+        public static int user_arrow_animation_2=0x7f020014;
+        public static int user_arrow_animation_3=0x7f020015;
     }
     public static final class id {
         public static int skyhook_img=0x7f050000;

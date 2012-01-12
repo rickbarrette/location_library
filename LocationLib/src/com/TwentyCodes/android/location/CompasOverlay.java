@@ -92,22 +92,6 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	}
 
 	/**
-	 * Calculated the bearing from the current location to the current destination, or returns the bearing for north if there is no destination
-	 * @return bearing
-	 * @author ricky barrette
-	 */
-	private float calculateBearing() {
-		if( (mLocation == null) || (mDestination == null) )
-			return mBearing;
-		
-		float bearing = mBearing - GeoUtils.bearing(mLocation, mDestination).floatValue();
-		if (bearing != 0)
-			bearing = 360 - bearing;
-		
-		return bearing;
-	}
-	
-	/**
 	 * Converts dip to px
 	 * @param dip
 	 * @return px
@@ -152,7 +136,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 			//draw the compass needle
 	        Bitmap arrowBitmap = BitmapFactory.decodeResource( mContext.getResources(), mNeedleResId);
 	        Matrix matrix = new Matrix();
-	        matrix.postRotate(calculateBearing());
+	        matrix.postRotate(GeoUtils.calculateBearing(mLocation, mDestination, mBearing));
 	        Bitmap rotatedBmp = Bitmap.createBitmap(
 	            arrowBitmap, 
 	            0, 0, 
