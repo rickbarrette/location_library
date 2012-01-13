@@ -59,7 +59,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 			boolean isCountingUp = true;
 			while (true) {
 				synchronized (this) {
-					if (! isAborted) {
+					if (isAborted) {
 						break;
 					}
 					
@@ -301,7 +301,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
     /**
      * Enables the Acquiring GPS dialog if the location has not been acquired
      * 
-     * TODO fix funtion
+     * TODO fix funtion currently generates bad window token
      * @author ricky barrette
      */
     public void enableGPSDialog(){
