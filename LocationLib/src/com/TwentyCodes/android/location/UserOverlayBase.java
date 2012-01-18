@@ -56,7 +56,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		public void run(){
 			super.run();
 			int index = 0;
-			boolean isCountingUp = true;
+			boolean isCountingDown = false;
 			while (true) {
 				synchronized (this) {
 					if (isAborted) {
@@ -66,33 +66,39 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 					switch(index){
 					case 1:
 						mUserArrow = R.drawable.user_arrow_animation_2;
+						if(isCountingDown)
+							index--;
+						else
+							index++;
+						
+						try {
+							sleep(100l);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						break;
 					case 2:
 						mUserArrow = R.drawable.user_arrow_animation_3;
+						index--;
+						isCountingDown = true;
+						try {
+							sleep(200l);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						break;
 					default:
 						mUserArrow = R.drawable.user_arrow_animation_1;
+						index++;
+						isCountingDown = false;
 						try {
-							sleep(300l);
+							sleep(700l);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 							return;
 						}
 						break;
 					}
-					
-					try {
-						sleep(200l);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-					if(isCountingUp){
-						if(index++ == 2)
-							isCountingUp = false;
-					} else if(index-- == 0)
-						isCountingUp = true;
-					
 				}
 			}
 			
