@@ -43,7 +43,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		
 		private boolean isAborted;
 
-		public synchronized void abort(){
+		public void abort(){
 			isAborted = true;
 		}
 
@@ -65,13 +65,13 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 					
 					switch(index){
 					case 1:
-						setDrawable(R.drawable.user_arrow_animation_2);
+						mUserArrow = R.drawable.user_arrow_animation_2;
 						break;
 					case 2:
-						setDrawable(R.drawable.user_arrow_animation_3);
+						mUserArrow = R.drawable.user_arrow_animation_3;
 						break;
 					default:
-						setDrawable(R.drawable.user_arrow_animation_1);
+						mUserArrow = R.drawable.user_arrow_animation_1;
 						try {
 							sleep(300l);
 						} catch (InterruptedException e) {
@@ -96,15 +96,6 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 				}
 			}
 			
-		}
-		
-		/**
-		 * Sets the id of the user drawable
-		 * @param id
-		 * @author ricky barrette
-		 */
-		private synchronized void setDrawable(int id){
-			mUserArrow = id;
 		}
 	}
 	private final String TAG = "UserOverlayBase";
@@ -181,9 +172,9 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		onMyLocationDisabled();
 		isEnabled = false;
 		mCompass.disable();
-		mAnimationThread.abort();
 		if(mGPSprogress != null)
 			mGPSprogress.cancel();
+		mAnimationThread.abort();
 	}
 	
 	/**
