@@ -13,11 +13,11 @@ import com.google.android.maps.GeoPoint;
  */
 public class MidPoint {
 	
-	private int mMinLatitude;
-	private int mMaxLatitude;
-	private int mMinLongitude;
-	private int mMaxLongitude;
-	private GeoPoint mMidPoint;
+	private final int mMinLatitude;
+	private final int mMaxLatitude;
+	private final int mMinLongitude;
+	private final int mMaxLongitude;
+	private final GeoPoint mMidPoint;
 
 	/**
 	 * Creates a new MidPoint
