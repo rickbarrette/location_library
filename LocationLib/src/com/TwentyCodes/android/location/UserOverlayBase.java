@@ -43,7 +43,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		
 		private boolean isAborted;
 
-		public void abort(){
+		public synchronized void abort(){
 			isAborted = true;
 		}
 
@@ -104,10 +104,10 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 			
 		}
 	}
+	
 	private final String TAG = "UserOverlayBase";
 	private boolean isEnabled;
-	private int mUserArrow = R.drawable.user_arrow_animation_1;
-
+	private volatile int mUserArrow = R.drawable.user_arrow_animation_1;
 	private AnimationThread mAnimationThread;
 	private float mBearing = 0;
 	private int mAccuracy;
@@ -507,6 +507,13 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		if(mCompass != null)
 			mCompass.setDestination(destination);
 	}
+	
+//	/**
+//	 * Sets whether or not the users location is enabled
+//	 * @param isEnabled
+//	 * @author ricky barrette
+//	 */
+//	public abstract void setMyLocationEnabled(boolean isEnabled);
 	
 	/**
 	 * UnResgisters the listener. after this call you will no longer get location updates
