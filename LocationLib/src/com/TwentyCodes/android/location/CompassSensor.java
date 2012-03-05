@@ -127,7 +127,7 @@ public class CompassSensor{
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg){
-				System.out.print((Float) msg.obj);
+//				System.out.print((Float) msg.obj);
 				if(mListener != null)
 					if(msg.what == BEARING)
 						mListener.onCompassUpdate((Float) msg.obj);
