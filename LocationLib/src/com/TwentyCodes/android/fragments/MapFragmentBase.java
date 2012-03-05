@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.TwentyCodes.android.location.MapView;
 import com.TwentyCodes.android.location.R;
-import com.TwentyCodes.android.location.R.id;
-import com.TwentyCodes.android.location.R.layout;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
 

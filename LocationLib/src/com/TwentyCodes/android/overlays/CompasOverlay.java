@@ -19,7 +19,6 @@ import com.TwentyCodes.android.location.CompassListener;
 import com.TwentyCodes.android.location.CompassSensor;
 import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
-import com.TwentyCodes.android.location.R.drawable;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
