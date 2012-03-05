@@ -20,6 +20,7 @@
  */
 package com.TwentyCodes.android.location;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,6 +151,32 @@ public class GeoUtils {
         double deltaLonRad = Math.toRadians(lon2 - lon1);
         return Math.acos(Math.sin(lat1Rad) * Math.sin(lat2Rad) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.cos(deltaLonRad)) * EARTH_RADIUS_KM;
     }
+    
+    /**
+	 * Converts distance into a human readbale string
+	 * @param distance in kilometers
+	 * @param returnMetric true if metric, false for US
+	 * @return string distance
+	 * @author ricky barrette
+	 */
+	public static String distanceToString(double distance, boolean returnMetric) {
+		DecimalFormat threeDForm = new DecimalFormat("#.###");
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+
+		if (returnMetric) {
+			if (distance < 1) {
+				distance = distance * 1000;
+				return twoDForm.format(distance) + " m";
+			}
+			return threeDForm.format(distance) + " Km";
+		}
+		distance = distance / 1.609344;
+		if (distance < 1) {
+			distance = distance * 5280;
+			return twoDForm.format(distance) + " ft";
+		}
+		return twoDForm.format(distance) + " mi";
+	}
     
     /**
 	 * a convince method for testing if 2 circles on the the surface of the earth intersect. 
