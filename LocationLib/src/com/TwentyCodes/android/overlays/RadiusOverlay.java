@@ -3,7 +3,7 @@
 * @author ricky barrette
 */
 
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.overlays;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +12,8 @@ import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.RectF;
 
+import com.TwentyCodes.android.location.GeoUtils;
+import com.TwentyCodes.android.location.OnLocationSelectedListener;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
@@ -30,7 +32,7 @@ public class RadiusOverlay extends Overlay{
 	private float mRadius = 0;
 	private int mColor = Color.GREEN;
 	private GeoPoint mRadiusPoint;
-	private LocationSelectedListener mListener;
+	private OnLocationSelectedListener mListener;
 	
 	/**
 	 * Creates a new RadiusOverlay
@@ -150,7 +152,7 @@ public class RadiusOverlay extends Overlay{
 		return 0;
 	}
 
-	public void setLocationSelectedListener(LocationSelectedListener listener) {
+	public void setLocationSelectedListener(OnLocationSelectedListener listener) {
 		this.mListener = listener;		
 	}
 }

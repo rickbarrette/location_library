@@ -3,11 +3,11 @@
  * @author ricky barrette
  * @date Oct 2, 2010
  */
-package com.TwentyCodes.android.SkyHook;
+package com.TwentyCodes.android.overlays;
 
 import android.content.Context;
 
-import com.TwentyCodes.android.location.UserOverlayBase;
+import com.TwentyCodes.android.SkyHook.SkyHook;
 import com.google.android.maps.MapView;
 
 /**
@@ -38,7 +38,7 @@ public class SkyHookUserOverlay extends UserOverlayBase{
 	/**
 	 * Called when the location provider needs to be disabled
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.UserOverlayBase#onMyLocationDisabled()
+	 * @see com.TwentyCodes.android.overlays.UserOverlayBase#onMyLocationDisabled()
 	 */
 	@Override
 	public void onMyLocationDisabled() {
@@ -48,7 +48,7 @@ public class SkyHookUserOverlay extends UserOverlayBase{
 	/**
 	 * Called when the location provider needs to be enabled
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.UserOverlayBase#onMyLocationEnabled()
+	 * @see com.TwentyCodes.android.overlays.UserOverlayBase#onMyLocationEnabled()
 	 */
 	@Override
 	public void onMyLocationEnabled() {

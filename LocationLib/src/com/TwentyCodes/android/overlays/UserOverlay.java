@@ -3,10 +3,11 @@
  * @author ricky barrette
  * @date Dec 28, 2010
  */
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.overlays;
 
 import android.content.Context;
 
+import com.TwentyCodes.android.location.AndroidGPS;
 import com.google.android.maps.MapView;
 
 /**

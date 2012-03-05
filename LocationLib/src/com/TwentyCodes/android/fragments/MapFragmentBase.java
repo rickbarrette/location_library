@@ -4,7 +4,7 @@
  * @author ricky barrette
  * @author Twenty Codes, LLC
  */
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.TwentyCodes.android.location.MapView;
+import com.TwentyCodes.android.location.R;
+import com.TwentyCodes.android.location.R.id;
+import com.TwentyCodes.android.location.R.layout;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.Overlay;
 

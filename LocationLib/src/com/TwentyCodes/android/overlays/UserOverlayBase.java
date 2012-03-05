@@ -4,7 +4,7 @@
  * @author ricky barrette
  * @author Twenty Codes, LLC
  */
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.overlays;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -22,7 +22,12 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.TwentyCodes.android.location.CompassListener;
+import com.TwentyCodes.android.location.GeoPointLocationListener;
+import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
+import com.TwentyCodes.android.location.R.drawable;
+import com.TwentyCodes.android.location.R.string;
 import com.TwentyCodes.android.debug.Debug;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;

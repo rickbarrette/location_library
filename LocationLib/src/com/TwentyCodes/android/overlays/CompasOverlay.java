@@ -4,7 +4,7 @@
  * @author ricky barrette
  * @author Twenty Codes, LLC
  */
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.overlays;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,7 +15,11 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.TypedValue;
 
+import com.TwentyCodes.android.location.CompassListener;
+import com.TwentyCodes.android.location.CompassSensor;
+import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
+import com.TwentyCodes.android.location.R.drawable;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;

@@ -4,8 +4,12 @@
  * @author ricky barrette
  * @author Twenty Codes, LLC
  */
-package com.TwentyCodes.android.location;
+package com.TwentyCodes.android.fragments;
 
+import com.TwentyCodes.android.location.CompassListener;
+import com.TwentyCodes.android.location.GeoPointLocationListener;
+import com.TwentyCodes.android.location.MapView;
+import com.TwentyCodes.android.overlays.UserOverlay;
 import com.google.android.maps.GeoPoint;
 
 /**
@@ -84,7 +88,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
+	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
 	 */
 	@Override
 	public void onMapViewCreate(MapView map) {
@@ -100,7 +104,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.MapFragmentBase#onPause()
+	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onPause()
 	 */
 	@Override
 	public void onPause() {
@@ -111,7 +115,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.MapFragmentBase#onResume()
+	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onResume()
 	 */
 	@Override
 	public void onResume() {
