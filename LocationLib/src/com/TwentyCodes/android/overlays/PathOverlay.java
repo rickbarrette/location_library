@@ -17,18 +17,18 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
 /**
- * This overlay class is used to draw a path and points on a map
+ * This imutable overlay class is used to draw a path and points on a map
  * @author ricky barrette
  */
-public class PathOverlay extends Overlay {
+public final class PathOverlay extends Overlay {
 
 	private static final int PATH = 0;
 	private static final int POINT = 1;
-	private GeoPoint mStart;
-	private GeoPoint mEnd;
-	private int mColor;
-	private int mMode;
-	private int mRadius;
+	private final GeoPoint mStart;
+	private final GeoPoint mEnd;
+	private final int mColor;
+	private final int mMode;
+	private final int mRadius;
 
 	/**
 	 * Creates a new PathOverlay in path mode
@@ -39,6 +39,7 @@ public class PathOverlay extends Overlay {
 		mEnd = end;
 		mColor = color;
 		mMode = PATH;
+		mRadius = 0;
 	}
 	
 	/**
@@ -52,6 +53,8 @@ public class PathOverlay extends Overlay {
 		mMode = POINT;
 		mRadius = radius;
 		mStart = point;
+		mEnd = null;
+		mColor = color;
 	}
 	
 	/**
