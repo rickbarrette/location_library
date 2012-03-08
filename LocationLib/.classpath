@@ -9,5 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/app/android-sdk-linux_86/extras/android-support-v4-r6-googlemaps.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

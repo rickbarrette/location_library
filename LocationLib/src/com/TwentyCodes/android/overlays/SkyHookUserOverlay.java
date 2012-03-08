@@ -56,4 +56,9 @@ public class SkyHookUserOverlay extends UserOverlayBase{
 		mSkyHook.getUpdates();
 	}
 
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		// unused
+	}
+
 }

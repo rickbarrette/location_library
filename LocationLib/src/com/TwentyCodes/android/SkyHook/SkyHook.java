@@ -289,4 +289,9 @@ public class SkyHook implements GeoPointLocationListener{
 			if(mListener != null)
 				mListener.onLocationChanged(point, accuracy);
 	}
+
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		// unused
+	}
 }    

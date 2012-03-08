@@ -6,10 +6,7 @@
  */
 package com.TwentyCodes.android.overlays;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,8 +15,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
@@ -117,13 +112,11 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 	private GeoPoint mPoint;
 	private Context mContext;
 	private MapView mMapView;
-	private ProgressDialog mGPSprogress;
 	private boolean isFistFix = true;
 	private GeoPointLocationListener mListener;
 	public boolean isFollowingUser = true;
 	private CompasOverlay mCompass;
 	private boolean isCompassEnabled;
-	private boolean isGPSDialogEnabled;
 	
 	private CompassListener mCompassListener;
 	
@@ -163,16 +156,6 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 	}
 	
 	/**
-	 * Disables the Acquiring GPS dialog
-	 * @author ricky barrette
-	 */
-	public void disableGPSDialog(){
-		isGPSDialogEnabled = false;
-		if(mGPSprogress != null)
-			mGPSprogress.dismiss();
-	}
-	
-	/**
 	 * Stops location updates and removes the overlay from view
 	 * @author ricky barrette
 	 */
@@ -181,8 +164,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		onMyLocationDisabled();
 		isEnabled = false;
 		mCompass.disable();
-		if(mGPSprogress != null)
-			mGPSprogress.cancel();
+		if(mListener != null)
+			mListener.onFirstFix(false);
 		mAnimationThread.abort();
 	}
 	
@@ -299,22 +282,6 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
     }
     
     /**
-     * Enables the Acquiring GPS dialog if the location has not been acquired
-     * 
-     * TODO fix funtion currently generates bad window token
-     * @author ricky barrette
-     */
-    public void enableGPSDialog(){
-    	isGPSDialogEnabled = true;
-    	if(isFistFix)
-    		if(mGPSprogress != null){
-    			if(! mGPSprogress.isShowing())
-    				mGPSprogress = ProgressDialog.show(mContext, "", mContext.getText(R.string.gps_fix), true, true);
-    		} else
-    			mGPSprogress = ProgressDialog.show(mContext, "", mContext.getText(R.string.gps_fix), true, true);
-    }
-    
-    /**
      * Attempts to enable MyLocation, registering for updates from provider
      * @author ricky barrette
      */
@@ -329,32 +296,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 			isEnabled = true;
 			mCompass.enable(this);
 			isFistFix = true;
-			if(isGPSDialogEnabled)
-				enableGPSDialog();
-			
-			/**
-			 * this is a message that tells the user that we are having trouble getting an GPS signal
-			 */
-			new Handler().postAtTime(new Runnable() {
-				@Override
-				public void run() {
-					if(mGPSprogress != null)
-						if (mGPSprogress.isShowing()) {
-							mGPSprogress.cancel();
-							AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-							builder.setMessage(
-									mContext.getText(R.string.sorry_theres_trouble))
-									.setCancelable(false)
-									.setPositiveButton(mContext.getText(android.R.string.ok),
-											new DialogInterface.OnClickListener() {
-												public void onClick( DialogInterface dialog, int id) {
-													dialog.cancel();
-												}
-											});
-							builder.show();
-						}
-				}
-			}, SystemClock.uptimeMillis()+90000L);
+			if(mListener != null)
+				mListener.onFirstFix(false);
 		}
     }
     
@@ -417,8 +360,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 		if(point != null && isFistFix){
 			mMapView.getController().setCenter(point);
 			mMapView.getController().setZoom( (mMapView.getMaxZoomLevel() - 2) );
-			if(mGPSprogress != null)
-				mGPSprogress.dismiss();
+			if(mListener != null)
+				mListener.onFirstFix(true);
 			isFistFix = false;
 		}
 		

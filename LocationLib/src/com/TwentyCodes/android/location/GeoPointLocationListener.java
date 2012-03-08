@@ -20,4 +20,11 @@ public interface GeoPointLocationListener {
 	 * @author ricky barrette
 	 */
 	public void onLocationChanged(GeoPoint point, int accuracy);
+	
+	/**
+	 * Called when first fix is aquired
+	 * @param isFirstFix
+	 * @author ricky barrette
+	 */
+	public void onFirstFix(boolean isFirstFix);
 }

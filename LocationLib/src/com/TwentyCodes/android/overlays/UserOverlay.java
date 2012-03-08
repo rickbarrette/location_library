@@ -37,5 +37,10 @@ public class UserOverlay extends UserOverlayBase{
 	public void onMyLocationEnabled() {
 		mAndroidGPS.enableLocationUpdates(this);
 	}
+
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		// unused
+	}
 	
 }

@@ -31,22 +31,6 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	public SkyHoookUserOverlayMapFragment() {
 		super();
 	}
-
-	/**
-	 * disables the GPS dialog
-	 * @author ricky barrette
-	 */
-	public void disableGPSDialog(){
-		mUserOverlay.disableGPSDialog();
-	}
-
-	/**
-	 * enables the GPS dialog
-	 * @author ricky barrette
-	 */
-	public void enableGPSDialog(){
-		mUserOverlay.enableGPSDialog();
-	}
 	
 	/**
 	 * Tells the useroverlay to pan the map to follow the user
@@ -96,7 +80,6 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 		mUserOverlay.registerListener(this);
 		mUserOverlay.setCompassListener(this);
 		mUserOverlay.enableCompass();
-		mUserOverlay.disableGPSDialog();
 		mUserOverlay.followUser(true);
 		
 		map.getOverlays().add(mUserOverlay);
@@ -120,8 +103,10 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(mUserOverlay != null)
+		if(mUserOverlay != null) {
 			mUserOverlay.enableMyLocation();
+			addOverlay(mUserOverlay);
+		}
 	}
 	
 	/**
@@ -169,4 +154,9 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 		mGeoPointLocationListener = listener;
 	}
 
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		if(mGeoPointLocationListener != null)
+			mGeoPointLocationListener.onFirstFix(isFistFix);
+	}
 }

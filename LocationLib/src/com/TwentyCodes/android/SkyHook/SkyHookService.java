@@ -235,19 +235,25 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 
 	@Override
 	public void done() {
-		// TODO Auto-generated method stub
+		// unused
 		
 	}
 
 	@Override
 	public WPSContinuation handleError(WPSReturnCode arg0) {
-		// TODO Auto-generated method stub
+		// unused
 		return null;
 	}
 
 	@Override
 	public void handleSuccess() {
-		// TODO Auto-generated method stub
+		// unused
+		
+	}
+
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		// unused
 		
 	}
 }
