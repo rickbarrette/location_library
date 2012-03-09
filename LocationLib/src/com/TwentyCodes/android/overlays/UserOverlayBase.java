@@ -90,7 +90,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 						index++;
 						isCountingDown = false;
 						try {
-							sleep(700l);
+							sleep(2000l);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 							return;
