@@ -6,16 +6,15 @@
  */
 package com.TwentyCodes.android.location;
 
+import com.TwentyCodes.android.debug.Debug;
+
 import android.content.Context;
-import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Message;
-
-import com.TwentyCodes.android.debug.Debug;
 
 /**
  * A simple convince class that accesses the compass sensor on another thread
@@ -24,76 +23,74 @@ import com.TwentyCodes.android.debug.Debug;
 public class CompassSensor{
 	
 	private static final int BEARING = 0;
-	private SensorManager mSensorManager;
-	private Context mContext;
+	private final SensorManager mSensorManager;
 	private CompassListener mListener;
-	private Handler mHandler;
-	private SensorCallBack mCallBack;
+	private final Handler mHandler;
 
-	/**
-	 * A convince callback class for the compass sensor
-	 * @author ricky barrette
-	 */
-	private class SensorCallBack implements SensorEventListener  {
+	private final SensorEventListener mCallBack = new SensorEventListener() {
 
-		/**
-		 * (non-Javadoc)
-		 * @see android.hardware.SensorEventListener#onAccuracyChanged(android.hardware.Sensor, int)
-		 * @author ricky barrette
-		 */
+		private float[] inR = new float[16];
+		private float[] I = new float[16];
+		private float[] gravity = new float[3];
+		private float[] geomag = new float[3];
+		private float[] orientVals = new float[3];
+
+		private double azimuth = 0;
+//		double pitch = 0;
+//		double roll = 0;
+
+		public void onSensorChanged(SensorEvent sensorEvent) {
+		    // If the sensor data is unreliable return
+		    if (sensorEvent.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE)
+		        return;
+
+		    // Gets the value of the sensor that has been changed
+		    switch (sensorEvent.sensor.getType()) {  
+		        case Sensor.TYPE_ACCELEROMETER:
+		            gravity = sensorEvent.values.clone();
+		            break;
+		        case Sensor.TYPE_MAGNETIC_FIELD:
+		            geomag = sensorEvent.values.clone();
+		            break;
+		    }
+
+		    // If gravity and geomag have values then find rotation matrix
+		    if (gravity != null && geomag != null) {
+
+		        // checks that the rotation matrix is found
+		        boolean success = SensorManager.getRotationMatrix(inR, I, gravity, geomag);
+		        if (success) {
+		            SensorManager.getOrientation(inR, orientVals);
+		            azimuth = Math.toDegrees(orientVals[0]);
+//		            pitch = Math.toDegrees(orientVals[1]);
+//		            roll = Math.toDegrees(orientVals[2]);
+		        }
+		    }
+		    
+		    mHandler.sendMessage(mHandler.obtainMessage(BEARING, (float) azimuth));
+		}
+
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// NOT USED
 		}
-
-		/**
-		 * (non-Javadoc)
-		 * @see android.hardware.SensorEventListener#onSensorChanged(android.hardware.SensorEvent)
-		 * @author ricky barrette
-		 */
-		@Override
-		public void onSensorChanged(SensorEvent event) {
-			float myAzimuth = event.values[0];
-			// myPitch = event.values[1];
-			float roll = event.values[2];
-
-			if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-				boolean isNormal = false;
-				if (roll <= -25)
-					isNormal = false;
-
-				if (roll >= 25)
-					isNormal = true;
-
-				if (isNormal)
-					myAzimuth = myAzimuth + 90;
-				else
-					myAzimuth = myAzimuth - 90;
-			}
-			
-			mHandler.sendMessage(mHandler.obtainMessage(BEARING, myAzimuth));
-		}
-
-
-    }
+    };
 	
 	/**
 	 * Creates a new CompassSensor
 	 * @author ricky barrette
 	 */
-	public CompassSensor(Context context) {
-		mContext = context;
-		setUiHandler();
-		
-		//start getting information from the compass sensor
-		new Thread(new Runnable(){
+	public CompassSensor(final Context context) {
+		mHandler = new Handler(){
 			@Override
-			public void run() {
-				mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);			
+			public void handleMessage(Message msg){
+//				System.out.print((Float) msg.obj);
+				if(mListener != null)
+					if(msg.what == BEARING)
+						mListener.onCompassUpdate((Float) msg.obj);
 			}
-		}).start();
-		mCallBack = new SensorCallBack();
+		};
+		
+		mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 	}
 	
 	/**
@@ -113,26 +110,16 @@ public class CompassSensor{
 	public void enable(CompassListener listener){
 		if(mListener == null) {
 			mListener = listener;
-			if(mSensorManager == null)
-				mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-			mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), Debug.COMPASS_UPDATE_INTERVAL);
+			if(mSensorManager != null)
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						// Register this class as a listener for the accelerometer sensor
+						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), Debug.COMPASS_UPDATE_INTERVAL);
+						// ...and the orientation sensor
+						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), Debug.COMPASS_UPDATE_INTERVAL);
+					}
+				}).start();
 		}
 	}
-	
-	/**
-	 * Sets up the UI handler
-	 * @author ricky barrette
-	 */
-	private void setUiHandler() {
-		mHandler = new Handler(){
-			@Override
-			public void handleMessage(Message msg){
-//				System.out.print((Float) msg.obj);
-				if(mListener != null)
-					if(msg.what == BEARING)
-						mListener.onCompassUpdate((Float) msg.obj);
-			}
-		};
-	}
-
 }
