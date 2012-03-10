@@ -31,9 +31,16 @@ import com.google.android.maps.GeoPoint;
  */
 public class DirectionsOverlay {
 	
+	/**
+	 * @author ricky barrette
+	 */
+	public interface OnDirectionsCompleteListener{
+		public void onDirectionsComplete(DirectionsOverlay directionsOverlay);
+	}
+	
 	private static final String TAG = "DirectionsOverlay";
-	ArrayList<PathOverlay> mPath;
-	ArrayList<String> mDirections;
+	private ArrayList<PathOverlay> mPath;
+	private ArrayList<String> mDirections;
 	private MapView mMapView;
 	private OnDirectionsCompleteListener mListener;
 	private String mCopyRights;
@@ -72,6 +79,62 @@ public class DirectionsOverlay {
 	}
 	
 	/**
+	 * Deocodes googles polyline
+	 * @param encoded
+	 * @return a list of geopoints representing the path 
+	 * @author Mark McClure http://facstaff.unca.edu/mcmcclur/googlemaps/encodepolyline/
+	 * @author ricky barrette
+	 * @throws JSONException 
+	 */
+	private void decodePoly(JSONObject step) throws JSONException {
+		if(Debug.DEBUG)
+			Log.d(TAG, "decodePoly");
+
+		String encoded = step.getJSONObject("polyline").getString("points");
+	    int index = 0, len = encoded.length();
+	    int lat = 0, lng = 0;
+
+	    GeoPoint last = null;
+	    while (index < len) {
+	        int b, shift = 0, result = 0;
+	        do {
+	            b = encoded.charAt(index++) - 63;
+	            result |= (b & 0x1f) << shift;
+	            shift += 5;
+	        } while (b >= 0x20);
+	        int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+	        lat += dlat;
+
+	        shift = 0;
+	        result = 0;
+	        do {
+	            b = encoded.charAt(index++) - 63;
+	            result |= (b & 0x1f) << shift;
+	            shift += 5;
+	        } while (b >= 0x20);
+	        int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+	        lng += dlng;
+
+	        GeoPoint p = new GeoPoint((int) (((double) lat / 1E5) * 1E6), (int) (((double) lng / 1E5) * 1E6));
+	        
+	        if(Debug.DEBUG){
+				Log.d(TAG, "current = "+ p.toString());
+				if(last != null)
+					Log.d(TAG, "last = "+ last.toString());
+	        }
+	        
+	        
+	        if(last != null)
+	        	mPath.add(new PathOverlay(last, p, Color.RED));
+//	        else
+//	        	mPath.add(new PathOverlay(p, 5, Color.GREEN));
+	        
+	        last = p;
+	    }
+	    
+	}
+	
+	/**
 	 * Downloads Google Directions JSON from the Internet 
 	 * @param url
 	 * @return
@@ -92,6 +155,7 @@ public class DirectionsOverlay {
 			response.append(buff);
 		return response.toString();
 	}
+	
 	
 	/**
 	 * Creates a new DirectionsOverlay from the json provided
@@ -193,61 +257,58 @@ public class DirectionsOverlay {
 				"&sensor=true&mode=walking";
 	}
 	
-	
 	/**
-	 * Deocodes googles polyline
-	 * @param encoded
-	 * @return a list of geopoints representing the path 
-	 * @author Mark McClure http://facstaff.unca.edu/mcmcclur/googlemaps/encodepolyline/
+	 * @return
 	 * @author ricky barrette
-	 * @throws JSONException 
 	 */
-	private void decodePoly(JSONObject step) throws JSONException {
-		if(Debug.DEBUG)
-			Log.d(TAG, "decodePoly");
-
-		String encoded = step.getJSONObject("polyline").getString("points");
-	    int index = 0, len = encoded.length();
-	    int lat = 0, lng = 0;
-
-	    GeoPoint last = null;
-	    while (index < len) {
-	        int b, shift = 0, result = 0;
-	        do {
-	            b = encoded.charAt(index++) - 63;
-	            result |= (b & 0x1f) << shift;
-	            shift += 5;
-	        } while (b >= 0x20);
-	        int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-	        lat += dlat;
-
-	        shift = 0;
-	        result = 0;
-	        do {
-	            b = encoded.charAt(index++) - 63;
-	            result |= (b & 0x1f) << shift;
-	            shift += 5;
-	        } while (b >= 0x20);
-	        int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-	        lng += dlng;
-
-	        GeoPoint p = new GeoPoint((int) (((double) lat / 1E5) * 1E6), (int) (((double) lng / 1E5) * 1E6));
-	        
-	        if(Debug.DEBUG){
-				Log.d(TAG, "current = "+ p.toString());
-				if(last != null)
-					Log.d(TAG, "last = "+ last.toString());
-	        }
-	        
-	        
-	        if(last != null)
-	        	mPath.add(new PathOverlay(last, p, Color.RED));
-	        
-	        last = p;
-	    }
-	    
+	public String getCopyrights(){
+		return mCopyRights;
 	}
 	
+	/**
+	 * @return
+	 * @author ricky barrette
+	 */
+	public ArrayList<String> getDirections() {
+		return mDirections;
+	}
+
+	/**
+	 * @param step
+	 * @return the distance of a step
+	 * @throws JSONException
+	 * @author ricky barrette
+	 */
+	private String getDistance(JSONObject step) throws JSONException{
+		return step.getJSONObject("distance").getString("text");
+	}
+	
+	/**
+	 * @return
+	 * @author ricky barrette
+	 */
+	public ArrayList<String> getDistances(){
+		return mDistance;
+	}
+
+	/**
+	 * @param step
+	 * @return the duration of a step 
+	 * @throws JSONException
+	 * @author ricky barrette
+	 */
+	private String getDuration(JSONObject step) throws JSONException{
+		return step.getJSONObject("duration").getString("text");
+	}
+
+	/**
+	 * @return
+	 * @author ricky barrette
+	 */
+	public ArrayList<String> getDurations(){
+		return mDuration;
+	}
+
 	/**
 	 * Converts a JSON location object into a GeoPoint
 	 * @param point
@@ -258,26 +319,6 @@ public class DirectionsOverlay {
 	private GeoPoint getGeoPoint(JSONObject point) throws JSONException{
 		return new GeoPoint((int) (point.getDouble("lat")*1E6), (int) (point.getDouble("lng")*1E6));
 	}
-	
-	/**
-	 * @param step
-	 * @return the duration of a step 
-	 * @throws JSONException
-	 * @author ricky barrette
-	 */
-	private String getDuration(JSONObject step) throws JSONException{
-		return step.getJSONObject("duration").getString("text");
-	}
-	
-	/**
-	 * @param step
-	 * @return the distance of a step
-	 * @throws JSONException
-	 * @author ricky barrette
-	 */
-	private String getDistance(JSONObject step) throws JSONException{
-		return step.getJSONObject("distance").getString("text");
-	}
 
 	/**
 	 * @return the array of PathOverlays
@@ -287,29 +328,6 @@ public class DirectionsOverlay {
 		return mPath;
 	}
 	
-	/**
-	 * Removes the directions overlay from the map view
-	 * @author ricky barrette
-	 */
-	public void removePath() {
-		if(mMapView.getOverlays().removeAll(mPath));		
-	}
-
-	/**
-	 * @author ricky barrette
-	 */
-	public interface OnDirectionsCompleteListener{
-		public void onDirectionsComplete(DirectionsOverlay directionsOverlay);
-	}
-
-	/**
-	 * @return
-	 * @author ricky barrette
-	 */
-	public ArrayList<String> getDirections() {
-		return mDirections;
-	}
-
 	/**
 	 * @return
 	 * @author ricky barrette
@@ -322,31 +340,15 @@ public class DirectionsOverlay {
 	 * @return
 	 * @author ricky barrette
 	 */
-	public ArrayList<String> getDurations(){
-		return mDuration;
-	}
-	
-	/**
-	 * @return
-	 * @author ricky barrette
-	 */
-	public ArrayList<String> getDistances(){
-		return mDistance;
-	}
-
-	/**
-	 * @return
-	 * @author ricky barrette
-	 */
-	public String getCopyrights(){
-		return mCopyRights;
-	}
-
-	/**
-	 * @return
-	 * @author ricky barrette
-	 */
 	public ArrayList<String> getWarnings() {
 		return mWarnings;
+	}
+
+	/**
+	 * Removes the directions overlay from the map view
+	 * @author ricky barrette
+	 */
+	public void removePath() {
+		if(mMapView.getOverlays().removeAll(mPath));		
 	}
 }

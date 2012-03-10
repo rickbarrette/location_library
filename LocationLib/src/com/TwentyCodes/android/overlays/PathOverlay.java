@@ -53,7 +53,7 @@ public final class PathOverlay extends Overlay {
 		mMode = POINT;
 		mRadius = radius;
 		mStart = point;
-		mEnd = null;
+		mEnd = mStart;
 		mColor = color;
 	}
 	
@@ -85,5 +85,21 @@ public final class PathOverlay extends Overlay {
 				canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
 		}
 		super.draw(canvas, mapView, shadow);
+	}
+	
+	/**
+	 * @return the end point of this path
+	 * @author ricky barrette
+	 */
+	public GeoPoint getEndPoint(){
+		return this.mEnd;
+	}
+	
+	/**
+	 * @return the start point of this path
+	 * @author ricky barrette
+	 */
+	public GeoPoint getStartPoint(){
+		return this.mStart;
 	}
 }
