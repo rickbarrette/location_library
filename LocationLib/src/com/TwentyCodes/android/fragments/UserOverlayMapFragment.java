@@ -40,6 +40,14 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	public void followUser(boolean followUser){
 		mUserOverlay.followUser(followUser);
 	}
+	
+	/**
+	 * @return return the current destination
+	 * @author ricky barrette
+	 */
+	public GeoPoint getDestination(){
+		return mUserOverlay.getDestination();
+	}
 
 	/**
 	 * @return the users current location
@@ -60,6 +68,12 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 			mCompassListener.onCompassUpdate(bearing);
 	}
 
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		if(mGeoPointLocationListener != null)
+			mGeoPointLocationListener.onFirstFix(isFistFix);
+	}
+
 	/**
 	 * Called when skyhook has a location to report
 	 * @author ricky barrette
@@ -69,7 +83,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 		if(mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onLocationChanged(point, accuracy);
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
@@ -84,7 +98,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 		
 		map.getOverlays().add(mUserOverlay);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onPause()
@@ -95,7 +109,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 		mUserOverlay.disableMyLocation();
 		removeOverlay(mUserOverlay);
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onResume()
@@ -128,7 +142,7 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	public void setCompassDrawables(int needleResId, int backgroundResId, int x, int y){
 		mUserOverlay.setCompassDrawables(needleResId, backgroundResId, x, y);
 	}
-	
+
 	/**
 	 * @param listener
 	 * @author ricky barrette
@@ -152,11 +166,5 @@ public class UserOverlayMapFragment extends MapFragmentBase implements GeoPointL
 	 */
 	public void setGeoPointLocationListener(GeoPointLocationListener listener){
 		mGeoPointLocationListener = listener;
-	}
-
-	@Override
-	public void onFirstFix(boolean isFistFix) {
-		if(mGeoPointLocationListener != null)
-			mGeoPointLocationListener.onFirstFix(isFistFix);
 	}
 }

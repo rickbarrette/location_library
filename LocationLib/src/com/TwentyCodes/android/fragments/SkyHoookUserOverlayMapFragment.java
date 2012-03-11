@@ -40,6 +40,14 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	public void followUser(boolean followUser){
 		mUserOverlay.followUser(followUser);
 	}
+	
+	/**
+	 * @return return the current destination
+	 * @author ricky barrette
+	 */
+	public GeoPoint getDestination(){
+		return mUserOverlay.getDestination();
+	}
 
 	/**
 	 * @return the users current location
@@ -58,6 +66,12 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	public void onCompassUpdate(float bearing) {
 		if(mCompassListener != null)
 			mCompassListener.onCompassUpdate(bearing);
+	}
+
+	@Override
+	public void onFirstFix(boolean isFistFix) {
+		if(mGeoPointLocationListener != null)
+			mGeoPointLocationListener.onFirstFix(isFistFix);
 	}
 
 	/**
@@ -84,7 +98,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 		
 		map.getOverlays().add(mUserOverlay);
 	}
-
+	
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onPause()
@@ -136,7 +150,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	public void setCompassListener(CompassListener listener){
 		mCompassListener = listener;
 	}
-	
+
 	/**
 	 * Sets the destination for the compass to point to
 	 * @param destination
@@ -152,11 +166,5 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	 */
 	public void setGeoPointLocationListener(GeoPointLocationListener listener){
 		mGeoPointLocationListener = listener;
-	}
-
-	@Override
-	public void onFirstFix(boolean isFistFix) {
-		if(mGeoPointLocationListener != null)
-			mGeoPointLocationListener.onFirstFix(isFistFix);
 	}
 }

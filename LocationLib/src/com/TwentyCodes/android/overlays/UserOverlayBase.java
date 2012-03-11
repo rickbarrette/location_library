@@ -312,6 +312,14 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
     }
     
     /**
+	 * @return return the current destination
+	 * @author ricky barrette
+	 */
+	public GeoPoint getDestination(){
+		return mCompass.getDestination();
+	}
+    
+    /**
      * returns the users current bearing
      * @return
      * @author ricky barrette

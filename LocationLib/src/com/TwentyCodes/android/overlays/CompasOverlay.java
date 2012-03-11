@@ -187,6 +187,14 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	public float getBearing(){
 		return mBearing;
 	}
+	
+	/**
+	 * @return return the current destination
+	 * @author ricky barrette
+	 */
+	public GeoPoint getDestination(){
+		return mDestination;
+	}
 
 	/**
 	 * Called from the compass Sensor to update the current bearing
