@@ -9,6 +9,7 @@ package com.TwentyCodes.android.location;
 import com.TwentyCodes.android.debug.Debug;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +27,7 @@ public class CompassSensor{
 	private final SensorManager mSensorManager;
 	private CompassListener mListener;
 	private final Handler mHandler;
+	private Context mContext;
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {
 
@@ -36,8 +38,8 @@ public class CompassSensor{
 		private float[] orientVals = new float[3];
 
 		private double azimuth = 0;
-//		double pitch = 0;
-//		double roll = 0;
+		double pitch = 0;
+		double roll = 0;
 
 		public void onSensorChanged(SensorEvent sensorEvent) {
 		    // If the sensor data is unreliable return
@@ -62,8 +64,25 @@ public class CompassSensor{
 		        if (success) {
 		            SensorManager.getOrientation(inR, orientVals);
 		            azimuth = Math.toDegrees(orientVals[0]);
-//		            pitch = Math.toDegrees(orientVals[1]);
-//		            roll = Math.toDegrees(orientVals[2]);
+		            pitch = Math.toDegrees(orientVals[1]);
+		            roll = Math.toDegrees(orientVals[2]);
+		            
+		            /**
+		             * this will compenstate for device rotations
+		             */
+		            if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+						boolean isNormal = false;
+						if (roll <= -25)
+							isNormal = false;
+
+						if (roll >= 25)
+							isNormal = true;
+
+						if (isNormal)
+							azimuth = azimuth - 90;
+						else
+							azimuth = azimuth + 90;
+					}
 		        }
 		    }
 		    
@@ -80,6 +99,7 @@ public class CompassSensor{
 	 * @author ricky barrette
 	 */
 	public CompassSensor(final Context context) {
+		mContext = context;
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg){
