@@ -6,16 +6,18 @@
  */
 package com.TwentyCodes.android.location;
 
-import com.TwentyCodes.android.debug.Debug;
-
 import android.content.Context;
 import android.content.res.Configuration;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
+
+import com.TwentyCodes.android.debug.Debug;
 
 /**
  * A simple convince class that accesses the compass sensor on another thread
@@ -28,18 +30,20 @@ public class CompassSensor{
 	private CompassListener mListener;
 	private final Handler mHandler;
 	private Context mContext;
+	private float mDelination = 0;
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {
 
-		private float[] inR = new float[16];
-		private float[] I = new float[16];
-		private float[] gravity = new float[3];
-		private float[] geomag = new float[3];
-		private float[] orientVals = new float[3];
+		private float[] mR = new float[16];
+		private float[] mI = new float[16];
+		private float[] mGravity = new float[3];
+		private float[] mGeomag = new float[3];
+		private float[] mOrientVals = new float[3];
 
-		private double azimuth = 0;
-		double pitch = 0;
-		double roll = 0;
+		private double mAzimuth = 0;
+		double mPitch = 0;
+		double mRoll = 0;
+		private float mInclination;
 
 		public void onSensorChanged(SensorEvent sensorEvent) {
 		    // If the sensor data is unreliable return
@@ -49,44 +53,56 @@ public class CompassSensor{
 		    // Gets the value of the sensor that has been changed
 		    switch (sensorEvent.sensor.getType()) {  
 		        case Sensor.TYPE_ACCELEROMETER:
-		            gravity = sensorEvent.values.clone();
+		            mGravity = sensorEvent.values.clone();
 		            break;
 		        case Sensor.TYPE_MAGNETIC_FIELD:
-		            geomag = sensorEvent.values.clone();
+		            mGeomag = sensorEvent.values.clone();
 		            break;
 		    }
 
 		    // If gravity and geomag have values then find rotation matrix
-		    if (gravity != null && geomag != null) {
+		    if (mGravity != null && mGeomag != null) {
 
 		        // checks that the rotation matrix is found
-		        boolean success = SensorManager.getRotationMatrix(inR, I, gravity, geomag);
+		        boolean success = SensorManager.getRotationMatrix(mR, mI, mGravity, mGeomag);
 		        if (success) {
-		            SensorManager.getOrientation(inR, orientVals);
-		            azimuth = Math.toDegrees(orientVals[0]);
-		            pitch = Math.toDegrees(orientVals[1]);
-		            roll = Math.toDegrees(orientVals[2]);
+		        	
+		        	/*
+		        	 * TODO remap cords due to Display.getRotation()
+		        	 */
+//		        	SensorManager.remapCoordinateSystem(mR, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, mR);
+		            SensorManager.getOrientation(mR, mOrientVals);
+		            mInclination = SensorManager.getInclination(mI);
+		            mAzimuth = Math.toDegrees(mOrientVals[0]);
+		            mPitch = Math.toDegrees(mOrientVals[1]);
+		            mRoll = Math.toDegrees(mOrientVals[2]);
 		            
-		            /**
+		            /*
+		             * compensate for magentic delination
+		             */
+		            mAzimuth += mDelination;
+		            
+		            /*
 		             * this will compenstate for device rotations
+		             * TODO compensate for inversed portrait
 		             */
 		            if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 						boolean isNormal = false;
-						if (roll <= -25)
+						if (mRoll <= -25)
 							isNormal = false;
 
-						if (roll >= 25)
+						if (mRoll >= 25)
 							isNormal = true;
 
 						if (isNormal)
-							azimuth = azimuth - 90;
+							mAzimuth = mAzimuth - 90;
 						else
-							azimuth = azimuth + 90;
+							mAzimuth = mAzimuth + 90;
 					}
 		        }
 		    }
 		    
-		    mHandler.sendMessage(mHandler.obtainMessage(BEARING, (float) azimuth));
+		    mHandler.sendMessage(mHandler.obtainMessage(BEARING, (float) mAzimuth));
 		}
 
 		@Override
@@ -103,7 +119,6 @@ public class CompassSensor{
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg){
-//				System.out.print((Float) msg.obj);
 				if(mListener != null)
 					if(msg.what == BEARING)
 						mListener.onCompassUpdate((Float) msg.obj);
@@ -141,5 +156,23 @@ public class CompassSensor{
 					}
 				}).start();
 		}
+	}
+	
+	/**
+	 * Updates the Geomagnetic Field Declination based off of the provided location
+	 * @param location last known (lat,lon,altitude), null will reset
+	 * @author ricky barrette
+	 */
+	public void setDeclination(Location location){
+        if (location != null) {
+            GeomagneticField geomagneticField;
+            geomagneticField = new GeomagneticField(new Double(location.getLatitude()).floatValue(), 
+            		new Double(location.getLongitude()).floatValue(), 
+                    new Double(location.getAltitude()).floatValue(), 
+                    System.currentTimeMillis());
+            mDelination = geomagneticField.getDeclination();
+        } else {
+        	mDelination = 0;
+        }
 	}
 }
