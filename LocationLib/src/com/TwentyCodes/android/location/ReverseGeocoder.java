@@ -43,7 +43,7 @@ public class ReverseGeocoder {
 	 * @throws IOException 
 	 * @throws JSONException 
 	 */
-    public static JSONArray getFromLocation(Location location) throws IOException, JSONException {
+    public static JSONArray getFromLocation(final  Location location) throws IOException, JSONException {
     	String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
 		StringBuffer response = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
@@ -72,7 +72,7 @@ public class ReverseGeocoder {
      * @return string address, or lat, lon if search fails
      * @author ricky barrette
      */
-    public static String getAddressFromLocation(Location location) {
+    public static String getAddressFromLocation(final  Location location) {
     	String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
 		StringBuffer response = new StringBuffer();
 		HttpClient client = new DefaultHttpClient();
@@ -124,7 +124,7 @@ public class ReverseGeocoder {
      * @throws JSONException
      * @author ricky barrette
      */
-	public static JSONArray addressSearch(String address) throws IOException, JSONException {
+	public static JSONArray addressSearch(final String address) throws IOException, JSONException {
 		String urlStr = "http://maps.google.com/maps/geo?q=" + address + "&output=json&sensor=false";
 		urlStr = urlStr.replace(' ', '+');
 		StringBuffer response = new StringBuffer();

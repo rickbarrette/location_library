@@ -20,8 +20,8 @@ import com.skyhookwireless.wps.XPS;
  */
 public class SkyHookRegistration{
 	
-	private XPS mXps;
-	private Context mContext;
+	private final XPS mXps;
+	private final Context mContext;
 
 	public SkyHookRegistration(Context context){
 		mContext = context;
@@ -35,9 +35,9 @@ public class SkyHookRegistration{
 	 * @param listener for call back methods
 	 * @author ricky barrette
 	 */
-	public void registerNewUser(RegistrationCallback listener){
+	public void registerNewUser(final RegistrationCallback listener){
 		if(mXps != null){
-			TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 			if(tm == null)
 				Log.v(SkyHook.TAG, "TelephonyManager is null");
 			String newUser = tm.getLine1Number();
@@ -58,7 +58,7 @@ public class SkyHookRegistration{
 	 * @return
 	 * @author ricky barrette
 	 */
-	public static String getUserName(Context context){
+	public static String getUserName(final Context context){
 		
 		switch(Debug.DEFAULT_REGISTRATION_BEHAVIOR){
 			case NORMAL:

@@ -23,7 +23,7 @@ import com.google.android.maps.Overlay;
  * 
  * @author ricky barrette
  */
-public abstract class MapFragmentBase extends Fragment {
+public abstract class BaseMapFragment extends Fragment {
 
 	private MapView mMapView;
 	private boolean isGPSDialogEnabled;
@@ -33,7 +33,7 @@ public abstract class MapFragmentBase extends Fragment {
 	 * Creates a new MapFragment
 	 * @author ricky barrette
 	 */
-	public MapFragmentBase() {
+	public BaseMapFragment() {
 		super();
 	}
 	
@@ -64,7 +64,7 @@ public abstract class MapFragmentBase extends Fragment {
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.map_fragment, container, false);
+		View view = inflater.inflate(R.layout.base_map_fragment, container, false);
 		
 		mMapView = (MapView) view.findViewById(R.id.mapview);
 		mMapView.setClickable(true);

@@ -18,7 +18,7 @@ import com.google.android.maps.GeoPoint;
  * TODO acquiring gps dialog
  * @author ricky barrette
  */
-public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements GeoPointLocationListener, CompassListener{
+public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements GeoPointLocationListener, CompassListener{
 
 	private SkyHookUserOverlay mUserOverlay;
 	private GeoPointLocationListener mGeoPointLocationListener;
@@ -86,7 +86,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onMapViewCreate(com.TwentyCodes.android.location.MapView)
+	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onMapViewCreate(com.TwentyCodes.android.location.MapView)
 	 */
 	@Override
 	public void onMapViewCreate(MapView map) {
@@ -101,7 +101,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onPause()
+	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onPause()
 	 */
 	@Override
 	public void onPause() {
@@ -112,7 +112,7 @@ public class SkyHoookUserOverlayMapFragment extends MapFragmentBase implements G
 	
 	/**
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.fragments.MapFragmentBase#onResume()
+	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onResume()
 	 */
 	@Override
 	public void onResume() {

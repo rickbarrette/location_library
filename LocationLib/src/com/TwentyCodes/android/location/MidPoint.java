@@ -11,7 +11,7 @@ import com.google.android.maps.GeoPoint;
  * This MidPoint object will hold the information form the calculations performed by GeoUtils.midPoint(). 
  * @author ricky barrette
  */
-public final class MidPoint {
+public class MidPoint {
 	
 	private final int mMinLatitude;
 	private final int mMaxLatitude;

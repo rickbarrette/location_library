@@ -41,14 +41,14 @@ public class GeoUtils {
     
     /**
      * Calculates the bearing from the user location to the destination location, or returns the bearing for north if there is no destination.
-     * This method is awesome for make a compass point toward the destination rather than North.
+     * This method is awesome for making a compass point toward the destination rather than North.
      * @param user location
      * @param dest location
      * @param bearing Degrees East from compass
      * @return Degrees East of dest location
      * @author ricky barrette
      */
-	public static float calculateBearing(GeoPoint user, GeoPoint dest, float bearing) {
+	public static float calculateBearing(final GeoPoint user, final GeoPoint dest, float bearing) {
 		
 		if( (user == null) || (dest == null) )
 			return bearing;
@@ -72,7 +72,7 @@ public class GeoUtils {
      * @return the bearing of lat2/lon2 in relationship from lat1/lon1 in degrees East of true north
      * @author Google Inc.
      */
-    public static double bearing(double lat1, double lon1, double lat2, double lon2) {
+    public static double bearing(final double lat1, final double lon1, final double lat2, final double lon2) {
         double lat1Rad = Math.toRadians(lat1);
         double lat2Rad = Math.toRadians(lat2);
         double deltaLonRad = Math.toRadians(lon2 - lon1);
@@ -88,7 +88,7 @@ public class GeoUtils {
      * @return the bearing of p2 in relationship from p1 in degrees East
      * @author Google Inc.
      */
-    public static Double bearing(GeoPoint p1, GeoPoint p2) {
+    public static Double bearing(final GeoPoint p1, final GeoPoint p2) {
         double lat1 = p1.getLatitudeE6() / MILLION;
         double lon1 = p1.getLongitudeE6() / MILLION;
         double lat2 = p2.getLatitudeE6() / MILLION;
@@ -105,7 +105,7 @@ public class GeoUtils {
 	 * @return geopoint that is x meters away from the geopoint supplied
 	 * @author ricky barrette
 	 */
-	public static GeoPoint distanceFrom(GeoPoint point, double distance){
+	public static GeoPoint distanceFrom(final GeoPoint point, double distance){
 		//convert meters into kilometers
 		distance = distance / 1000;
 		
@@ -145,7 +145,7 @@ public class GeoUtils {
      * @return the distance between to lat1/lon1 and lat2/lon2
      * @author Google Inc.
      */
-    public static double distanceKm(double lat1, double lon1, double lat2, double lon2) {
+    public static double distanceKm(final double lat1, final double lon1, final double lat2, final double lon2) {
         double lat1Rad = Math.toRadians(lat1);
         double lat2Rad = Math.toRadians(lat2);
         double deltaLonRad = Math.toRadians(lon2 - lon1);
@@ -159,7 +159,7 @@ public class GeoUtils {
 	 * @return string distance
 	 * @author ricky barrette
 	 */
-	public static String distanceToString(double distance, boolean returnMetric) {
+	public static String distanceToString(double distance, final boolean returnMetric) {
 		DecimalFormat threeDForm = new DecimalFormat("#.###");
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
 
@@ -190,7 +190,7 @@ public class GeoUtils {
 	 * @return true if the circles intersect
 	 * @author ricky barrette
 	 */
-	public static boolean isIntersecting(GeoPoint userPoint, float accuracyRadius, GeoPoint locationPoint, float locationRadius, float fudgeFactor){
+	public static boolean isIntersecting(final GeoPoint userPoint, final float accuracyRadius, final GeoPoint locationPoint, final float locationRadius, final float fudgeFactor){
 		if(((accuracyRadius + locationRadius) - fudgeFactor) > distanceKm(locationPoint, userPoint))
 			return true;
 		return false;
@@ -203,7 +203,7 @@ public class GeoUtils {
      * @return the distance between to p1 and p2
      * @author Google Inc.
      */
-    public static double distanceKm(GeoPoint p1, GeoPoint p2) {
+    public static double distanceKm(final GeoPoint p1, final GeoPoint p2) {
     	//if we are handed a null, return -1 so we don't break
     	if(p1 == null || p2 == null)
     		return -1;
@@ -221,7 +221,7 @@ public class GeoUtils {
 	 * @return true is the point is off the map
 	 * @author ricky barrette
 	 */
-	public static boolean isPointOffMap(MapView map , GeoPoint point){
+	public static boolean isPointOffMap(final MapView map , final GeoPoint point){
 		if(map == null)
 			return false;
 		if (point == null)
@@ -243,8 +243,8 @@ public class GeoUtils {
      * @return a MidPoint object
      * @author ricky barrette
      */
-    public static MidPoint midPoint(GeoPoint p1, GeoPoint p2) {
-        int minLatitude = (int)(+81 * 1E6);
+    public static MidPoint midPoint(final GeoPoint p1, final GeoPoint p2) {
+    	int minLatitude = (int)(+81 * 1E6);
         int maxLatitude = (int)(-81 * 1E6);
         int minLongitude  = (int)(+181 * 1E6);
         int maxLongitude  = (int)(-181 * 1E6);
@@ -277,7 +277,7 @@ public class GeoUtils {
      * @return bearing
      * @author Google Inc.
      */
-    public static double radToBearing(double rad) {
+    public static double radToBearing(final double rad) {
         return (Math.toDegrees(rad) + 360) % 360;
     }
 }

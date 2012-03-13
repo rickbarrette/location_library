@@ -37,12 +37,12 @@ public class SkyHook implements GeoPointLocationListener{
 	private GeoPointLocationListener mListener;
     private long mPeriod = 0l; //period is in milliseconds for periodic updates
     private int mIterations = 0;
-	private XPS mXps;
+	private final XPS mXps;
 	private WPSAuthentication mWPSAuthentication;
 	private Handler mHandler;
 	private final XPScallback mXPScallback = new XPScallback();
 	private boolean isPeriodicEnabled;
-	private Context mContext;
+	private final Context mContext;
 	private boolean hasLocation;
 	protected AndroidGPS mSkyHookFallback = null;
 	protected long mFallBackDelay = 5000l;
@@ -248,7 +248,7 @@ public class SkyHook implements GeoPointLocationListener{
 	                			if (isUnauthorized){
 	                				isPeriodicEnabled = false;
 	                				mXps.abort();
-	                				mXps = null;
+//	                				mXps = null;
 	                			}
 	                			isUnauthorized = true;
 	                		}

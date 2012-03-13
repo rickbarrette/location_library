@@ -16,6 +16,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
 
@@ -31,6 +32,7 @@ public class CompassSensor{
 	private final Handler mHandler;
 	private Context mContext;
 	private float mDelination = 0;
+	public static final String TAG = "CompassSensor";
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {
 
@@ -45,8 +47,26 @@ public class CompassSensor{
 		double mRoll = 0;
 		private float mInclination;
 
-		public void onSensorChanged(SensorEvent sensorEvent) {
-		    // If the sensor data is unreliable return
+		public void onSensorChanged(final SensorEvent sensorEvent) {
+			if(Debug.DEBUG){
+				switch (sensorEvent.accuracy){
+					case SensorManager.SENSOR_STATUS_UNRELIABLE:
+						Log.v(TAG , "UNRELIABLE");
+						break;
+					case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+						Log.v(TAG , "LOW");
+						break;
+					case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+						Log.v(TAG , "MEDIUM");
+						break;
+					case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+						Log.v(TAG , "HIGH");
+						break;
+					
+				}
+			}
+
+			// If the sensor data is unreliable return
 		    if (sensorEvent.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE)
 		        return;
 
@@ -70,6 +90,10 @@ public class CompassSensor{
 		        	/*
 		        	 * TODO remap cords due to Display.getRotation()
 		        	 */
+//		        	Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+//		        	switch (display.getOrientation()){
+//		        	}
+		        	
 //		        	SensorManager.remapCoordinateSystem(mR, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, mR);
 		            SensorManager.getOrientation(mR, mOrientVals);
 		            mInclination = SensorManager.getInclination(mI);
@@ -163,10 +187,9 @@ public class CompassSensor{
 	 * @param location last known (lat,lon,altitude), null will reset
 	 * @author ricky barrette
 	 */
-	public void setDeclination(Location location){
+	public void setDeclination(final Location location){
         if (location != null) {
-            GeomagneticField geomagneticField;
-            geomagneticField = new GeomagneticField(new Double(location.getLatitude()).floatValue(), 
+            final GeomagneticField geomagneticField = new GeomagneticField(new Double(location.getLatitude()).floatValue(), 
             		new Double(location.getLongitude()).floatValue(), 
                     new Double(location.getAltitude()).floatValue(), 
                     System.currentTimeMillis());

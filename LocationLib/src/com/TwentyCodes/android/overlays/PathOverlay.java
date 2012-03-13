@@ -34,7 +34,7 @@ public final class PathOverlay extends Overlay {
 	 * Creates a new PathOverlay in path mode
 	 * @author ricky barrette
 	 */
-	public PathOverlay(GeoPoint start, GeoPoint end, int color) {
+	public PathOverlay(final GeoPoint start, final GeoPoint end, final int color) {
 		mStart = start;
 		mEnd = end;
 		mColor = color;
@@ -49,7 +49,7 @@ public final class PathOverlay extends Overlay {
 	 * @param color
 	 * @author ricky barrette
 	 */
-	public PathOverlay(GeoPoint point, int radius, int color){
+	public PathOverlay(final GeoPoint point, final int radius, final int color){
 		mMode = POINT;
 		mRadius = radius;
 		mStart = point;
@@ -66,8 +66,8 @@ public final class PathOverlay extends Overlay {
 	 */
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-		Projection projection = mapView.getProjection();
-		Paint paint = new Paint();
+		final Projection projection = mapView.getProjection();
+		final Paint paint = new Paint();
 		paint.setColor(mColor);
 		paint.setAntiAlias(true);
 		Point point = new Point();

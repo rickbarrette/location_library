@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
@@ -31,7 +32,7 @@ import com.google.android.maps.Projection;
  * This class will be used to build user overlays
  * @author ricky barrette
  */
-public abstract class UserOverlayBase extends Overlay implements GeoPointLocationListener, CompassListener {
+public abstract class BaseUserOverlay extends Overlay implements GeoPointLocationListener, CompassListener {
 	
 	/**
 	 * This thread is responsible for animating the user icon
@@ -126,7 +127,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 	 * @param context
 	 * @author ricky barrette
 	 */
-	public UserOverlayBase(MapView mapView, Context context) {
+	public BaseUserOverlay(MapView mapView, Context context) {
 		super();
 		mContext = context;
 		mMapView = mapView;
@@ -141,7 +142,7 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 	 * @param followUser
 	 * @author ricky barrette
 	 */
-	public UserOverlayBase(MapView mapView, Context context, boolean followUser) {
+	public BaseUserOverlay(MapView mapView, Context context, boolean followUser) {
 		this(mapView, context);
 		isFollowingUser = followUser;
 	}
@@ -192,7 +193,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 			/*
 			 * the following log is used to demonstrate if the leftGeo point is the correct
 			 */
-//			Log.d(TAG, (GeoUtils.distanceKm(mPoint, leftGeo) * 1000)+"m");
+			if(Debug.DEBUG)
+				Log.d(TAG, (GeoUtils.distanceKm(mPoint, leftGeo) * 1000)+"m");
 		}
 		super.draw(canvas, mapView, shadow);
 	}
@@ -234,9 +236,11 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
          * for testing
          * draw a dot over the left geopoint 
          */
-//        paint.setColor(Color.RED);
-//		RectF oval = new RectF(left.x - 1, left.y - 1, left.x + 1, left.y + 1);
-//		canvas.drawOval(oval, paint);
+        if(Debug.DEBUG){
+	        paint.setColor(Color.RED);
+			RectF oval = new RectF(left.x - 1, left.y - 1, left.x + 1, left.y + 1);
+			canvas.drawOval(oval, paint);
+        }
     	
         return canvas;
 	}
@@ -286,7 +290,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
      * @author ricky barrette
      */
     public void enableMyLocation(){
-    	Log.d(TAG,"enableMyLocation()");
+    	if(Debug.DEBUG)
+    		Log.d(TAG,"enableMyLocation()");
     	if (! isEnabled) {
     		
     		mAnimationThread = new AnimationThread();
@@ -307,7 +312,8 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
      * @author ricky barrette
      */
     public void followUser(boolean followUser){
-    	Log.d(TAG,"followUser()");
+    	if(Debug.DEBUG)
+    		Log.d(TAG,"followUser()");
     	isFollowingUser = followUser;
     }
     
@@ -339,8 +345,6 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
     
 	@Override
 	public void onCompassUpdate(float bearing) {
-		if(Debug.DEBUG)
-			Log.v(TAG, "onCompassUpdate()");
 		if(mCompassListener != null)
 			mCompassListener.onCompassUpdate(bearing);
 		mBearing = bearing;
@@ -467,7 +471,6 @@ public abstract class UserOverlayBase extends Overlay implements GeoPointLocatio
 	 * @author Ricky Barrette
 	 */
 	public void unRegisterListener(){
-		Log.d(TAG,"unRegisterListener()");
 		mListener = null;
 	}
 }

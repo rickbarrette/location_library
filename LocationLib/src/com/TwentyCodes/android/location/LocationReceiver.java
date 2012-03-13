@@ -28,7 +28,7 @@ public abstract class LocationReceiver extends BroadcastReceiver {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 		mContext = context;
 		if(intent.getParcelableExtra(INTENT_EXTRA_LOCATION_PARCEL) != null){
 			Location location = intent.getParcelableExtra(INTENT_EXTRA_LOCATION_PARCEL);

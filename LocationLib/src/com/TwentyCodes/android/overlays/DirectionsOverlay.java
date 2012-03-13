@@ -41,8 +41,8 @@ public class DirectionsOverlay {
 	private static final String TAG = "DirectionsOverlay";
 	private ArrayList<PathOverlay> mPath;
 	private ArrayList<String> mDirections;
-	private MapView mMapView;
-	private OnDirectionsCompleteListener mListener;
+	private final MapView mMapView;
+	private final OnDirectionsCompleteListener mListener;
 	private String mCopyRights;
 	private ArrayList<GeoPoint> mPoints;
 	private ArrayList<String> mDistance;
@@ -59,7 +59,7 @@ public class DirectionsOverlay {
 	 * @throws IllegalStateException 
 	 * @throws JSONException 
 	 */
-	public DirectionsOverlay(MapView map, GeoPoint origin, GeoPoint destination, OnDirectionsCompleteListener listener) throws IllegalStateException, ClientProtocolException, IOException, JSONException {
+	public DirectionsOverlay(final MapView map, final GeoPoint origin, final GeoPoint destination, final OnDirectionsCompleteListener listener) throws IllegalStateException, ClientProtocolException, IOException, JSONException {
 		mMapView = map;
 		mListener = listener;
 		String json = downloadJSON(generateUrl(origin, destination));
@@ -72,7 +72,7 @@ public class DirectionsOverlay {
 	 * @throws JSONException
 	 * @author ricky barrette
 	 */
-	public DirectionsOverlay(MapView map, String json, OnDirectionsCompleteListener listener) throws JSONException{
+	public DirectionsOverlay(final MapView map, final String json, final OnDirectionsCompleteListener listener) throws JSONException{
 		mListener = listener;
 		mMapView = map;
 		drawPath(json);
@@ -86,7 +86,7 @@ public class DirectionsOverlay {
 	 * @author ricky barrette
 	 * @throws JSONException 
 	 */
-	private void decodePoly(JSONObject step) throws JSONException {
+	private void decodePoly(final JSONObject step) throws JSONException {
 		if(Debug.DEBUG)
 			Log.d(TAG, "decodePoly");
 
@@ -143,7 +143,7 @@ public class DirectionsOverlay {
 	 * @throws IOException
 	 * @author ricky barrette
 	 */
-	private String downloadJSON(String url) throws IllegalStateException, ClientProtocolException, IOException {
+	private String downloadJSON(final String url) throws IllegalStateException, ClientProtocolException, IOException {
 		if(Debug.DEBUG)
 			Log.d(TAG, url);
 		if(url == null)
@@ -164,7 +164,7 @@ public class DirectionsOverlay {
 	 * @return 
 	 * @throws JSONException 
 	 */
-	public void drawPath(String json) throws JSONException{
+	public void drawPath(final String json) throws JSONException{
 		if(Debug.DEBUG){
 			Log.d(TAG, "drawPath");
 			Log.d(TAG, json);
@@ -245,7 +245,7 @@ public class DirectionsOverlay {
 	 * @return The Google API url for our directions 
 	 * @author ricky barrette
 	 */
-	private String generateUrl(GeoPoint origin, GeoPoint destination){
+	private String generateUrl(final GeoPoint origin, final GeoPoint destination){
 		return "http://maps.googleapis.com/maps/api/directions/json?&origin="+
 				Double.toString(origin.getLatitudeE6() / 1.0E6)+
 				","+
@@ -279,7 +279,7 @@ public class DirectionsOverlay {
 	 * @throws JSONException
 	 * @author ricky barrette
 	 */
-	private String getDistance(JSONObject step) throws JSONException{
+	private String getDistance(final JSONObject step) throws JSONException{
 		return step.getJSONObject("distance").getString("text");
 	}
 	
@@ -297,7 +297,7 @@ public class DirectionsOverlay {
 	 * @throws JSONException
 	 * @author ricky barrette
 	 */
-	private String getDuration(JSONObject step) throws JSONException{
+	private String getDuration(final JSONObject step) throws JSONException{
 		return step.getJSONObject("duration").getString("text");
 	}
 
@@ -316,7 +316,7 @@ public class DirectionsOverlay {
 	 * @throws JSONException
 	 * @author ricky barrette
 	 */
-	private GeoPoint getGeoPoint(JSONObject point) throws JSONException{
+	private GeoPoint getGeoPoint(final JSONObject point) throws JSONException{
 		return new GeoPoint((int) (point.getDouble("lat")*1E6), (int) (point.getDouble("lng")*1E6));
 	}
 

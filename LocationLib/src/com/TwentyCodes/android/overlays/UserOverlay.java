@@ -14,9 +14,9 @@ import com.google.android.maps.MapView;
  * This is the standard version of the UserOverlay. 
  * @author ricky barrette
  */
-public class UserOverlay extends UserOverlayBase{
+public class UserOverlay extends BaseUserOverlay{
 
-	private AndroidGPS mAndroidGPS;
+	private final AndroidGPS mAndroidGPS;
 
 	public UserOverlay(MapView mapView, Context context) {
 		super(mapView, context);

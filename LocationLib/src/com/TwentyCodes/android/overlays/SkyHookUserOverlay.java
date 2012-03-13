@@ -14,9 +14,9 @@ import com.google.android.maps.MapView;
  * this class will be used to display the users location on the map using skyhook's call back methods
  * @author ricky barrette
  */
-public class SkyHookUserOverlay extends UserOverlayBase{
+public class SkyHookUserOverlay extends BaseUserOverlay{
 
-	private SkyHook mSkyHook;
+	private final SkyHook mSkyHook;
 	
 	public SkyHookUserOverlay(MapView mapView, Context context) {
 		super(mapView, context);
@@ -38,7 +38,7 @@ public class SkyHookUserOverlay extends UserOverlayBase{
 	/**
 	 * Called when the location provider needs to be disabled
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.overlays.UserOverlayBase#onMyLocationDisabled()
+	 * @see com.TwentyCodes.android.overlays.BaseUserOverlay#onMyLocationDisabled()
 	 */
 	@Override
 	public void onMyLocationDisabled() {
@@ -48,7 +48,7 @@ public class SkyHookUserOverlay extends UserOverlayBase{
 	/**
 	 * Called when the location provider needs to be enabled
 	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.overlays.UserOverlayBase#onMyLocationEnabled()
+	 * @see com.TwentyCodes.android.overlays.BaseUserOverlay#onMyLocationEnabled()
 	 */
 	@Override
 	public void onMyLocationEnabled() {

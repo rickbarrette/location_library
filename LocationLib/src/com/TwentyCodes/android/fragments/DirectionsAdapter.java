@@ -22,8 +22,8 @@ import com.TwentyCodes.android.overlays.DirectionsOverlay;
  */
 public class DirectionsAdapter extends BaseAdapter {
 	
-	private LayoutInflater mInflater;
-	private DirectionsOverlay mDirections;
+	private final LayoutInflater mInflater;
+	private final DirectionsOverlay mDirections;
 	
 
 	/**
@@ -80,8 +80,8 @@ public class DirectionsAdapter extends BaseAdapter {
 	 * @author ricky barrette
 	 */
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+	public View getView(final int position, View convertView, final ViewGroup parent) {
+		final ViewHolder holder;
 			 if (convertView == null) {
 				 convertView = mInflater.inflate(R.layout.list_row, null);
 				 holder = new ViewHolder();

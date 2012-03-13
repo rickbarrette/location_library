@@ -30,11 +30,11 @@ import com.google.android.maps.Overlay;
 public class CompasOverlay extends Overlay implements CompassListener {
 
 	private float mBearing;
-	private Context mContext;
+	private final Context mContext;
 	private GeoPoint mDestination;
 	private GeoPoint mLocation;
 	private boolean isEnabled;
-	private CompassSensor mCompassSensor;
+	private final CompassSensor mCompassSensor;
 	private int mNeedleResId = R.drawable.needle_sm;
 	private int mBackgroundResId = R.drawable.compass_sm;
 	private int mX;
@@ -121,7 +121,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow) {
 		
 		if(isEnabled){
 			//set the center of the compass in the top left corner of the screen

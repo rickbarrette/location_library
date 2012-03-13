@@ -24,7 +24,7 @@ import com.google.android.maps.GeoPoint;
 public class AndroidGPS implements LocationListener {
 	
 	private static final String TAG = "AndroidGPS";
-	private LocationManager mLocationManager;
+	private final LocationManager mLocationManager;
 	private GeoPointLocationListener mListener;
 	private LocationListener mLocationListener;
 	
@@ -131,8 +131,6 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	private void requestUpdates() {
-		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		try {
 			mLocationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
 		} catch (IllegalArgumentException e) {
@@ -141,6 +139,8 @@ public class AndroidGPS implements LocationListener {
 			 * to function we can ignore it.
 			 */
 		}
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 	}
 
 }

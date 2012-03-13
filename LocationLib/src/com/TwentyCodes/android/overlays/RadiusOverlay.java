@@ -62,12 +62,12 @@ public class RadiusOverlay extends Overlay{
 	 * @param when
 	 */
 	@Override
-	public void draw(Canvas canvas, MapView mapView, boolean shadow){
+	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow){
 		if(mPoint != null){
-	    	Paint paint = new Paint();
-	    	Point center = new Point();
-	    	Point left = new Point();
-	        Projection projection = mapView.getProjection();
+			final Paint paint = new Paint();
+			final Point center = new Point();
+			final Point left = new Point();
+			final Projection projection = mapView.getProjection();
 	
 	        /*
 	         * Calculate a geopoint that is "radius" meters away from geopoint point and 
