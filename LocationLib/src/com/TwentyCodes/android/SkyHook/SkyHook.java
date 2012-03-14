@@ -34,15 +34,15 @@ public class SkyHook implements GeoPointLocationListener{
 	public static final int LOCATION_MESSAGE = 1;
     public static final int ERROR_MESSAGE = 2;
     public static final int DONE_MESSAGE = 3;
+    private final XPScallback mXPScallback = new XPScallback();
+    private final XPS mXps;
+    private final Context mContext;
 	private GeoPointLocationListener mListener;
     private long mPeriod = 0l; //period is in milliseconds for periodic updates
     private int mIterations = 0;
-	private final XPS mXps;
 	private WPSAuthentication mWPSAuthentication;
 	private Handler mHandler;
-	private final XPScallback mXPScallback = new XPScallback();
 	private boolean isPeriodicEnabled;
-	private final Context mContext;
 	private boolean hasLocation;
 	protected AndroidGPS mSkyHookFallback = null;
 	protected long mFallBackDelay = 5000l;
