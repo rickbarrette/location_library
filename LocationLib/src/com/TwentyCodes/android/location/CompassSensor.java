@@ -28,13 +28,27 @@ import com.TwentyCodes.android.debug.Debug;
  */
 public class CompassSensor{
 	
+	/**
+	 * A simple listener interface to get updates from CompassSensor
+	 * @author ricky barrette
+	 */
+	public interface CompassListener {
+		
+		/**
+		 * Called when there is an update from the Compass Sensor
+		 * @param bearing
+		 * @author ricky barrette
+		 */
+		public void onCompassUpdate(float bearing);
+	}
+	
 	public static final String TAG = "CompassSensor";
 	private static final int BEARING = 0;
 	private final Display mDisplay;
 	private final Handler mHandler;
 	private final SensorManager mSensorManager;
+	private final Context mContext;
 	private CompassListener mListener;
-	private Context mContext;
 	private float mDelination = 0;
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {

@@ -19,7 +19,7 @@ import android.graphics.RectF;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
-import com.TwentyCodes.android.location.CompassListener;
+import com.TwentyCodes.android.location.CompassSensor.CompassListener;
 import com.TwentyCodes.android.location.GeoPointLocationListener;
 import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;

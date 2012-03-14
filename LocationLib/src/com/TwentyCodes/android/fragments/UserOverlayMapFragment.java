@@ -6,7 +6,7 @@
  */
 package com.TwentyCodes.android.fragments;
 
-import com.TwentyCodes.android.location.CompassListener;
+import com.TwentyCodes.android.location.CompassSensor.CompassListener;
 import com.TwentyCodes.android.location.GeoPointLocationListener;
 import com.TwentyCodes.android.location.MapView;
 import com.TwentyCodes.android.overlays.UserOverlay;

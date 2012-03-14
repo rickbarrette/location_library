@@ -15,8 +15,8 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.TypedValue;
 
-import com.TwentyCodes.android.location.CompassListener;
 import com.TwentyCodes.android.location.CompassSensor;
+import com.TwentyCodes.android.location.CompassSensor.CompassListener;
 import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
 import com.google.android.maps.GeoPoint;
