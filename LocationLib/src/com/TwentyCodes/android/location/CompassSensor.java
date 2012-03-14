@@ -7,7 +7,6 @@
 package com.TwentyCodes.android.location;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,6 +16,9 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import com.TwentyCodes.android.debug.Debug;
 
@@ -26,26 +28,28 @@ import com.TwentyCodes.android.debug.Debug;
  */
 public class CompassSensor{
 	
+	public static final String TAG = "CompassSensor";
 	private static final int BEARING = 0;
+	private final Display mDisplay;
+	private final Handler mHandler;
 	private final SensorManager mSensorManager;
 	private CompassListener mListener;
-	private final Handler mHandler;
 	private Context mContext;
 	private float mDelination = 0;
-	public static final String TAG = "CompassSensor";
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {
 
-		private float[] mR = new float[16];
+		private float[] mRotationMatrix = new float[16];
+//		private float[] mRemapedRotationMatrix = new float[16];
 		private float[] mI = new float[16];
 		private float[] mGravity = new float[3];
 		private float[] mGeomag = new float[3];
 		private float[] mOrientVals = new float[3];
 
 		private double mAzimuth = 0;
-		double mPitch = 0;
-		double mRoll = 0;
-		private float mInclination;
+//		double mPitch = 0;
+//		double mRoll = 0;
+//		private float mInclination;
 
 		public void onSensorChanged(final SensorEvent sensorEvent) {
 			if(Debug.DEBUG){
@@ -84,22 +88,36 @@ public class CompassSensor{
 		    if (mGravity != null && mGeomag != null) {
 
 		        // checks that the rotation matrix is found
-		        boolean success = SensorManager.getRotationMatrix(mR, mI, mGravity, mGeomag);
+		        boolean success = SensorManager.getRotationMatrix(mRotationMatrix, mI, mGravity, mGeomag);
 		        if (success) {
 		        	
-		        	/*
-		        	 * TODO remap cords due to Display.getRotation()
-		        	 */
-//		        	Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-//		        	switch (display.getOrientation()){
-//		        	}
+//		        	switch (mDisplay.getOrientation()){
+//			            case Surface.ROTATION_0:
+//			            	Log.v(TAG , "0");
+//	//		            	SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Y, mRemapedRotationMatrix);
+//			            	break;
+//			            case Surface.ROTATION_90:
+//			            	Log.v(TAG , "90");
+//	//		            	SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X, SensorManager.AXIS_Y, mRemapedRotationMatrix);
+//			            	break;
+//			            case Surface.ROTATION_180:
+//			            	Log.v(TAG , "180");
+//	//		            	SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, mRemapedRotationMatrix);
+//			            	break;
+//			            case Surface.ROTATION_270:
+//			            	Log.v(TAG , "270");
+//	//		            	SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_Y, mRemapedRotationMatrix);
+//			            	break;
+//		        	}		        	
 		        	
-//		        	SensorManager.remapCoordinateSystem(mR, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, mR);
-		            SensorManager.getOrientation(mR, mOrientVals);
-		            mInclination = SensorManager.getInclination(mI);
+		            /*
+		             * remap cords due to Display.getRotation()
+		             */
+		            SensorManager.getOrientation(mRotationMatrix, mOrientVals);
+//		            mInclination = SensorManager.getInclination(mI);
 		            mAzimuth = Math.toDegrees(mOrientVals[0]);
-		            mPitch = Math.toDegrees(mOrientVals[1]);
-		            mRoll = Math.toDegrees(mOrientVals[2]);
+//		            mPitch = Math.toDegrees(mOrientVals[1]);
+//		            mRoll = Math.toDegrees(mOrientVals[2]);
 		            
 		            /*
 		             * compensate for magentic delination
@@ -107,22 +125,21 @@ public class CompassSensor{
 		            mAzimuth += mDelination;
 		            
 		            /*
-		             * this will compenstate for device rotations
-		             * TODO compensate for inversed portrait
+		             * compensate for device orentation
 		             */
-		            if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-						boolean isNormal = false;
-						if (mRoll <= -25)
-							isNormal = false;
-
-						if (mRoll >= 25)
-							isNormal = true;
-
-						if (isNormal)
-							mAzimuth = mAzimuth - 90;
-						else
-							mAzimuth = mAzimuth + 90;
-					}
+		            switch (mDisplay.getOrientation()){
+			            case Surface.ROTATION_0:
+			            	break;
+			            case Surface.ROTATION_90:
+			            	mAzimuth = mAzimuth + 90;
+			            	break;
+			            case Surface.ROTATION_180:
+			            	mAzimuth = mAzimuth +180;
+			            	break;
+			            case Surface.ROTATION_270:
+			            	mAzimuth = mAzimuth - 90;
+			            	break;
+		            }
 		        }
 		    }
 		    
@@ -140,6 +157,7 @@ public class CompassSensor{
 	 */
 	public CompassSensor(final Context context) {
 		mContext = context;
+		mDisplay = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg){
