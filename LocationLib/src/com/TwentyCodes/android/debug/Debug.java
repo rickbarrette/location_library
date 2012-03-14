@@ -30,7 +30,7 @@ public final class Debug {
 	 * Sets the default compass sensor update interval
 	 * @author ricky barrette
 	 */
-	public static final int COMPASS_UPDATE_INTERVAL = SensorManager.SENSOR_DELAY_UI;
+	public static final int COMPASS_UPDATE_INTERVAL = SensorManager.SENSOR_DELAY_NORMAL;
 
 	/**
 	 * The maximum running time for a single shot location service
