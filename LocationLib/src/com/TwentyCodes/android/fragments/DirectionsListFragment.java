@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.TwentyCodes.android.location.OnDirectionSelectedListener;
 import com.TwentyCodes.android.overlays.DirectionsOverlay;
 import com.google.android.maps.GeoPoint;
 
@@ -23,6 +22,21 @@ import com.google.android.maps.GeoPoint;
  * @author ricky barrette
  */
 public class DirectionsListFragment extends ListFragment {
+	
+	/**
+	 * A simple interfrace for a directions list fragment
+	 * @author ricky barrette
+	 */
+	public interface OnDirectionSelectedListener {
+		
+		/**
+		 * Called when the user selects a direction from a directions list
+		 * @param point
+		 * @author ricky barrette
+		 */
+		public void onDirectionSelected(GeoPoint point);
+
+	}
 	
 	private OnDirectionSelectedListener mListener;
 	private ArrayList<GeoPoint> mPoints;
