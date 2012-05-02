@@ -27,6 +27,7 @@ public class AndroidGPS implements LocationListener {
 	private final LocationManager mLocationManager;
 	private GeoPointLocationListener mListener;
 	private LocationListener mLocationListener;
+	private boolean isFirstFix;
 	
 	/**
 	 * Creates a new SkyHookFallback
@@ -34,6 +35,7 @@ public class AndroidGPS implements LocationListener {
 	 */
 	public AndroidGPS(Context context) {
 		mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		isFirstFix = true;
 	}
 	
 	/**
@@ -45,6 +47,7 @@ public class AndroidGPS implements LocationListener {
 			Log.d(TAG, "disableLocationUpdates()");
 		mListener = null;
 		mLocationManager.removeUpdates(this);
+		isFirstFix = true;
 	}
 
 	/**
@@ -88,6 +91,9 @@ public class AndroidGPS implements LocationListener {
 		if(mLocationListener != null){
 			mLocationListener.onLocationChanged(location);
 		}
+		
+		mListener.onFirstFix(isFirstFix);
+		isFirstFix = false;
 	}
 	
 	/**

@@ -49,6 +49,7 @@ public class SkyHook implements GeoPointLocationListener{
 	private boolean isFallBackScheduled = false;
 	private boolean isEnabled = false;
 	private boolean isUnauthorized = false;
+	private boolean isFirstFix;
 	
 	/*
 	 * this runnable will be used to check if we have location from skyhook,
@@ -123,6 +124,7 @@ public class SkyHook implements GeoPointLocationListener{
         // in the text view. we use a Handler because UI updates
         // must occur in the UI thread
         setUIHandler();
+        isFirstFix = true;
 	}
 	
 	/**
@@ -195,6 +197,7 @@ public class SkyHook implements GeoPointLocationListener{
     		mSkyHookFallback = null;
     		isEnabled = false;
     	}
+    	isFirstFix = true;
     }
     
     /**
@@ -226,7 +229,10 @@ public class SkyHook implements GeoPointLocationListener{
 	                    			Log.d(TAG,"got location "+ location.getLatitude() +", "+ location.getLongitude()+" +- "+ location.getHPE() +"m");
 	                    		
 	                			mListener.onLocationChanged(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), location.getHPE());
+	                			mListener.onFirstFix(isFirstFix);
 	                			hasLocation = true;
+	                			isFirstFix = false;
+	                			
 	                		}
 						}
 						return;
@@ -291,7 +297,7 @@ public class SkyHook implements GeoPointLocationListener{
 	}
 
 	@Override
-	public void onFirstFix(boolean isFistFix) {
-		// unused
+	public void onFirstFix(boolean firstFix) {
+		mListener.onFirstFix(firstFix);
 	}
 }    
