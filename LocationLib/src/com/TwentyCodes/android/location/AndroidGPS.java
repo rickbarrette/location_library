@@ -85,14 +85,15 @@ public class AndroidGPS implements LocationListener {
 	 */
 	@Override
 	public void onLocationChanged(Location location) {
-		if(mListener != null)
+		if(mListener != null) {
 			mListener.onLocationChanged(new GeoPoint( (int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), (int) location.getAccuracy());
+			mListener.onFirstFix(isFirstFix);
+		}
 		
 		if(mLocationListener != null){
 			mLocationListener.onLocationChanged(location);
 		}
 		
-		mListener.onFirstFix(isFirstFix);
 		isFirstFix = false;
 	}
 	
