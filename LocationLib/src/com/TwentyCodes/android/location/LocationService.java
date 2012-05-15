@@ -22,6 +22,7 @@ import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 
 /**
  * This service class will be used broadcast the users location either one time, or periodically.
@@ -117,7 +118,7 @@ public class LocationService extends Service implements LocationListener {
 		/*
 		 * que the fail safe runnable to kill the report location and kill it self after the MAX_RUN_TIME has been meet
 		 */
-		new Handler().postDelayed(failSafe, Debug.MAX_LOCATION_SERVICE_RUN_TIME);
+		new Handler().postDelayed(failSafe, LocationLibraryConstants.MAX_LOCATION_SERVICE_RUN_TIME);
 		super.onCreate();
 	}
 	
@@ -229,7 +230,7 @@ public class LocationService extends Service implements LocationListener {
 		if(Debug.DEBUG)
 			Log.d(TAG, "got location +- "+ location.getAccuracy() +"m");
 		mLocation = location;
-		if(location.getAccuracy() <= (mRequiredAccuracy > -1 ? mRequiredAccuracy : Debug.MINIMUM_REQUIRED_ACCURACY) || Debug.REPORT_FIRST_LOCATION){
+		if(location.getAccuracy() <= (mRequiredAccuracy > -1 ? mRequiredAccuracy : LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY) || LocationLibraryConstants.REPORT_FIRST_LOCATION){
 			stopSelf(mStartId);
 		}
 	}

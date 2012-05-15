@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 import com.skyhookwireless.wps.RegistrationCallback;
 import com.skyhookwireless.wps.WPSAuthentication;
 import com.skyhookwireless.wps.XPS;
@@ -60,7 +61,7 @@ public class SkyHookRegistration{
 	 */
 	public static String getUserName(final Context context){
 		
-		switch(Debug.DEFAULT_REGISTRATION_BEHAVIOR){
+		switch(LocationLibraryConstants.DEFAULT_REGISTRATION_BEHAVIOR){
 			case NORMAL:
 				TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 				if(tm == null)

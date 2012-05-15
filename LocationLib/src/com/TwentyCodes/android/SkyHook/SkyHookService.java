@@ -17,7 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 import com.TwentyCodes.android.location.GeoPointLocationListener;
 import com.TwentyCodes.android.location.LocationReceiver;
 import com.google.android.maps.GeoPoint;
@@ -121,7 +121,7 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
         	public void run(){
         		stopSelfResult(mStartID);
         	}
-        }, Debug.MAX_LOCATION_SERVICE_RUN_TIME);
+        }, LocationLibraryConstants.MAX_LOCATION_SERVICE_RUN_TIME);
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 		 * then continue 
 		 * else stop to report location
 		 */
-		if(accuracy < (this.mRequiredAccuracy > -1 ? this.mRequiredAccuracy : Debug.MINIMUM_REQUIRED_ACCURACY) || Debug.REPORT_FIRST_LOCATION)
+		if(accuracy < (this.mRequiredAccuracy > -1 ? this.mRequiredAccuracy : LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY) || LocationLibraryConstants.REPORT_FIRST_LOCATION)
 			this.stopSelf(this.mStartID);
 		
 	}
