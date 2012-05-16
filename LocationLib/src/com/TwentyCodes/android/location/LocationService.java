@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -48,8 +49,8 @@ public class LocationService extends Service implements LocationListener {
 	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
 	
 	/**
-	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link LocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
-	 * @see LocationReceiver.INTENT_EXTRA_ACTION_UPDATE
+	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
+	 * @see BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE
 	 */
 	public static final String INTENT_EXTRA_ACTION_UPDATE = "action_update";
 	
@@ -95,8 +96,8 @@ public class LocationService extends Service implements LocationListener {
 			if(mIntent.getAction() != null)
 				locationUpdate.setAction(mIntent.getAction());
 			else
-				locationUpdate.setAction(LocationReceiver.INTENT_EXTRA_ACTION_UPDATE);
-			locationUpdate.putExtra(LocationReceiver.INTENT_EXTRA_LOCATION_PARCEL, mLocation);
+				locationUpdate.setAction(LocationLibraryConstants.INTENT_ACTION_UPDATE);
+			locationUpdate.putExtra(LocationManager.KEY_LOCATION_CHANGED, mLocation);
 			sendBroadcast(locationUpdate);
 			stopSelf(mStartId);
 		}

@@ -1,8 +1,7 @@
 /**
- * PassiveLocationChangedReceiver.java
- * @date May 15, 2012
- * @author ricky barrette
  * @author Twenty Codes, LLC
+ * @author ricky barrette
+ * @date Oct 18, 2010
  */
 package com.TwentyCodes.android.location;
 
@@ -13,11 +12,12 @@ import android.location.Location;
 import android.location.LocationManager;
 
 /**
+ * this abstract class will be used as a for classes wishing to be a receiver of location updates from the location services
  * @author ricky barrette
  */
-public abstract class PassiveLocationChangedReceiver extends BroadcastReceiver {
-
-	protected Context mContext;
+public abstract class BaseLocationReceiver extends BroadcastReceiver {
+	
+	public Context mContext;
 
 	/**
 	 * (non-Javadoc)

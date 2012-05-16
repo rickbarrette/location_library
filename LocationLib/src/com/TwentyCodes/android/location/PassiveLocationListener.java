@@ -22,13 +22,13 @@ public class PassiveLocationListener {
 	/**
 	 * A convenience method for requesting passive location updates
 	 * @param context
+	 * @param receiverIntent
 	 * @author ricky barrette
 	 */
-	public static final void requestPassiveLocationUpdates(final Context context){
+	public static final void requestPassiveLocationUpdates(final Context context, final Intent receiverIntent){
 		if (LocationLibraryConstants.SUPPORTS_FROYO) {
             final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            final Intent passiveIntent = new Intent(context, PassiveLocationChangedReceiver.class);
-            final PendingIntent locationListenerPassivePendingIntent = PendingIntent.getBroadcast(context, 0, passiveIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final PendingIntent locationListenerPassivePendingIntent = PendingIntent.getBroadcast(context, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, locationListenerPassivePendingIntent);
         }
 	}

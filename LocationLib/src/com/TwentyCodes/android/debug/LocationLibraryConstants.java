@@ -1,5 +1,5 @@
 /**
- * Debug.java
+ * LocationLibraryConstants.java
  * @date Mar 1, 2011
  * @author ricky barrette
  * @author Twenty Codes, LLC
@@ -7,6 +7,7 @@
 package com.TwentyCodes.android.debug;
 
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 
 /**
  * This class will be used to set the Location Library Constants
@@ -14,6 +15,12 @@ import android.hardware.SensorManager;
  */
 public final class LocationLibraryConstants {
 	
+	static{
+		SUPPORTS_FROYO = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO;
+		
+		SUPPORTS_GINGERBREAD = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD;
+	}
+
 	/**
 	 * Sets the default SkyHook Registration Behavior used by SkyHookRegistration.getUserName()
 	 * @author ricky barrette
@@ -47,10 +54,8 @@ public final class LocationLibraryConstants {
 	public static final boolean SUPPORTS_FROYO;
 	
 	public static final boolean SUPPORTS_GINGERBREAD;
+
+	public static final String INTENT_ACTION_UPDATE = "TwentyCodes.intent.action.LocationUpdate";
 	
-	static{
-		SUPPORTS_FROYO = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.FROYO;
-		
-		SUPPORTS_GINGERBREAD = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD;
-	}
+	public static final String INTENT_EXTRA_LOCATION_CHANGED = LocationManager.KEY_LOCATION_CHANGED;
 }
