@@ -21,6 +21,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 
 /**
  * A simple convince class that accesses the compass sensor on another thread
@@ -206,9 +207,9 @@ public class CompassSensor{
 					@Override
 					public void run() {
 						// Register this class as a listener for the accelerometer sensor
-						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), Debug.COMPASS_UPDATE_INTERVAL);
+						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), LocationLibraryConstants.COMPASS_UPDATE_INTERVAL);
 						// ...and the orientation sensor
-						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), Debug.COMPASS_UPDATE_INTERVAL);
+						mSensorManager.registerListener(mCallBack, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), LocationLibraryConstants.COMPASS_UPDATE_INTERVAL);
 					}
 				}).start();
 		}

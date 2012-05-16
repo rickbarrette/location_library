@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -22,6 +23,7 @@ import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 
 /**
  * This service class will be used broadcast the users location either one time, or periodically.
@@ -47,8 +49,8 @@ public class LocationService extends Service implements LocationListener {
 	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
 	
 	/**
-	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link LocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
-	 * @see LocationReceiver.INTENT_EXTRA_ACTION_UPDATE
+	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
+	 * @see BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE
 	 */
 	public static final String INTENT_EXTRA_ACTION_UPDATE = "action_update";
 	
@@ -94,8 +96,8 @@ public class LocationService extends Service implements LocationListener {
 			if(mIntent.getAction() != null)
 				locationUpdate.setAction(mIntent.getAction());
 			else
-				locationUpdate.setAction(LocationReceiver.INTENT_EXTRA_ACTION_UPDATE);
-			locationUpdate.putExtra(LocationReceiver.INTENT_EXTRA_LOCATION_PARCEL, mLocation);
+				locationUpdate.setAction(LocationLibraryConstants.INTENT_ACTION_UPDATE);
+			locationUpdate.putExtra(LocationManager.KEY_LOCATION_CHANGED, mLocation);
 			sendBroadcast(locationUpdate);
 			stopSelf(mStartId);
 		}
@@ -117,7 +119,7 @@ public class LocationService extends Service implements LocationListener {
 		/*
 		 * que the fail safe runnable to kill the report location and kill it self after the MAX_RUN_TIME has been meet
 		 */
-		new Handler().postDelayed(failSafe, Debug.MAX_LOCATION_SERVICE_RUN_TIME);
+		new Handler().postDelayed(failSafe, LocationLibraryConstants.MAX_LOCATION_SERVICE_RUN_TIME);
 		super.onCreate();
 	}
 	
@@ -229,7 +231,7 @@ public class LocationService extends Service implements LocationListener {
 		if(Debug.DEBUG)
 			Log.d(TAG, "got location +- "+ location.getAccuracy() +"m");
 		mLocation = location;
-		if(location.getAccuracy() <= (mRequiredAccuracy > -1 ? mRequiredAccuracy : Debug.MINIMUM_REQUIRED_ACCURACY) || Debug.REPORT_FIRST_LOCATION){
+		if(location.getAccuracy() <= (mRequiredAccuracy > -1 ? mRequiredAccuracy : LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY) || LocationLibraryConstants.REPORT_FIRST_LOCATION){
 			stopSelf(mStartId);
 		}
 	}

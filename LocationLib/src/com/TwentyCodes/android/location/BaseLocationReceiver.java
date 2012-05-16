@@ -9,38 +9,32 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 
 /**
  * this abstract class will be used as a for classes wishing to be a receiver of location updates from the location services
  * @author ricky barrette
  */
-public abstract class LocationReceiver extends BroadcastReceiver {
+public abstract class BaseLocationReceiver extends BroadcastReceiver {
 	
-	public static final String INTENT_EXTRA_ACTION_UPDATE = "TwentyCodes.intent.action.LocationUpdate";
-	public static final String INTENT_EXTRA_LOCATION_PARCEL = "location_parcel";
 	public Context mContext;
 
 	/**
 	 * (non-Javadoc)
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
-	 * @param contextonBind
-	 * @param intent
-	 * @author ricky barrette
 	 */
 	@Override
-	public void onReceive(final Context context, final Intent intent) {
+	public void onReceive(Context context, Intent intent) {
 		mContext = context;
-		if(intent.getParcelableExtra(INTENT_EXTRA_LOCATION_PARCEL) != null){
-			Location location = intent.getParcelableExtra(INTENT_EXTRA_LOCATION_PARCEL);
-			onLocationUpdate(location);
-		}
+		final String key = LocationManager.KEY_LOCATION_CHANGED;
+		if (intent.hasExtra(key))
+			onLocationUpdate((Location)intent.getExtras().get(key));
 	}
-
+	
 	/**
 	 * called when a location update is received
 	 * @param parcelableExtra
 	 * @author ricky barrette
 	 */
 	public abstract void onLocationUpdate(Location location);
-
 }

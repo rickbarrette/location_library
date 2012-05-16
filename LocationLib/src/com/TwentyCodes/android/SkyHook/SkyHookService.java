@@ -13,13 +13,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.TwentyCodes.android.debug.Debug;
+import com.TwentyCodes.android.debug.LocationLibraryConstants;
 import com.TwentyCodes.android.location.GeoPointLocationListener;
-import com.TwentyCodes.android.location.LocationReceiver;
+import com.TwentyCodes.android.location.BaseLocationReceiver;
 import com.google.android.maps.GeoPoint;
 import com.skyhookwireless.wps.RegistrationCallback;
 import com.skyhookwireless.wps.WPSContinuation;
@@ -49,8 +50,8 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
 	
 	/**
-	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link LocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
-	 * @see LocationReceiver.INTENT_EXTRA_ACTION_UPDATE
+	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
+	 * @see BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE
 	 */
 	public static final String INTENT_EXTRA_ACTION_UPDATE = "action_update";
 	
@@ -75,8 +76,8 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 			if(mIntent.getAction() != null)
 				locationUpdate.setAction(mIntent.getAction());
 			else
-				locationUpdate.setAction(LocationReceiver.INTENT_EXTRA_ACTION_UPDATE);
-			locationUpdate.putExtra(LocationReceiver.INTENT_EXTRA_LOCATION_PARCEL, convertLocation());
+				locationUpdate.setAction(LocationLibraryConstants.INTENT_ACTION_UPDATE);
+			locationUpdate.putExtra(LocationManager.KEY_LOCATION_CHANGED, convertLocation());
 			sendBroadcast(locationUpdate);
 		}
 	}
@@ -121,7 +122,7 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
         	public void run(){
         		stopSelfResult(mStartID);
         	}
-        }, Debug.MAX_LOCATION_SERVICE_RUN_TIME);
+        }, LocationLibraryConstants.MAX_LOCATION_SERVICE_RUN_TIME);
 	}
 	
 	/**
@@ -228,7 +229,7 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 		 * then continue 
 		 * else stop to report location
 		 */
-		if(accuracy < (this.mRequiredAccuracy > -1 ? this.mRequiredAccuracy : Debug.MINIMUM_REQUIRED_ACCURACY) || Debug.REPORT_FIRST_LOCATION)
+		if(accuracy < (this.mRequiredAccuracy > -1 ? this.mRequiredAccuracy : LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY) || LocationLibraryConstants.REPORT_FIRST_LOCATION)
 			this.stopSelf(this.mStartID);
 		
 	}
