@@ -298,6 +298,7 @@ public class SkyHook implements GeoPointLocationListener{
 
 	@Override
 	public void onFirstFix(boolean firstFix) {
-		mListener.onFirstFix(firstFix);
+		if(mListener != null)
+			mListener.onFirstFix(firstFix);
 	}
 }    
