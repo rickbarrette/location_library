@@ -177,11 +177,13 @@ public class SkyHookService extends Service implements GeoPointLocationListener,
 		
 		this.mIntent = intent;
 		
-		if (intent.hasExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
-			mPeriod = intent.getLongExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, 60000L);
-		
-		if (intent.hasExtra(INTENT_EXTRA_REQUIRED_ACCURACY))
-			mRequiredAccuracy = intent.getIntExtra(INTENT_EXTRA_REQUIRED_ACCURACY, -1);
+		if(intent != null){
+			if (intent.hasExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
+				mPeriod = intent.getLongExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, 60000L);
+			
+			if (intent.hasExtra(INTENT_EXTRA_REQUIRED_ACCURACY))
+				mRequiredAccuracy = intent.getIntExtra(INTENT_EXTRA_REQUIRED_ACCURACY, -1);
+		}
 	}
 	
 	/**
