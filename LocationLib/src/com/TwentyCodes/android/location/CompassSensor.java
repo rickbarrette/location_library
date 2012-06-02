@@ -222,9 +222,9 @@ public class CompassSensor{
 	 */
 	public void setDeclination(final Location location){
         if (location != null) {
-            final GeomagneticField geomagneticField = new GeomagneticField(new Double(location.getLatitude()).floatValue(), 
-            		new Double(location.getLongitude()).floatValue(), 
-                    new Double(location.getAltitude()).floatValue(), 
+            final GeomagneticField geomagneticField = new GeomagneticField(Double.valueOf(location.getLatitude()).floatValue(), 
+            		Double.valueOf(location.getLongitude()).floatValue(), 
+            		Double.valueOf(location.getAltitude()).floatValue(), 
                     System.currentTimeMillis());
             mDelination = geomagneticField.getDeclination();
         } else {
