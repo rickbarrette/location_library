@@ -46,11 +46,22 @@ public class CompassSensor{
 	public static final String TAG = "CompassSensor";
 	private static final int BEARING = 0;
 	private final Display mDisplay;
-	private final Handler mHandler;
+	private static final Handler mHandler;
 	private final SensorManager mSensorManager;
 	private final Context mContext;
-	private CompassListener mListener;
+	private static CompassListener mListener;
 	private float mDelination = 0;
+
+	static{
+		mHandler = new Handler(){
+			@Override
+			public void handleMessage(Message msg){
+				if(mListener != null)
+					if(msg.what == BEARING)
+						mListener.onCompassUpdate((Float) msg.obj);
+			}
+		};
+	}
 
 	private final SensorEventListener mCallBack = new SensorEventListener() {
 
@@ -173,15 +184,6 @@ public class CompassSensor{
 	public CompassSensor(final Context context) {
 		mContext = context;
 		mDisplay = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-		mHandler = new Handler(){
-			@Override
-			public void handleMessage(Message msg){
-				if(mListener != null)
-					if(msg.what == BEARING)
-						mListener.onCompassUpdate((Float) msg.obj);
-			}
-		};
-		
 		mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 	}
 	
