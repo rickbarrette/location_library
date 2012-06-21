@@ -8,6 +8,7 @@ package com.TwentyCodes.android.debug;
 
 import com.TwentyCodes.android.location.BaseLocationReceiver;
 
+import android.app.AlarmManager;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 
@@ -51,7 +52,7 @@ public final class LocationLibraryConstants {
 	 * Minimum Required accuracy to report
 	 * @author ricky barrette
 	 */
-	public static final int MINIMUM_REQUIRED_ACCURACY = 50;
+	public static final int MINIMUM_REQUIRED_ACCURACY = 100;
 	
 	public static final boolean SUPPORTS_FROYO;
 	
@@ -70,4 +71,9 @@ public final class LocationLibraryConstants {
 	 * Used to tell the service how accurate of a location you want reported
 	 */
 	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
+	
+	/**
+	 * used if the INTENT_EXTRA_PERIOD_BETWEEN_UPDATES is present, but contains no data
+	 */
+	public static final long FAIL_SAFE_UPDATE_INVERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
 }
