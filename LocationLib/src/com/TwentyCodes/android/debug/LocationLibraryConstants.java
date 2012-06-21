@@ -6,6 +6,8 @@
  */
 package com.TwentyCodes.android.debug;
 
+import com.TwentyCodes.android.location.BaseLocationReceiver;
+
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 
@@ -58,4 +60,14 @@ public final class LocationLibraryConstants {
 	public static final String INTENT_ACTION_UPDATE = "TwentyCodes.intent.action.LocationUpdate";
 	
 	public static final String INTENT_EXTRA_LOCATION_CHANGED = LocationManager.KEY_LOCATION_CHANGED;
+	
+	/**
+	 * Used to tell the service how frequently it needs to run. This is required if you want a multishot service
+	 */
+	public static final String INTENT_EXTRA_PERIOD_BETWEEN_UPDATES = "period_beween_updates";
+	
+	/**
+	 * Used to tell the service how accurate of a location you want reported
+	 */
+	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
 }

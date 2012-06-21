@@ -37,22 +37,6 @@ import com.TwentyCodes.android.debug.LocationLibraryConstants;
  * @author ricky barrette
  */
 public class LocationService extends Service implements LocationListener {
-
-	/**
-	 * Used to tell the service how frequently it needs to run. This is required if you want a multishot service
-	 */
-	public static final String INTENT_EXTRA_PERIOD_BETWEEN_UPDATES = "period_beween_updates";
-	
-	/**
-	 * Used to tell the service how accurate of a location you want reported
-	 */
-	public static final String INTENT_EXTRA_REQUIRED_ACCURACY = "required_accuracy";
-	
-	/**
-	 * Used to tell the service the update action to broadcast. If this is not supplied, {@link BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE } will be used.
-	 * @see BaseLocationReceiver.INTENT_EXTRA_ACTION_UPDATE
-	 */
-	public static final String INTENT_EXTRA_ACTION_UPDATE = "action_update";
 	
 	public static final String TAG = "LocationService";
 	private static final int REQUEST_CODE = 7893749;
@@ -180,11 +164,11 @@ public class LocationService extends Service implements LocationListener {
 		
 		this.mIntent = intent;
 		
-		if (intent.hasExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
-			mPeriod = intent.getLongExtra(INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, 60000L);
+		if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
+			mPeriod = intent.getLongExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, 60000L);
 		
-		if (intent.hasExtra(INTENT_EXTRA_REQUIRED_ACCURACY))
-			mRequiredAccuracy = intent.getIntExtra(INTENT_EXTRA_REQUIRED_ACCURACY, -1);
+		if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY))
+			mRequiredAccuracy = intent.getIntExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY, -1);
 	}
 	
 	/**
