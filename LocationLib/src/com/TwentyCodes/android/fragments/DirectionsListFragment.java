@@ -17,18 +17,18 @@ import com.TwentyCodes.android.overlays.DirectionsOverlay;
 import com.google.android.maps.GeoPoint;
 
 /**
- * This fragment will be used to display directions to the user. 
+ * This fragment will be used to display directions to the user.
  * When a specific direction is clicked, the corrispoding geopoint is returned via listener
  * @author ricky barrette
  */
 public class DirectionsListFragment extends ListFragment {
-	
+
 	/**
 	 * A simple interfrace for a directions list fragment
 	 * @author ricky barrette
 	 */
 	public interface OnDirectionSelectedListener {
-		
+
 		/**
 		 * Called when the user selects a direction from a directions list
 		 * @param point
@@ -37,7 +37,7 @@ public class DirectionsListFragment extends ListFragment {
 		public void onDirectionSelected(GeoPoint point);
 
 	}
-	
+
 	private OnDirectionSelectedListener mListener;
 	private ArrayList<GeoPoint> mPoints;
 
@@ -54,17 +54,17 @@ public class DirectionsListFragment extends ListFragment {
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public DirectionsListFragment(OnDirectionSelectedListener listener) {
+	public DirectionsListFragment(final OnDirectionSelectedListener listener) {
 		this();
 		mListener = listener;
 	}
-	
+
 	/**
 	 * Deletes all content in the listview
 	 * @author ricky barrette
 	 */
 	public void clear() {
-		this.setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>()));
+		setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>()));
 	}
 
 	/**
@@ -74,19 +74,19 @@ public class DirectionsListFragment extends ListFragment {
 	 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
 	 */
 	@Override
-	public void onListItemClick(ListView l, View w, int position, long id) {
+	public void onListItemClick(final ListView l, final View w, final int position, final long id) {
 		if(position < mPoints.size())
 			if(mListener != null)
 				mListener.onDirectionSelected(mPoints.get(position));
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
 	public void onStart() {
-		this.setListShown(true);
+		setListShown(true);
 		super.onStart();
 	}
 
@@ -97,7 +97,7 @@ public class DirectionsListFragment extends ListFragment {
 	 */
 	public void setDirections(final DirectionsOverlay directions) {
 		mPoints = directions.getPoints();
-		this.setListAdapter(new DirectionsAdapter(getActivity(), directions));
+		setListAdapter(new DirectionsAdapter(getActivity(), directions));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class DirectionsListFragment extends ListFragment {
 	 * @param text
 	 * @author ricky barrette
 	 */
-	public void SetEmptyText(String text){
-		this.setEmptyText(text);
+	public void SetEmptyText(final String text){
+		setEmptyText(text);
 	}
 }

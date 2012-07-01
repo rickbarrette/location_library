@@ -41,7 +41,7 @@ public final class PathOverlay extends Overlay {
 		mMode = PATH;
 		mRadius = 0;
 	}
-	
+
 	/**
 	 * Creates a new PathOverlay in point mode. This is used to draw end points.
 	 * @param point
@@ -56,29 +56,29 @@ public final class PathOverlay extends Overlay {
 		mEnd = mStart;
 		mColor = color;
 	}
-	
+
 	/**
 	 * 
 	 * @param canvas canvas to be drawn on
-	 * @param mapView 
-	 * @param shadow 
+	 * @param mapView
+	 * @param shadow
 	 * @param when
 	 */
 	@Override
-	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow) {
 		final Projection projection = mapView.getProjection();
 		final Paint paint = new Paint();
 		paint.setColor(mColor);
 		paint.setAntiAlias(true);
-		Point point = new Point();
+		final Point point = new Point();
 		projection.toPixels(mStart, point);
-		
+
 		switch (mMode){
 			case POINT:
-				RectF oval = new RectF(point.x - mRadius, point.y - mRadius, point.x + mRadius, point.y + mRadius);
+				final RectF oval = new RectF(point.x - mRadius, point.y - mRadius, point.x + mRadius, point.y + mRadius);
 				canvas.drawOval(oval, paint);
 			case PATH:
-				Point point2 = new Point();
+				final Point point2 = new Point();
 				projection.toPixels(mEnd, point2);
 				paint.setStrokeWidth(5);
 				paint.setAlpha(120);
@@ -86,20 +86,20 @@ public final class PathOverlay extends Overlay {
 		}
 		super.draw(canvas, mapView, shadow);
 	}
-	
+
 	/**
 	 * @return the end point of this path
 	 * @author ricky barrette
 	 */
 	public GeoPoint getEndPoint(){
-		return this.mEnd;
+		return mEnd;
 	}
-	
+
 	/**
 	 * @return the start point of this path
 	 * @author ricky barrette
 	 */
 	public GeoPoint getStartPoint(){
-		return this.mStart;
+		return mStart;
 	}
 }

@@ -15,16 +15,16 @@ public enum SkyHookRegistrationBehavior {
 	/**
 	 * Used to force SkyHookRegistration.getUserName to behave normally
 	 */
-	NORMAL, 
-	
+	NORMAL,
+
 	/**
 	 * Used to force SkyHookRegistration.getUserName to return the testing user name
 	 */
-	USE_TESTING_USERNAME, 
-	
+	USE_TESTING_USERNAME,
+
 	/**
 	 * Used to force SkyHookRegistration.getUserName to return null
 	 */
 	RETURN_NULL;
-	
+
 }

@@ -12,7 +12,14 @@ import com.google.android.maps.GeoPoint;
  * @author ricky barrette
  */
 public interface GeoPointLocationListener {
-	
+
+	/**
+	 * Called when first fix is aquired
+	 * @param isFirstFix
+	 * @author ricky barrette
+	 */
+	public void onFirstFix(boolean isFirstFix);
+
 	/**
 	 * Called when the location has changed
 	 * @param point
@@ -20,11 +27,4 @@ public interface GeoPointLocationListener {
 	 * @author ricky barrette
 	 */
 	public void onLocationChanged(GeoPoint point, int accuracy);
-	
-	/**
-	 * Called when first fix is aquired
-	 * @param isFirstFix
-	 * @author ricky barrette
-	 */
-	public void onFirstFix(boolean isFirstFix);
 }

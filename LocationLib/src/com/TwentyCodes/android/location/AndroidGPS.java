@@ -22,22 +22,22 @@ import com.google.android.maps.GeoPoint;
  * @author ricky barrette
  */
 public class AndroidGPS implements LocationListener {
-	
+
 	private static final String TAG = "AndroidGPS";
 	private final LocationManager mLocationManager;
 	private GeoPointLocationListener mListener;
 	private LocationListener mLocationListener;
 	private boolean isFirstFix;
-	
+
 	/**
 	 * Creates a new SkyHookFallback
 	 * @author ricky barrette
 	 */
-	public AndroidGPS(Context context) {
+	public AndroidGPS(final Context context) {
 		mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		isFirstFix = true;
 	}
-	
+
 	/**
 	 * Remove updates from androids location services
 	 * @author ricky barrette
@@ -51,28 +51,28 @@ public class AndroidGPS implements LocationListener {
 	}
 
 	/**
-	 * Attempts to enable periodic location updates
-	 * @param listener
-	 * @author ricky barrette
-	 */
-	public void enableLocationUpdates(LocationListener listener) {
-		if(Debug.DEBUG)
-			Log.d(SkyHook.TAG, "enableLocationUpdates()");
-		if(mLocationListener == null){
-			mLocationListener = listener;
-			requestUpdates();
-		}	
-	}
-
-	/**
 	 * request periodic location updates from androids location services
 	 * @author ricky barrette
 	 */
-	public void enableLocationUpdates(GeoPointLocationListener listener) {
+	public void enableLocationUpdates(final GeoPointLocationListener listener) {
 		if(Debug.DEBUG)
 			Log.d(SkyHook.TAG, "enableLocationUpdates()");
 		if (mListener == null) {
 			mListener = listener;
+			requestUpdates();
+		}
+	}
+
+	/**
+	 * Attempts to enable periodic location updates
+	 * @param listener
+	 * @author ricky barrette
+	 */
+	public void enableLocationUpdates(final LocationListener listener) {
+		if(Debug.DEBUG)
+			Log.d(SkyHook.TAG, "enableLocationUpdates()");
+		if(mLocationListener == null){
+			mLocationListener = listener;
 			requestUpdates();
 		}
 	}
@@ -84,19 +84,18 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(Location location) {
+	public void onLocationChanged(final Location location) {
 		if(mListener != null) {
 			mListener.onLocationChanged(new GeoPoint( (int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), (int) location.getAccuracy());
 			mListener.onFirstFix(isFirstFix);
 		}
-		
-		if(mLocationListener != null){
+
+		if(mLocationListener != null)
 			mLocationListener.onLocationChanged(location);
-		}
-		
+
 		isFirstFix = false;
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
@@ -104,7 +103,7 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onProviderDisabled(String arg0) {
+	public void onProviderDisabled(final String arg0) {
 		// UNUSED
 
 	}
@@ -116,10 +115,10 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onProviderEnabled(String arg0) {
+	public void onProviderEnabled(final String arg0) {
 		// UNUSED
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see android.location.LocationListener#onStatusChanged(java.lang.String, int, android.os.Bundle)
@@ -129,7 +128,7 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+	public void onStatusChanged(final String arg0, final int arg1, final Bundle arg2) {
 		// UNUSED
 	}
 
@@ -140,7 +139,7 @@ public class AndroidGPS implements LocationListener {
 	private void requestUpdates() {
 		try {
 			mLocationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
 			/* We do no handle this exception as it is caused if the android version is < 1.6. since the PASSIVE_PROVIDER call is not required
 			 * to function we can ignore it.

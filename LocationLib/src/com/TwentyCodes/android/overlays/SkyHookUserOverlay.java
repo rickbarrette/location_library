@@ -17,12 +17,12 @@ import com.google.android.maps.MapView;
 public class SkyHookUserOverlay extends BaseUserOverlay{
 
 	private final SkyHook mSkyHook;
-	
-	public SkyHookUserOverlay(MapView mapView, Context context) {
+
+	public SkyHookUserOverlay(final MapView mapView, final Context context) {
 		super(mapView, context);
 		mSkyHook = new SkyHook(context);
 	}
-	
+
 	/**
 	 * Construct a new SkyHookUserOverlay
 	 * @param mapView
@@ -30,9 +30,14 @@ public class SkyHookUserOverlay extends BaseUserOverlay{
 	 * @param followUser
 	 * @author ricky barrette
 	 */
-	public SkyHookUserOverlay(MapView mapView, Context context, boolean followUser) {
+	public SkyHookUserOverlay(final MapView mapView, final Context context, final boolean followUser) {
 		super(mapView, context, followUser);
 		mSkyHook = new SkyHook(context);
+	}
+
+	@Override
+	public void onFirstFix(final boolean isFistFix) {
+		// unused
 	}
 
 	/**
@@ -54,11 +59,6 @@ public class SkyHookUserOverlay extends BaseUserOverlay{
 	public void onMyLocationEnabled() {
 		mSkyHook.setLocationListener(this);
 		mSkyHook.getUpdates();
-	}
-
-	@Override
-	public void onFirstFix(boolean isFistFix) {
-		// unused
 	}
 
 }

@@ -8,11 +8,11 @@ package com.TwentyCodes.android.location;
 import com.google.android.maps.GeoPoint;
 
 /**
- * This MidPoint object will hold the information form the calculations performed by GeoUtils.midPoint(). 
+ * This MidPoint object will hold the information form the calculations performed by GeoUtils.midPoint().
  * @author ricky barrette
  */
 public class MidPoint {
-	
+
 	private final int mMinLatitude;
 	private final int mMaxLatitude;
 	private final int mMinLongitude;
@@ -23,23 +23,14 @@ public class MidPoint {
 	 * Creates a new MidPoint
 	 * @author ricky barrette
 	 */
-	public MidPoint(GeoPoint midPoint, int minLatitude, int minLongitude, int maxLatitude, int maxLongitude) {
+	public MidPoint(final GeoPoint midPoint, final int minLatitude, final int minLongitude, final int maxLatitude, final int maxLongitude) {
 		mMinLatitude = minLatitude;
 		mMaxLatitude = maxLatitude;
 		mMinLongitude = minLongitude;
 		mMaxLongitude = maxLongitude;
 		mMidPoint = midPoint;
 	}
-	
-	/**
-	 * zooms the provided map view to the span of this mid point
-	 * @param mMapView
-	 * @author ricky barrette
-	 */
-	public void zoomToSpan(com.google.android.maps.MapView mMapView){
-		mMapView.getController().zoomToSpan((mMaxLatitude - mMinLatitude), (mMaxLongitude - mMinLongitude));
-	}
-	
+
 	/**
 	 * returns the calculated midpoint
 	 * @return
@@ -47,5 +38,14 @@ public class MidPoint {
 	 */
 	public GeoPoint getMidPoint(){
 		return mMidPoint;
+	}
+
+	/**
+	 * zooms the provided map view to the span of this mid point
+	 * @param mMapView
+	 * @author ricky barrette
+	 */
+	public void zoomToSpan(final com.google.android.maps.MapView mMapView){
+		mMapView.getController().zoomToSpan(mMaxLatitude - mMinLatitude, mMaxLongitude - mMinLongitude);
 	}
 }

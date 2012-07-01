@@ -15,8 +15,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="11" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
 
     <uses-feature
         android:name="android.hardware.location"

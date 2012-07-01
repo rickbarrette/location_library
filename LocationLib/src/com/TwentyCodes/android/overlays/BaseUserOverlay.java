@@ -33,13 +33,13 @@ import com.google.android.maps.Projection;
  * @author ricky barrette
  */
 public abstract class BaseUserOverlay extends Overlay implements GeoPointLocationListener, CompassListener {
-	
+
 	/**
 	 * This thread is responsible for animating the user icon
 	 * @author ricky barrette
 	 */
 	public class AnimationThread extends Thread {
-		
+
 		private boolean isAborted;
 
 		public void abort(){
@@ -51,59 +51,57 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 		 * (non-Javadoc)
 		 * @see java.lang.Thread#run()
 		 */
-		@Override 
+		@Override
 		public void run(){
 			super.run();
 			int index = 0;
 			boolean isCountingDown = false;
-			while (true) {
+			while (true)
 				synchronized (this) {
-					if (isAborted) {
+					if (isAborted)
 						break;
-					}
-					
+
 					switch(index){
-					case 1:
-						mUserArrow = R.drawable.user_arrow_animation_2;
-						if(isCountingDown)
+						case 1:
+							mUserArrow = R.drawable.user_arrow_animation_2;
+							if(isCountingDown)
+								index--;
+							else
+								index++;
+
+							try {
+								sleep(100l);
+							} catch (final InterruptedException e) {
+								e.printStackTrace();
+							}
+							break;
+						case 2:
+							mUserArrow = R.drawable.user_arrow_animation_3;
 							index--;
-						else
+							isCountingDown = true;
+							try {
+								sleep(200l);
+							} catch (final InterruptedException e) {
+								e.printStackTrace();
+							}
+							break;
+						default:
+							mUserArrow = R.drawable.user_arrow_animation_1;
 							index++;
-						
-						try {
-							sleep(100l);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						break;
-					case 2:
-						mUserArrow = R.drawable.user_arrow_animation_3;
-						index--;
-						isCountingDown = true;
-						try {
-							sleep(200l);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						break;
-					default:
-						mUserArrow = R.drawable.user_arrow_animation_1;
-						index++;
-						isCountingDown = false;
-						try {
-							sleep(2000l);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-							return;
-						}
-						break;
+							isCountingDown = false;
+							try {
+								sleep(2000l);
+							} catch (final InterruptedException e) {
+								e.printStackTrace();
+								return;
+							}
+							break;
 					}
 				}
-			}
-			
+
 		}
 	}
-	
+
 	private final String TAG = "UserOverlayBase";
 	private boolean isEnabled;
 	private int mUserArrow = R.drawable.user_arrow_animation_1;
@@ -111,30 +109,30 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	private float mBearing = 0;
 	private int mAccuracy;
 	private GeoPoint mPoint;
-	private Context mContext;
-	private MapView mMapView;
+	private final Context mContext;
+	private final MapView mMapView;
 	private boolean isFistFix = true;
 	private GeoPointLocationListener mListener;
 	public boolean isFollowingUser = true;
-	private CompasOverlay mCompass;
+	private final CompasOverlay mCompass;
 	private boolean isCompassEnabled;
-	
+
 	private CompassListener mCompassListener;
-	
+
 	/**
 	 * Construct a new UserOverlay
 	 * @param mapView
 	 * @param context
 	 * @author ricky barrette
 	 */
-	public BaseUserOverlay(MapView mapView, Context context) {
+	public BaseUserOverlay(final MapView mapView, final Context context) {
 		super();
 		mContext = context;
 		mMapView = mapView;
 		mCompass = new CompasOverlay(context);
 		mUserArrow = R.drawable.user_arrow_animation_1;
 	}
-	
+
 	/**
 	 * Construct a new UserOverlayTODO Auto-generated method stub
 	 * @param mapView
@@ -142,11 +140,11 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @param followUser
 	 * @author ricky barrette
 	 */
-	public BaseUserOverlay(MapView mapView, Context context, boolean followUser) {
+	public BaseUserOverlay(final MapView mapView, final Context context, final boolean followUser) {
 		this(mapView, context);
 		isFollowingUser = followUser;
 	}
-	
+
 	/**
 	 * Disables the compass
 	 * @author ricky barrette
@@ -155,7 +153,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 		isCompassEnabled = false;
 		mMapView.getOverlays().remove(mCompass);
 	}
-	
+
 	/**
 	 * Stops location updates and removes the overlay from view
 	 * @author ricky barrette
@@ -169,7 +167,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 			mListener.onFirstFix(false);
 		mAnimationThread.abort();
 	}
-	
+
 	/**
 	 * we override this methods so we can provide a drawable and a location to draw on the canvas.
 	 * (non-Javadoc)
@@ -180,12 +178,12 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @author ricky barrette
 	 */
 	@Override
-	public void draw(Canvas canvas, MapView mapView, boolean shadow){
+	public void draw(Canvas canvas, final MapView mapView, final boolean shadow){
 		if (isEnabled && mPoint != null) {
-			Point center = new Point();
-			Point left = new Point();
-			Projection projection = mapView.getProjection();
-			GeoPoint leftGeo = GeoUtils.distanceFrom(mPoint, mAccuracy);
+			final Point center = new Point();
+			final Point left = new Point();
+			final Projection projection = mapView.getProjection();
+			final GeoPoint leftGeo = GeoUtils.distanceFrom(mPoint, mAccuracy);
 			projection.toPixels(leftGeo, left);
 			projection.toPixels(mPoint, center);
 			canvas = drawAccuracyCircle(center, left, canvas);
@@ -194,7 +192,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 			 * the following log is used to demonstrate if the leftGeo point is the correct
 			 */
 			if(Debug.DEBUG)
-				Log.d(TAG, (GeoUtils.distanceKm(mPoint, leftGeo) * 1000)+"m");
+				Log.d(TAG, GeoUtils.distanceKm(mPoint, leftGeo) * 1000+"m");
 		}
 		super.draw(canvas, mapView, shadow);
 	}
@@ -207,96 +205,95 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @return modified canvas
 	 * @author ricky barrette
 	 */
-    private Canvas drawAccuracyCircle(Point center, Point left, Canvas canvas) {
-    	Paint paint = new Paint();
-    	
-        /*
-         * get radius of the circle being drawn by 
-         */
-        int circleRadius = center.x - left.x;
-        if(circleRadius <= 0){
-        	circleRadius = left.x - center.x;
-        }
-        /*
-         * paint a blue circle on the map  
-         */
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(2.0f);
-        paint.setColor(Color.BLUE);
-        paint.setStyle(Style.STROKE);
-        canvas.drawCircle(center.x, center.y, circleRadius, paint);
+	private Canvas drawAccuracyCircle(final Point center, final Point left, final Canvas canvas) {
+		final Paint paint = new Paint();
+
+		/*
+		 * get radius of the circle being drawn by
+		 */
+		int circleRadius = center.x - left.x;
+		if(circleRadius <= 0)
+			circleRadius = left.x - center.x;
+		/*
+		 * paint a blue circle on the map
+		 */
+		paint.setAntiAlias(true);
+		paint.setStrokeWidth(2.0f);
+		paint.setColor(Color.BLUE);
+		paint.setStyle(Style.STROKE);
+		canvas.drawCircle(center.x, center.y, circleRadius, paint);
 		/*
 		 * fill the radius with a alpha blue
 		 */
 		paint.setAlpha(30);
-        paint.setStyle(Style.FILL);
-        canvas.drawCircle(center.x, center.y, circleRadius, paint);
-        
-        /*
-         * for testing
-         * draw a dot over the left geopoint 
-         */
-        if(Debug.DEBUG){
-	        paint.setColor(Color.RED);
-			RectF oval = new RectF(left.x - 1, left.y - 1, left.x + 1, left.y + 1);
+		paint.setStyle(Style.FILL);
+		canvas.drawCircle(center.x, center.y, circleRadius, paint);
+
+		/*
+		 * for testing
+		 * draw a dot over the left geopoint
+		 */
+		if(Debug.DEBUG){
+			paint.setColor(Color.RED);
+			final RectF oval = new RectF(left.x - 1, left.y - 1, left.x + 1, left.y + 1);
 			canvas.drawOval(oval, paint);
-        }
-    	
-        return canvas;
+		}
+
+		return canvas;
 	}
-	
-    /**
-     * draws user arrow that points north based on bearing onto the supplied canvas
-     * @param point to draw user arrow on
-     * @param bearing of the device
-     * @param canvas to draw on
-     * @return modified canvas
-     * @author ricky barrette
-     */
-    private Canvas drawUser(Point point, float bearing, Canvas canvas){
-    	Bitmap user = BitmapFactory.decodeResource(mContext.getResources(), mUserArrow);
-        Matrix matrix = new Matrix();
-        matrix.postRotate(bearing);
-        Bitmap rotatedBmp = Bitmap.createBitmap(
-            user, 
-            0, 0, 
-            user.getWidth(), 
-            user.getHeight(), 
-            matrix, 
-            true
-        );
-        canvas.drawBitmap(
-            rotatedBmp, 
-            point.x - (rotatedBmp.getWidth()  / 2), 
-            point.y - (rotatedBmp.getHeight() / 2), 
-            null
-        );
-        return canvas;
-    }
-    
-    /**
-     * Enables the compass
-     * @author ricky barrette
-     */
-    public void enableCompass(){
-    	if(! this.isCompassEnabled){
-    		this.mMapView.getOverlays().add(this.mCompass);
-    		this.isCompassEnabled = true;
-    	}
-    }
-    
-    /**
-     * Attempts to enable MyLocation, registering for updates from provider
-     * @author ricky barrette
-     */
-    public void enableMyLocation(){
-    	if(Debug.DEBUG)
-    		Log.d(TAG,"enableMyLocation()");
-    	if (! isEnabled) {
-    		
-    		mAnimationThread = new AnimationThread();
-    		mAnimationThread.start();
-    		
+
+	/**
+	 * draws user arrow that points north based on bearing onto the supplied canvas
+	 * @param point to draw user arrow on
+	 * @param bearing of the device
+	 * @param canvas to draw on
+	 * @return modified canvas
+	 * @author ricky barrette
+	 */
+	private Canvas drawUser(final Point point, final float bearing, final Canvas canvas){
+		final Bitmap user = BitmapFactory.decodeResource(mContext.getResources(), mUserArrow);
+		final Matrix matrix = new Matrix();
+		matrix.postRotate(bearing);
+		final Bitmap rotatedBmp = Bitmap.createBitmap(
+				user,
+				0, 0,
+				user.getWidth(),
+				user.getHeight(),
+				matrix,
+				true
+				);
+		canvas.drawBitmap(
+				rotatedBmp,
+				point.x - rotatedBmp.getWidth()  / 2,
+				point.y - rotatedBmp.getHeight() / 2,
+				null
+				);
+		return canvas;
+	}
+
+	/**
+	 * Enables the compass
+	 * @author ricky barrette
+	 */
+	public void enableCompass(){
+		if(! isCompassEnabled){
+			mMapView.getOverlays().add(mCompass);
+			isCompassEnabled = true;
+		}
+	}
+
+	/**
+	 * Attempts to enable MyLocation, registering for updates from provider
+	 * @author ricky barrette
+	 */
+	public void enableMyLocation(){
+		if(Debug.DEBUG)
+			Log.d(TAG,"enableMyLocation()");
+		if (! isEnabled) {
+
+			mAnimationThread = new AnimationThread();
+			mAnimationThread.start();
+
 			onMyLocationEnabled();
 			isEnabled = true;
 			mCompass.enable(this);
@@ -304,37 +301,37 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 			if(mListener != null)
 				mListener.onFirstFix(false);
 		}
-    }
-    
-    /**
-     * Allows the map to follow the user
-     * @param followUser
-     * @author ricky barrette
-     */
-    public void followUser(boolean followUser){
-    	if(Debug.DEBUG)
-    		Log.d(TAG,"followUser()");
-    	isFollowingUser = followUser;
-    }
-    
-    /**
+	}
+
+	/**
+	 * Allows the map to follow the user
+	 * @param followUser
+	 * @author ricky barrette
+	 */
+	public void followUser(final boolean followUser){
+		if(Debug.DEBUG)
+			Log.d(TAG,"followUser()");
+		isFollowingUser = followUser;
+	}
+
+	/**
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
 	public GeoPoint getDestination(){
 		return mCompass.getDestination();
 	}
-    
-    /**
-     * returns the users current bearing
-     * @return
-     * @author ricky barrette
-     */
-    public float getUserBearing(){
-    	return mBearing;
-    }
-    
-    /**
+
+	/**
+	 * returns the users current bearing
+	 * @return
+	 * @author ricky barrette
+	 */
+	public float getUserBearing(){
+		return mBearing;
+	}
+
+	/**
 	 * returns the users current location
 	 * @return
 	 * @author ricky barrette
@@ -342,9 +339,9 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	public GeoPoint getUserLocation(){
 		return mPoint;
 	}
-    
+
 	@Override
-	public void onCompassUpdate(float bearing) {
+	public void onCompassUpdate(final float bearing) {
 		if(mCompassListener != null)
 			mCompassListener.onCompassUpdate(bearing);
 		mBearing = bearing;
@@ -360,34 +357,32 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(GeoPoint point, int accuracy) {
-		
+	public void onLocationChanged(final GeoPoint point, final int accuracy) {
+
 		if(mCompass != null)
 			mCompass.setLocation(point);
-		
+
 		/*
 		 * if this is the first fix
 		 * set map center the users location, and zoom to the max zoom level
 		 */
 		if(point != null && isFistFix){
 			mMapView.getController().setCenter(point);
-			mMapView.getController().setZoom( (mMapView.getMaxZoomLevel() - 2) );
+			mMapView.getController().setZoom( mMapView.getMaxZoomLevel() - 2 );
 			if(mListener != null)
 				mListener.onFirstFix(true);
 			isFistFix = false;
 		}
-		
+
 		//update the users point, and accuracy for the UI
 		mPoint = point;
 		mAccuracy = accuracy;
 		mMapView.invalidate();
-		if(mListener != null){
+		if(mListener != null)
 			mListener.onLocationChanged(point, accuracy);
-		}
-		
-		if (isFollowingUser) {
+
+		if (isFollowingUser)
 			panToUserIfOffMap(point);
-		}
 	}
 
 	/**
@@ -397,43 +392,41 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	public abstract void onMyLocationDisabled();
 
 	/**
-     * Called when the enableMyLocation() is called. This is where you want to ask your location provider for updates 
-     * @author ricky barrette
-     */
-    public abstract void onMyLocationEnabled();
-	
+	 * Called when the enableMyLocation() is called. This is where you want to ask your location provider for updates
+	 * @author ricky barrette
+	 */
+	public abstract void onMyLocationEnabled();
+
 	/**
 	 * pans the map view if the user is off screen.
 	 * @author ricky barrette
 	 */
-	private void panToUserIfOffMap(GeoPoint user) {
-		GeoPoint center = mMapView.getMapCenter();
-		double distance = GeoUtils.distanceKm(center, user);
-		double distanceLat = GeoUtils.distanceKm(center, new GeoPoint((center.getLatitudeE6() + (int) (mMapView.getLatitudeSpan() / 2)), center.getLongitudeE6()));
-		double distanceLon = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6(), (center.getLongitudeE6() + (int) (mMapView.getLongitudeSpan() / 2))));
-		
-		double whichIsGreater = (distanceLat > distanceLon) ? distanceLat : distanceLon;
-		
+	private void panToUserIfOffMap(final GeoPoint user) {
+		final GeoPoint center = mMapView.getMapCenter();
+		final double distance = GeoUtils.distanceKm(center, user);
+		final double distanceLat = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6() + mMapView.getLatitudeSpan() / 2, center.getLongitudeE6()));
+		final double distanceLon = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6(), center.getLongitudeE6() + mMapView.getLongitudeSpan() / 2));
+
+		final double whichIsGreater = distanceLat > distanceLon ? distanceLat : distanceLon;
+
 		/**
 		 * if the user is one the map, keep them their
 		 * else don't pan to user unless they pan pack to them
 		 */
 		if( ! (distance > whichIsGreater) )
-			if (distance >  distanceLat || distance > distanceLon){
+			if (distance >  distanceLat || distance > distanceLon)
 				mMapView.getController().animateTo(user);
-			}
 	}
-	
+
 	/**
 	 * Attempts to register the listener for location updates
 	 * @param listener
 	 * @author Ricky Barrette
 	 */
-	public void registerListener(GeoPointLocationListener listener){
+	public void registerListener(final GeoPointLocationListener listener){
 		Log.d(TAG,"registerListener()");
-		if (mListener == null){
+		if (mListener == null)
 			mListener = listener;
-		}
 	}
 
 	/**
@@ -444,7 +437,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @param y
 	 * @author ricky barrette
 	 */
-	public void setCompassDrawables(int needleResId, int backgroundResId, int x, int y) {
+	public void setCompassDrawables(final int needleResId, final int backgroundResId, final int x, final int y) {
 		mCompass.setDrawables(needleResId, backgroundResId, x, y);
 	}
 
@@ -453,19 +446,19 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setCompassListener(CompassListener listener){
+	public void setCompassListener(final CompassListener listener){
 		mCompassListener = listener;
 	}
-	
+
 	/**
 	 * Sets the destination for the compass
 	 * @author ricky barrette
 	 */
-	public void setDestination(GeoPoint destination){
+	public void setDestination(final GeoPoint destination){
 		if(mCompass != null)
 			mCompass.setDestination(destination);
 	}
-		
+
 	/**
 	 * UnResgisters the listener. after this call you will no longer get location updates
 	 * @author Ricky Barrette

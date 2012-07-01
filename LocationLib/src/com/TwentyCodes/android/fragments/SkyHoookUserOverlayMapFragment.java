@@ -31,16 +31,16 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	public SkyHoookUserOverlayMapFragment() {
 		super();
 	}
-	
+
 	/**
 	 * Tells the useroverlay to pan the map to follow the user
 	 * @param followUser
 	 * @author ricky barrette
 	 */
-	public void followUser(boolean followUser){
+	public void followUser(final boolean followUser){
 		mUserOverlay.followUser(followUser);
 	}
-	
+
 	/**
 	 * @return return the current destination
 	 * @author ricky barrette
@@ -56,20 +56,20 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	public GeoPoint getUserLocation() {
 		return mUserOverlay.getUserLocation();
 	}
-	
+
 	/**
 	 * Called when the compass is updated
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.location.CompassListener#onCompassUpdate(float)
 	 */
 	@Override
-	public void onCompassUpdate(float bearing) {
+	public void onCompassUpdate(final float bearing) {
 		if(mCompassListener != null)
 			mCompassListener.onCompassUpdate(bearing);
 	}
 
 	@Override
-	public void onFirstFix(boolean isFistFix) {
+	public void onFirstFix(final boolean isFistFix) {
 		if(mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onFirstFix(isFistFix);
 	}
@@ -79,7 +79,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(GeoPoint point, int accuracy) {
+	public void onLocationChanged(final GeoPoint point, final int accuracy) {
 		if(mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onLocationChanged(point, accuracy);
 	}
@@ -89,16 +89,16 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onMapViewCreate(com.TwentyCodes.android.location.MapView)
 	 */
 	@Override
-	public void onMapViewCreate(MapView map) {
-		mUserOverlay = new SkyHookUserOverlay(map, this.getActivity().getApplicationContext());
+	public void onMapViewCreate(final MapView map) {
+		mUserOverlay = new SkyHookUserOverlay(map, getActivity().getApplicationContext());
 		mUserOverlay.registerListener(this);
 		mUserOverlay.setCompassListener(this);
 		mUserOverlay.enableCompass();
 		mUserOverlay.followUser(true);
-		
+
 		map.getOverlays().add(mUserOverlay);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onPause()
@@ -109,7 +109,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 		mUserOverlay.disableMyLocation();
 		removeOverlay(mUserOverlay);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onResume()
@@ -122,7 +122,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 			addOverlay(mUserOverlay);
 		}
 	}
-	
+
 	/**
 	 * reorders the overlays to the UserOverlay always on top
 	 * @author ricky barrette
@@ -131,7 +131,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 		getMap().getOverlays().remove(mUserOverlay);
 		getMap().getOverlays().add(mUserOverlay);
 	}
-	
+
 	/**
 	 * @param needleResId
 	 * @param backgroundResId
@@ -139,15 +139,15 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	 * @param y
 	 * @author ricky barrette
 	 */
-	public void setCompassDrawables(int needleResId, int backgroundResId, int x, int y){
+	public void setCompassDrawables(final int needleResId, final int backgroundResId, final int x, final int y){
 		mUserOverlay.setCompassDrawables(needleResId, backgroundResId, x, y);
 	}
-	
+
 	/**
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setCompassListener(CompassListener listener){
+	public void setCompassListener(final CompassListener listener){
 		mCompassListener = listener;
 	}
 
@@ -156,7 +156,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(GeoPoint destination){
+	public void setDestination(final GeoPoint destination){
 		mUserOverlay.setDestination(destination);
 	}
 
@@ -164,7 +164,7 @@ public class SkyHoookUserOverlayMapFragment extends BaseMapFragment implements G
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setGeoPointLocationListener(GeoPointLocationListener listener){
+	public void setGeoPointLocationListener(final GeoPointLocationListener listener){
 		mGeoPointLocationListener = listener;
 	}
 }

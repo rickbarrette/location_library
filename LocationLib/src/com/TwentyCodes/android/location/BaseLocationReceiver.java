@@ -16,25 +16,25 @@ import android.location.LocationManager;
  * @author ricky barrette
  */
 public abstract class BaseLocationReceiver extends BroadcastReceiver {
-	
+
 	public Context mContext;
 
-	/**
-	 * (non-Javadoc)
-	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
-	 */
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		mContext = context;
-		final String key = LocationManager.KEY_LOCATION_CHANGED;
-		if (intent.hasExtra(key))
-			onLocationUpdate((Location)intent.getExtras().get(key));
-	}
-	
 	/**
 	 * called when a location update is received
 	 * @param parcelableExtra
 	 * @author ricky barrette
 	 */
 	public abstract void onLocationUpdate(Location location);
+
+	/**
+	 * (non-Javadoc)
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
+	public void onReceive(final Context context, final Intent intent) {
+		mContext = context;
+		final String key = LocationManager.KEY_LOCATION_CHANGED;
+		if (intent.hasExtra(key))
+			onLocationUpdate((Location)intent.getExtras().get(key));
+	}
 }

@@ -17,20 +17,29 @@ import com.TwentyCodes.android.location.R;
 import com.TwentyCodes.android.overlays.DirectionsOverlay;
 
 /**
- * this is a custom listview adaptor that wills a listview that has 2 textviews in each row. 
+ * this is a custom listview adaptor that wills a listview that has 2 textviews in each row.
  * @author ricky barrette
  */
 public class DirectionsAdapter extends BaseAdapter {
-	
+
+	/**
+	 * this class will hold the TextViews
+	 * @author ricky barrette
+	 */
+	class ViewHolder {
+		TextView text;
+		TextView text2;
+	}
 	private final LayoutInflater mInflater;
+
+
 	private final DirectionsOverlay mDirections;
-	
 
 	/**
 	 * Creates a new DirectionsAdapter
 	 * @author ricky barrette
 	 */
-	public DirectionsAdapter(Context context, DirectionsOverlay directions) {
+	public DirectionsAdapter(final Context context, final DirectionsOverlay directions) {
 		mInflater = LayoutInflater.from(context);
 		mDirections = directions;
 	}
@@ -54,7 +63,7 @@ public class DirectionsAdapter extends BaseAdapter {
 	 * @author ricky barrette
 	 */
 	@Override
-	public Object getItem(int position) {
+	public Object getItem(final int position) {
 		return position;
 	}
 
@@ -66,7 +75,7 @@ public class DirectionsAdapter extends BaseAdapter {
 	 * @author ricky barrette
 	 */
 	@Override
-	public long getItemId(int position) {
+	public long getItemId(final int position) {
 		return position;
 	}
 
@@ -82,37 +91,27 @@ public class DirectionsAdapter extends BaseAdapter {
 	@Override
 	public View getView(final int position, View convertView, final ViewGroup parent) {
 		final ViewHolder holder;
-			 if (convertView == null) {
-				 convertView = mInflater.inflate(R.layout.list_row, null);
-				 holder = new ViewHolder();
-				 holder.text = (TextView) convertView.findViewById(R.id.TextView01);
-				 holder.text2 = (TextView) convertView.findViewById(R.id.TextView02);
-				 
-				 convertView.setTag(holder);
-			 } else {
-				 holder = (ViewHolder) convertView.getTag();
-			 }
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.list_row, null);
+			holder = new ViewHolder();
+			holder.text = (TextView) convertView.findViewById(R.id.TextView01);
+			holder.text2 = (TextView) convertView.findViewById(R.id.TextView02);
 
-			 /**
-			  * Display the copyrights on the bottom of the directions list
-			  */
-			 if (position == mDirections.getDirections().size()){
-				 holder.text.setText(mDirections.getCopyrights());
-				 holder.text2.setText("");
-			 } else {
-			 	holder.text.setText(Html.fromHtml(mDirections.getDirections().get(position)));
-			 	holder.text2.setText(mDirections.getDurations().get(position) +" : "+ mDirections.getDistances().get(position));
-			 }
-			 return convertView;
-			 }
+			convertView.setTag(holder);
+		} else
+			holder = (ViewHolder) convertView.getTag();
 
-	/**
-	 * this class will hold the TextViews
-	 * @author ricky barrette
-	 */
-	class ViewHolder {
-		TextView text;
-		TextView text2;	
+		/**
+		 * Display the copyrights on the bottom of the directions list
+		 */
+		if (position == mDirections.getDirections().size()){
+			holder.text.setText(mDirections.getCopyrights());
+			holder.text2.setText("");
+		} else {
+			holder.text.setText(Html.fromHtml(mDirections.getDirections().get(position)));
+			holder.text2.setText(mDirections.getDurations().get(position) +" : "+ mDirections.getDistances().get(position));
+		}
+		return convertView;
 	}
 
 }

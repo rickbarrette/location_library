@@ -36,114 +36,114 @@ public class ReverseGeocoder {
 	private static final String TAG = "ReverseGeocoder";
 
 	/**
-	 * Performs a google maps search for the address 
-	 * @param location
-	 * @return JSON Array on google place marks nearby
+	 * Performs a google maps search for the address
+	 * @param address to search
+	 * @return JSON Array of google place marks
+	 * @throws IOException
+	 * @throws JSONException
 	 * @author ricky barrette
-	 * @throws IOException 
-	 * @throws JSONException 
 	 */
-    public static JSONArray getFromLocation(final  Location location) throws IOException, JSONException {
-    	String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
-		StringBuffer response = new StringBuffer();
-		HttpClient client = new DefaultHttpClient();
-		
+	public static JSONArray addressSearch(final String address) throws IOException, JSONException {
+		String urlStr = "http://maps.google.com/maps/geo?q=" + address + "&output=json&sensor=false";
+		urlStr = urlStr.replace(' ', '+');
+		final StringBuffer response = new StringBuffer();
+		final HttpClient client = new DefaultHttpClient();
+
 		if(Debug.DEBUG)
 			Log.d(TAG, urlStr);
-		HttpResponse hr = client.execute(new HttpGet(urlStr));
-		HttpEntity entity = hr.getEntity();
+		final HttpResponse hr = client.execute(new HttpGet(urlStr));
+		final HttpEntity entity = hr.getEntity();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+		final BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
 
 		String buff = null;
 		while ((buff = br.readLine()) != null)
 			response.append(buff);
-		
+
 		if(Debug.DEBUG)
 			Log.d(TAG, response.toString());
-		
+
 		return new JSONObject(response.toString()).getJSONArray("Placemark");
 	}
-    
-    /**
-     * Performs a google maps search for the closest address to the location
-     * @param lat
-     * @param lon
-     * @return string address, or lat, lon if search fails
-     * @author ricky barrette
-     */
-    public static String getAddressFromLocation(final  Location location) {
-    	String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
-		StringBuffer response = new StringBuffer();
-		HttpClient client = new DefaultHttpClient();
-		
+
+	/**
+	 * Performs a google maps search for the closest address to the location
+	 * @param lat
+	 * @param lon
+	 * @return string address, or lat, lon if search fails
+	 * @author ricky barrette
+	 */
+	public static String getAddressFromLocation(final  Location location) {
+		final String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
+		final StringBuffer response = new StringBuffer();
+		final HttpClient client = new DefaultHttpClient();
+
 		if(Debug.DEBUG)
 			Log.d(TAG, urlStr);
 		try {
-			HttpResponse hr = client.execute(new HttpGet(urlStr));
-			HttpEntity entity = hr.getEntity();
+			final HttpResponse hr = client.execute(new HttpGet(urlStr));
+			final HttpEntity entity = hr.getEntity();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+			final BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
 
 			String buff = null;
 			while ((buff = br.readLine()) != null)
 				response.append(buff);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		if(Debug.DEBUG)
 			Log.d(TAG, response.toString());
-		
+
 
 		JSONArray responseArray = null;
 		try {
 			responseArray = new JSONObject(response.toString()).getJSONArray("Placemark");
-		} catch (JSONException e) {
-			return location.getLatitude() +", "+ location.getLongitude() +" ± "+ location.getAccuracy()+"m";
+		} catch (final JSONException e) {
+			return location.getLatitude() +", "+ location.getLongitude() +" +/- "+ location.getAccuracy()+"m";
 		}
 
 		if(Debug.DEBUG)
 			Log.d(TAG,responseArray.length() + " result(s)");
-		
+
 		try {
-			JSONObject jsl = responseArray.getJSONObject(0);
+			final JSONObject jsl = responseArray.getJSONObject(0);
 			return jsl.getString("address");
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 		}
 
-		return location.getLatitude() +", "+ location.getLongitude() +" ± "+ location.getAccuracy()+"m";
+		return location.getLatitude() +", "+ location.getLongitude() +" +/- "+ location.getAccuracy()+"m";
 	}
 
-    /**
-     * Performs a google maps search for the address
-     * @param address to search
-     * @return JSON Array of google place marks
-     * @throws IOException
-     * @throws JSONException
-     * @author ricky barrette
-     */
-	public static JSONArray addressSearch(final String address) throws IOException, JSONException {
-		String urlStr = "http://maps.google.com/maps/geo?q=" + address + "&output=json&sensor=false";
-		urlStr = urlStr.replace(' ', '+');
-		StringBuffer response = new StringBuffer();
-		HttpClient client = new DefaultHttpClient();
-		
+	/**
+	 * Performs a google maps search for the address
+	 * @param location
+	 * @return JSON Array on google place marks nearby
+	 * @author ricky barrette
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public static JSONArray getFromLocation(final  Location location) throws IOException, JSONException {
+		final String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
+		final StringBuffer response = new StringBuffer();
+		final HttpClient client = new DefaultHttpClient();
+
 		if(Debug.DEBUG)
 			Log.d(TAG, urlStr);
-		HttpResponse hr = client.execute(new HttpGet(urlStr));
-		HttpEntity entity = hr.getEntity();
+		final HttpResponse hr = client.execute(new HttpGet(urlStr));
+		final HttpEntity entity = hr.getEntity();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+		final BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
 
 		String buff = null;
 		while ((buff = br.readLine()) != null)
 			response.append(buff);
-		
+
 		if(Debug.DEBUG)
 			Log.d(TAG, response.toString());
-		
+
 		return new JSONObject(response.toString()).getJSONArray("Placemark");
 	}
 }
