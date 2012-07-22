@@ -137,14 +137,6 @@ public class AndroidGPS implements LocationListener {
 	 * @author ricky barrette
 	 */
 	private void requestUpdates() {
-		try {
-			mLocationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
-		} catch (final IllegalArgumentException e) {
-			e.printStackTrace();
-			/* We do no handle this exception as it is caused if the android version is < 1.6. since the PASSIVE_PROVIDER call is not required
-			 * to function we can ignore it.
-			 */
-		}
 		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 	}

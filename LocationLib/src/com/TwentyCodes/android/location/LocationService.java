@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,13 +26,6 @@ import com.TwentyCodes.android.debug.LocationLibraryConstants;
 
 /**
  * This service class will be used broadcast the users location either one time, or periodically.
- * To use as a one shot location service:
- * <blockquote><pre>PendingIntent pendingIntent = PendingIntent.getService(context, 0, LocationService.startService(context), 0);
- * or
- * Intent service = new Intent(context, LocationService.class);
- * context.startService(service);<pre></bloackquote>
- * To use as a recurring service:
- * <blockquote>LocationService.startService(this, (60000 * Integer.parseInt(ringer.getString(UPDATE_INTVERVAL , "5")))).run();</bloackquote>
  * @author ricky barrette
  */
 public class LocationService extends Service implements LocationListener {
@@ -65,7 +57,7 @@ public class LocationService extends Service implements LocationListener {
 		};
 	}
 	private WakeLock mWakeLock;
-	private long mPeriod = -1;
+	protected long mPeriod = -1;
 	private Location mLocation;
 	private int mStartId;
 	private AndroidGPS mLocationManager;
@@ -97,7 +89,7 @@ public class LocationService extends Service implements LocationListener {
 				locationUpdate.setAction(mIntent.getAction());
 			else
 				locationUpdate.setAction(LocationLibraryConstants.INTENT_ACTION_UPDATE);
-			locationUpdate.putExtra(LocationManager.KEY_LOCATION_CHANGED, mLocation);
+			locationUpdate.putExtra(LocationLibraryConstants.INTENT_EXTRA_LOCATION_CHANGED, mLocation);
 			sendBroadcast(locationUpdate);
 			stopSelf(mStartId);
 		}
@@ -175,21 +167,6 @@ public class LocationService extends Service implements LocationListener {
 	}
 
 	/**
-	 * To keep backwards compatibility we override onStart which is the equivalent of onStartCommand in pre android 2.x
-	 * @author ricky barrette
-	 */
-	@Override
-	public void onStart(final Intent intent, final int startId) {
-		if(Debug.DEBUG)
-			Log.i(TAG, "onStart.Service started with start id of: " + startId);
-		mStartId = startId;
-
-		parseIntent(intent);
-
-		mLocationManager.enableLocationUpdates(this);
-	}
-
-	/**
 	 * This method is called when startService is called. only used in 2.x android.
 	 * @author ricky barrette
 	 */
@@ -208,7 +185,6 @@ public class LocationService extends Service implements LocationListener {
 	@Override
 	public void onStatusChanged(final String provider, final int status, final Bundle extras) {
 		// TODO Auto-generated method stub
-
 	}
 
 	/**
