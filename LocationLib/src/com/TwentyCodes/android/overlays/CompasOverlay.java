@@ -24,7 +24,9 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
 /**
- * A Simple compass overlay that will be used to point towards a destination or north
+ * A Simple compass overlay that will be used to point towards a destination or
+ * north
+ * 
  * @author ricky barrette
  */
 public class CompasOverlay extends Overlay implements CompassListener {
@@ -43,6 +45,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Creates a new CompasOverlay
+	 * 
 	 * @author ricky barrette
 	 */
 	public CompasOverlay(final Context context) {
@@ -54,26 +57,30 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Creates a new CompasOverlay
+	 * 
 	 * @param context
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public CompasOverlay(final Context context, final GeoPoint destination){
+	public CompasOverlay(final Context context, final GeoPoint destination) {
 		this(context);
 		mDestination = destination;
 	}
 
 	/**
 	 * Creates a new CompasOverlay
+	 * 
 	 * @param context
 	 * @param destination
 	 * @param needleResId
 	 * @param backgroundResId
-	 * @param x dip
-	 * @param y dip
+	 * @param x
+	 *            dip
+	 * @param y
+	 *            dip
 	 * @author ricky barrette
 	 */
-	public CompasOverlay(final Context context, final GeoPoint destination, final int needleResId, final int backgroundResId, final int x, final int y){
+	public CompasOverlay(final Context context, final GeoPoint destination, final int needleResId, final int backgroundResId, final int x, final int y) {
 		this(context, destination);
 		mX = convertDipToPx(x);
 		mY = convertDipToPx(y);
@@ -83,6 +90,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Creates a new CompasOverlay
+	 * 
 	 * @param context
 	 * @param needleResId
 	 * @param backgroundResId
@@ -90,12 +98,13 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param y
 	 * @author ricky barrette
 	 */
-	public CompasOverlay(final Context context, final int needleResId, final int backgroundResId, final int x, final int y){
+	public CompasOverlay(final Context context, final int needleResId, final int backgroundResId, final int x, final int y) {
 		this(context, null, needleResId, backgroundResId, x, y);
 	}
 
 	/**
 	 * Converts dip to px
+	 * 
 	 * @param dip
 	 * @return px
 	 * @author ricky barrette
@@ -107,9 +116,10 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Disables the compass overlay
+	 * 
 	 * @author ricky barrette
 	 */
-	public void disable(){
+	public void disable() {
 		isEnabled = false;
 		mCompassSensor.disable();
 		mListener = null;
@@ -117,43 +127,30 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * (non-Javadoc)
-	 * @see com.google.android.maps.Overlay#draw(android.graphics.Canvas, com.google.android.maps.MapView, boolean)
+	 * 
+	 * @see com.google.android.maps.Overlay#draw(android.graphics.Canvas,
+	 *      com.google.android.maps.MapView, boolean)
 	 * @author ricky barrette
 	 */
 	@Override
 	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow) {
 
-		if(isEnabled){
-			//set the center of the compass in the top left corner of the screen
+		if (isEnabled) {
+			// set the center of the compass in the top left corner of the
+			// screen
 			final Point point = new Point();
 			point.set(mX, mY);
 
-			//draw compass background
-			final Bitmap compass = BitmapFactory.decodeResource( mContext.getResources(), mBackgroundResId);
-			canvas.drawBitmap(compass,
-					point.x - compass.getWidth()  / 2,
-					point.y - compass.getHeight() / 2,
-					null
-					);
+			// draw compass background
+			final Bitmap compass = BitmapFactory.decodeResource(mContext.getResources(), mBackgroundResId);
+			canvas.drawBitmap(compass, point.x - compass.getWidth() / 2, point.y - compass.getHeight() / 2, null);
 
-			//draw the compass needle
-			final Bitmap arrowBitmap = BitmapFactory.decodeResource( mContext.getResources(), mNeedleResId);
+			// draw the compass needle
+			final Bitmap arrowBitmap = BitmapFactory.decodeResource(mContext.getResources(), mNeedleResId);
 			final Matrix matrix = new Matrix();
 			matrix.postRotate(GeoUtils.calculateBearing(mLocation, mDestination, mBearing));
-			final Bitmap rotatedBmp = Bitmap.createBitmap(
-					arrowBitmap,
-					0, 0,
-					arrowBitmap.getWidth(),
-					arrowBitmap.getHeight(),
-					matrix,
-					true
-					);
-			canvas.drawBitmap(
-					rotatedBmp,
-					point.x - rotatedBmp.getWidth()  / 2,
-					point.y - rotatedBmp.getHeight() / 2,
-					null
-					);
+			final Bitmap rotatedBmp = Bitmap.createBitmap(arrowBitmap, 0, 0, arrowBitmap.getWidth(), arrowBitmap.getHeight(), matrix, true);
+			canvas.drawBitmap(rotatedBmp, point.x - rotatedBmp.getWidth() / 2, point.y - rotatedBmp.getHeight() / 2, null);
 			mapView.invalidate();
 		}
 		super.draw(canvas, mapView, shadow);
@@ -161,10 +158,11 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Enables the compass overlay
+	 * 
 	 * @author ricky barrette
 	 */
-	public void enable(){
-		if(! isEnabled){
+	public void enable() {
+		if (!isEnabled) {
 			isEnabled = true;
 			mCompassSensor.enable(this);
 		}
@@ -172,10 +170,11 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	/**
 	 * Enables the compass overlay
+	 * 
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void enable(final CompassListener listener){
+	public void enable(final CompassListener listener) {
 		mListener = listener;
 		enable();
 	}
@@ -184,7 +183,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @return the current bearing
 	 * @author ricky barrette
 	 */
-	public float getBearing(){
+	public float getBearing() {
 		return mBearing;
 	}
 
@@ -192,13 +191,14 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination(){
+	public GeoPoint getDestination() {
 		return mDestination;
 	}
 
 	/**
 	 * Called from the compass Sensor to update the current bearing
 	 * (non-Javadoc)
+	 * 
 	 * @see com.TwentyCodes.android.location.CompassListener#onCompassUpdate(float)
 	 * @author ricky barrette
 	 */
@@ -209,7 +209,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 		/*
 		 * pass it down the chain
 		 */
-		if(mListener != null)
+		if (mListener != null)
 			mListener.onCompassUpdate(bearing);
 	}
 
@@ -217,18 +217,20 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination){
+	public void setDestination(final GeoPoint destination) {
 		mDestination = destination;
 	}
 
 	/**
 	 * @param needleResId
 	 * @param backgroundResId
-	 * @param x dip
-	 * @param y dip
+	 * @param x
+	 *            dip
+	 * @param y
+	 *            dip
 	 * @author ricky barrette
 	 */
-	public void setDrawables(final int needleResId, final int backgroundResId, final int x, final int y){
+	public void setDrawables(final int needleResId, final int backgroundResId, final int x, final int y) {
 		mX = convertDipToPx(x);
 		mY = convertDipToPx(y);
 		mNeedleResId = needleResId;
@@ -239,7 +241,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param location
 	 * @author ricky barrette
 	 */
-	public void setLocation(final GeoPoint location){
+	public void setLocation(final GeoPoint location) {
 		mLocation = location;
 	}
 

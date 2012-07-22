@@ -16,9 +16,10 @@ import com.google.android.maps.GeoPoint;
  * This is a MapFragment that maintains the UserOverlay
  * 
  * TODO acquiring gps dialog
+ * 
  * @author ricky barrette
  */
-public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointLocationListener, CompassListener{
+public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointLocationListener, CompassListener {
 
 	private UserOverlay mUserOverlay;
 	private GeoPointLocationListener mGeoPointLocationListener;
@@ -26,6 +27,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	/**
 	 * Creates a new UserOverlayMapFragment
+	 * 
 	 * @author ricky barrette
 	 */
 	public UserOverlayMapFragment() {
@@ -34,10 +36,11 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	/**
 	 * Tells the useroverlay to pan the map to follow the user
+	 * 
 	 * @param followUser
 	 * @author ricky barrette
 	 */
-	public void followUser(final boolean followUser){
+	public void followUser(final boolean followUser) {
 		mUserOverlay.followUser(followUser);
 	}
 
@@ -45,7 +48,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination(){
+	public GeoPoint getDestination() {
 		return mUserOverlay.getDestination();
 	}
 
@@ -58,34 +61,36 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	}
 
 	/**
-	 * Called when the compass is updated
-	 * (non-Javadoc)
+	 * Called when the compass is updated (non-Javadoc)
+	 * 
 	 * @see com.TwentyCodes.android.location.CompassListener#onCompassUpdate(float)
 	 */
 	@Override
 	public void onCompassUpdate(final float bearing) {
-		if(mCompassListener != null)
+		if (mCompassListener != null)
 			mCompassListener.onCompassUpdate(bearing);
 	}
 
 	@Override
 	public void onFirstFix(final boolean isFistFix) {
-		if(mGeoPointLocationListener != null)
+		if (mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onFirstFix(isFistFix);
 	}
 
 	/**
 	 * Called when skyhook has a location to report
+	 * 
 	 * @author ricky barrette
 	 */
 	@Override
 	public void onLocationChanged(final GeoPoint point, final int accuracy) {
-		if(mGeoPointLocationListener != null)
+		if (mGeoPointLocationListener != null)
 			mGeoPointLocationListener.onLocationChanged(point, accuracy);
 	}
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onMapViewCreate(com.TwentyCodes.android.location.MapView)
 	 */
 	@Override
@@ -101,6 +106,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onPause()
 	 */
 	@Override
@@ -112,12 +118,13 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onResume()
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(mUserOverlay != null) {
+		if (mUserOverlay != null) {
 			mUserOverlay.enableMyLocation();
 			addOverlay(mUserOverlay);
 		}
@@ -125,6 +132,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	/**
 	 * reorders the overlays to the UserOverlay always on top
+	 * 
 	 * @author ricky barrette
 	 */
 	public void reorderOverlays() {
@@ -139,7 +147,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @param y
 	 * @author ricky barrette
 	 */
-	public void setCompassDrawables(final int needleResId, final int backgroundResId, final int x, final int y){
+	public void setCompassDrawables(final int needleResId, final int backgroundResId, final int x, final int y) {
 		mUserOverlay.setCompassDrawables(needleResId, backgroundResId, x, y);
 	}
 
@@ -147,16 +155,17 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setCompassListener(final CompassListener listener){
+	public void setCompassListener(final CompassListener listener) {
 		mCompassListener = listener;
 	}
 
 	/**
 	 * Sets the destination for the compass to point to
+	 * 
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination){
+	public void setDestination(final GeoPoint destination) {
 		mUserOverlay.setDestination(destination);
 	}
 
@@ -164,7 +173,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setGeoPointLocationListener(final GeoPointLocationListener listener){
+	public void setGeoPointLocationListener(final GeoPointLocationListener listener) {
 		mGeoPointLocationListener = listener;
 	}
 }

@@ -17,20 +17,23 @@ import com.TwentyCodes.android.overlays.DirectionsOverlay;
 import com.google.android.maps.GeoPoint;
 
 /**
- * This fragment will be used to display directions to the user.
- * When a specific direction is clicked, the corrispoding geopoint is returned via listener
+ * This fragment will be used to display directions to the user. When a specific
+ * direction is clicked, the corrispoding geopoint is returned via listener
+ * 
  * @author ricky barrette
  */
 public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * A simple interfrace for a directions list fragment
+	 * 
 	 * @author ricky barrette
 	 */
 	public interface OnDirectionSelectedListener {
 
 		/**
 		 * Called when the user selects a direction from a directions list
+		 * 
 		 * @param point
 		 * @author ricky barrette
 		 */
@@ -43,6 +46,7 @@ public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * Creates a new Directions List Fragment
+	 * 
 	 * @author ricky barrette
 	 */
 	public DirectionsListFragment() {
@@ -51,6 +55,7 @@ public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * Creates a new Directions List Fragment
+	 * 
 	 * @param listener
 	 * @author ricky barrette
 	 */
@@ -61,6 +66,7 @@ public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * Deletes all content in the listview
+	 * 
 	 * @author ricky barrette
 	 */
 	public void clear() {
@@ -68,20 +74,23 @@ public class DirectionsListFragment extends ListFragment {
 	}
 
 	/**
-	 * Called when a list item is clicked.
-	 * Checks to see if the list item is a direction, if to it reports the selected direction's geopoint to the listener
-	 * (non-Javadoc)
-	 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
+	 * Called when a list item is clicked. Checks to see if the list item is a
+	 * direction, if to it reports the selected direction's geopoint to the
+	 * listener (non-Javadoc)
+	 * 
+	 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView,
+	 *      android.view.View, int, long)
 	 */
 	@Override
 	public void onListItemClick(final ListView l, final View w, final int position, final long id) {
-		if(position < mPoints.size())
-			if(mListener != null)
+		if (position < mPoints.size())
+			if (mListener != null)
 				mListener.onDirectionSelected(mPoints.get(position));
 	}
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
@@ -92,6 +101,7 @@ public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * Displays the directions from the provided DirectionsOverlay object
+	 * 
 	 * @param directions
 	 * @author ricky barrette
 	 */
@@ -102,10 +112,11 @@ public class DirectionsListFragment extends ListFragment {
 
 	/**
 	 * Sets the text to be displayed while the list is empty
+	 * 
 	 * @param text
 	 * @author ricky barrette
 	 */
-	public void SetEmptyText(final String text){
+	public void SetEmptyText(final String text) {
 		setEmptyText(text);
 	}
 }

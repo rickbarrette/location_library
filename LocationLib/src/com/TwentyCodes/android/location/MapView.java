@@ -14,7 +14,9 @@ import android.view.MotionEvent;
 import com.TwentyCodes.android.debug.Debug;
 
 /**
- * We use this MapView Because it has double tap zoom capability and exception handling
+ * We use this MapView Because it has double tap zoom capability and exception
+ * handling
+ * 
  * @author ricky barrette
  */
 public class MapView extends com.google.android.maps.MapView {
@@ -52,22 +54,21 @@ public class MapView extends com.google.android.maps.MapView {
 	}
 
 	/**
-	 * We will override the draw method to help prevent issues
-	 * (non-Javadoc)
+	 * We will override the draw method to help prevent issues (non-Javadoc)
+	 * 
 	 * @see android.view.View#draw(android.graphics.Canvas)
 	 * @author ricky barrette
 	 */
 	@Override
 	public void draw(final Canvas canvas) {
 		try {
-			if(getZoomLevel() >= 21)
+			if (getZoomLevel() >= 21)
 				getController().setZoom(20);
 			super.draw(canvas);
-		}
-		catch(final Exception ex) {
-			//	            getController().setCenter(this.getMapCenter());
-			//	            getController().setZoom(this.getZoomLevel() - 2);
-			if(Debug.DEBUG)
+		} catch (final Exception ex) {
+			// getController().setCenter(this.getMapCenter());
+			// getController().setZoom(this.getZoomLevel() - 2);
+			if (Debug.DEBUG)
 				Log.d(TAG, "Internal error in MapView:" + Log.getStackTraceString(ex));
 		}
 	}
@@ -99,7 +100,8 @@ public class MapView extends com.google.android.maps.MapView {
 	}
 
 	/**
-	 * @param isDoubleTapZoonEnabled the isDoubleTapZoonEnabled to set
+	 * @param isDoubleTapZoonEnabled
+	 *            the isDoubleTapZoonEnabled to set
 	 * @author ricky barrette
 	 */
 	public void setDoubleTapZoonEnabled(final boolean isDoubleTapZoonEnabled) {

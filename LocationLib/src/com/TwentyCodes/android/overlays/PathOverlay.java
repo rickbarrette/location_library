@@ -18,6 +18,7 @@ import com.google.android.maps.Projection;
 
 /**
  * This imutable overlay class is used to draw a path and points on a map
+ * 
  * @author ricky barrette
  */
 public final class PathOverlay extends Overlay {
@@ -32,6 +33,7 @@ public final class PathOverlay extends Overlay {
 
 	/**
 	 * Creates a new PathOverlay in path mode
+	 * 
 	 * @author ricky barrette
 	 */
 	public PathOverlay(final GeoPoint start, final GeoPoint end, final int color) {
@@ -44,12 +46,13 @@ public final class PathOverlay extends Overlay {
 
 	/**
 	 * Creates a new PathOverlay in point mode. This is used to draw end points.
+	 * 
 	 * @param point
 	 * @param radius
 	 * @param color
 	 * @author ricky barrette
 	 */
-	public PathOverlay(final GeoPoint point, final int radius, final int color){
+	public PathOverlay(final GeoPoint point, final int radius, final int color) {
 		mMode = POINT;
 		mRadius = radius;
 		mStart = point;
@@ -59,7 +62,8 @@ public final class PathOverlay extends Overlay {
 
 	/**
 	 * 
-	 * @param canvas canvas to be drawn on
+	 * @param canvas
+	 *            canvas to be drawn on
 	 * @param mapView
 	 * @param shadow
 	 * @param when
@@ -73,16 +77,16 @@ public final class PathOverlay extends Overlay {
 		final Point point = new Point();
 		projection.toPixels(mStart, point);
 
-		switch (mMode){
-			case POINT:
-				final RectF oval = new RectF(point.x - mRadius, point.y - mRadius, point.x + mRadius, point.y + mRadius);
-				canvas.drawOval(oval, paint);
-			case PATH:
-				final Point point2 = new Point();
-				projection.toPixels(mEnd, point2);
-				paint.setStrokeWidth(5);
-				paint.setAlpha(120);
-				canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
+		switch (mMode) {
+		case POINT:
+			final RectF oval = new RectF(point.x - mRadius, point.y - mRadius, point.x + mRadius, point.y + mRadius);
+			canvas.drawOval(oval, paint);
+		case PATH:
+			final Point point2 = new Point();
+			projection.toPixels(mEnd, point2);
+			paint.setStrokeWidth(5);
+			paint.setAlpha(120);
+			canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
 		}
 		super.draw(canvas, mapView, shadow);
 	}
@@ -91,7 +95,7 @@ public final class PathOverlay extends Overlay {
 	 * @return the end point of this path
 	 * @author ricky barrette
 	 */
-	public GeoPoint getEndPoint(){
+	public GeoPoint getEndPoint() {
 		return mEnd;
 	}
 
@@ -99,7 +103,7 @@ public final class PathOverlay extends Overlay {
 	 * @return the start point of this path
 	 * @author ricky barrette
 	 */
-	public GeoPoint getStartPoint(){
+	public GeoPoint getStartPoint() {
 		return mStart;
 	}
 }

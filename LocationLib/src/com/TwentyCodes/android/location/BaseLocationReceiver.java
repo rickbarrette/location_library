@@ -12,7 +12,9 @@ import android.location.Location;
 import android.location.LocationManager;
 
 /**
- * this abstract class will be used as a for classes wishing to be a receiver of location updates from the location services
+ * this abstract class will be used as a for classes wishing to be a receiver of
+ * location updates from the location services
+ * 
  * @author ricky barrette
  */
 public abstract class BaseLocationReceiver extends BroadcastReceiver {
@@ -21,6 +23,7 @@ public abstract class BaseLocationReceiver extends BroadcastReceiver {
 
 	/**
 	 * called when a location update is received
+	 * 
 	 * @param parcelableExtra
 	 * @author ricky barrette
 	 */
@@ -28,13 +31,15 @@ public abstract class BaseLocationReceiver extends BroadcastReceiver {
 
 	/**
 	 * (non-Javadoc)
-	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+	 * 
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
+	 *      android.content.Intent)
 	 */
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		mContext = context;
 		final String key = LocationManager.KEY_LOCATION_CHANGED;
 		if (intent.hasExtra(key))
-			onLocationUpdate((Location)intent.getExtras().get(key));
+			onLocationUpdate((Location) intent.getExtras().get(key));
 	}
 }

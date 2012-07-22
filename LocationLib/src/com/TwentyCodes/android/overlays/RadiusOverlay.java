@@ -21,11 +21,12 @@ import com.google.android.maps.OverlayItem;
 import com.google.android.maps.Projection;
 
 /**
- * This class will used to draw a radius of a specified size in a specified location, then inserted into
- * an overlay list to be displayed a map
+ * This class will used to draw a radius of a specified size in a specified
+ * location, then inserted into an overlay list to be displayed a map
+ * 
  * @author ricky barrette
  */
-public class RadiusOverlay extends Overlay{
+public class RadiusOverlay extends Overlay {
 
 	public OverlayItem mOverlayItem;
 	private GeoPoint mPoint;
@@ -36,16 +37,22 @@ public class RadiusOverlay extends Overlay{
 
 	/**
 	 * Creates a new RadiusOverlay
+	 * 
 	 * @author ricky barrette
 	 */
-	public RadiusOverlay(){
+	public RadiusOverlay() {
 	}
 
 	/**
-	 * Creates a new RadiusOverlay object that can be inserted into an overlay list.
-	 * @param point center of radius geopoint
-	 * @param radius radius in meters
-	 * @param color desired color of the radius from Color API
+	 * Creates a new RadiusOverlay object that can be inserted into an overlay
+	 * list.
+	 * 
+	 * @param point
+	 *            center of radius geopoint
+	 * @param radius
+	 *            radius in meters
+	 * @param color
+	 *            desired color of the radius from Color API
 	 * @author ricky barrette
 	 */
 	public RadiusOverlay(final GeoPoint point, final float radius, final int color) {
@@ -56,25 +63,28 @@ public class RadiusOverlay extends Overlay{
 
 	/**
 	 * draws a specific radius on the mapview that is handed to it
-	 * @param canvas canvas to be drawn on
+	 * 
+	 * @param canvas
+	 *            canvas to be drawn on
 	 * @param mapView
 	 * @param shadow
 	 * @param when
 	 */
 	@Override
-	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow){
-		if(mPoint != null){
+	public void draw(final Canvas canvas, final MapView mapView, final boolean shadow) {
+		if (mPoint != null) {
 			final Paint paint = new Paint();
 			final Point center = new Point();
 			final Point left = new Point();
 			final Projection projection = mapView.getProjection();
 
 			/*
-			 * Calculate a geopoint that is "radius" meters away from geopoint point and
-			 * convert the given GeoPoint and leftGeo to onscreen pixel coordinates,
-			 * relative to the top-left of the MapView that provided this Projection.
+			 * Calculate a geopoint that is "radius" meters away from geopoint
+			 * point and convert the given GeoPoint and leftGeo to onscreen
+			 * pixel coordinates, relative to the top-left of the MapView that
+			 * provided this Projection.
 			 */
-			mRadiusPoint = GeoUtils.distanceFrom(mPoint , mRadius);
+			mRadiusPoint = GeoUtils.distanceFrom(mPoint, mRadius);
 			projection.toPixels(mRadiusPoint, left);
 			projection.toPixels(mPoint, center);
 
@@ -82,7 +92,7 @@ public class RadiusOverlay extends Overlay{
 			 * get radius of the circle being drawn by
 			 */
 			int circleRadius = center.x - left.x;
-			if(circleRadius <= 0)
+			if (circleRadius <= 0)
 				circleRadius = left.x - center.x;
 
 			/*
@@ -94,11 +104,11 @@ public class RadiusOverlay extends Overlay{
 			paint.setStyle(Style.STROKE);
 			canvas.drawCircle(center.x, center.y, circleRadius, paint);
 
-			//draw a dot over the geopoint
+			// draw a dot over the geopoint
 			final RectF oval = new RectF(center.x - 2, center.y - 2, center.x + 2, center.y + 2);
 			canvas.drawOval(oval, paint);
 
-			//fill the radius with a nice green
+			// fill the radius with a nice green
 			paint.setAlpha(25);
 			paint.setStyle(Style.FILL);
 			canvas.drawCircle(center.x, center.y, circleRadius, paint);
@@ -109,19 +119,19 @@ public class RadiusOverlay extends Overlay{
 	 * @return the selected location
 	 * @author ricky barrette
 	 */
-	public GeoPoint getLocation(){
+	public GeoPoint getLocation() {
 		return mPoint;
 	}
 
 	public int getZoomLevel() {
-		//		GeoUtils.GeoUtils.distanceFrom(mPoint , mRadius)
+		// GeoUtils.GeoUtils.distanceFrom(mPoint , mRadius)
 		return 0;
 	}
 
 	@Override
 	public boolean onTap(final GeoPoint p, final MapView mapView) {
 		mPoint = p;
-		if(mListener != null)
+		if (mListener != null)
 			mListener.onLocationSelected(p);
 		return super.onTap(p, mapView);
 	}
@@ -130,7 +140,7 @@ public class RadiusOverlay extends Overlay{
 	 * @param color
 	 * @author ricky barrette
 	 */
-	public void setColor(final int color){
+	public void setColor(final int color) {
 		mColor = color;
 	}
 
@@ -138,7 +148,7 @@ public class RadiusOverlay extends Overlay{
 	 * @param location
 	 * @author ricky barrette
 	 */
-	public void setLocation(final GeoPoint location){
+	public void setLocation(final GeoPoint location) {
 		mPoint = location;
 	}
 
@@ -147,11 +157,12 @@ public class RadiusOverlay extends Overlay{
 	}
 
 	/**
-	 * @param radius in meters
+	 * @param radius
+	 *            in meters
 	 * @author ricky barrette
 	 * @param radius
 	 */
-	public void setRadius(final int radius){
+	public void setRadius(final int radius) {
 		mRadius = radius;
 	}
 }

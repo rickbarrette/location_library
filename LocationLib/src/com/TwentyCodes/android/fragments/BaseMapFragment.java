@@ -31,18 +31,20 @@ public abstract class BaseMapFragment extends Fragment {
 
 	/**
 	 * Creates a new MapFragment
+	 * 
 	 * @author ricky barrette
 	 */
 	public BaseMapFragment() {
 		super();
 	}
 
-	public void addOverlay(final Overlay overlay){
+	public void addOverlay(final Overlay overlay) {
 		mMapView.getOverlays().add(overlay);
 	}
 
 	/**
 	 * changes the map mode
+	 * 
 	 * @author ricky barrette
 	 */
 	public void changeMapMode() {
@@ -51,9 +53,10 @@ public abstract class BaseMapFragment extends Fragment {
 
 	/**
 	 * Disables the Acquiring GPS dialog
+	 * 
 	 * @author ricky barrette
 	 */
-	public void disableGPSProgess(){
+	public void disableGPSProgess() {
 		isGPSDialogEnabled = false;
 		mProgress.setVisibility(View.GONE);
 	}
@@ -63,7 +66,7 @@ public abstract class BaseMapFragment extends Fragment {
 	 * 
 	 * @author ricky barrette
 	 */
-	public void enableGPSProgess(){
+	public void enableGPSProgess() {
 		isGPSDialogEnabled = true;
 		mProgress.setVisibility(View.VISIBLE);
 	}
@@ -72,15 +75,16 @@ public abstract class BaseMapFragment extends Fragment {
 	 * @return mapview
 	 * @author ricky barrette
 	 */
-	public MapView getMap(){
+	public MapView getMap() {
 		return mMapView;
 	}
 
 	/**
 	 * Forces the map to redraw
+	 * 
 	 * @author ricky barrette
 	 */
-	public void invalidate(){
+	public void invalidate() {
 		mMapView.invalidate();
 	}
 
@@ -88,7 +92,7 @@ public abstract class BaseMapFragment extends Fragment {
 	 * @return true if the GPS progress is showing
 	 * @author ricky barrette
 	 */
-	public boolean isGPSProgessShowing(){
+	public boolean isGPSProgessShowing() {
 		return isGPSDialogEnabled;
 	}
 
@@ -96,14 +100,15 @@ public abstract class BaseMapFragment extends Fragment {
 	 * @return true if the map is in satellite mode
 	 * @author ricky barrette
 	 */
-	public boolean isSatellite(){
+	public boolean isSatellite() {
 		return mMapView.isSatellite();
 	}
 
 	/**
-	 * Called when the fragment view is first created
-	 * (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 * Called when the fragment view is first created (non-Javadoc)
+	 * 
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater,
+	 *      android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -120,7 +125,9 @@ public abstract class BaseMapFragment extends Fragment {
 	}
 
 	/**
-	 * Called when the mapview has been initialized. here you want to init and add your custom overlays
+	 * Called when the mapview has been initialized. here you want to init and
+	 * add your custom overlays
+	 * 
 	 * @param map
 	 * @author ricky barrette
 	 */
@@ -128,47 +135,52 @@ public abstract class BaseMapFragment extends Fragment {
 
 	/**
 	 * Removes an overlay from the mapview
+	 * 
 	 * @param overlay
 	 * @author ricky barrette
 	 */
-	public void removeOverlay(final Object overlay){
+	public void removeOverlay(final Object overlay) {
 		mMapView.getOverlays().remove(overlay);
 	}
 
 	/**
 	 * Enables or disables the built in zoom controls
+	 * 
 	 * @param isShowing
 	 * @author ricky barrette
 	 */
-	public void setBuiltInZoomControls(final boolean isShowing){
+	public void setBuiltInZoomControls(final boolean isShowing) {
 		mMapView.setBuiltInZoomControls(isShowing);
 	}
 
 	/**
 	 * Sets where or not the map view is interactive
+	 * 
 	 * @param isClickable
 	 * @author ricky barrette
 	 */
-	public void setClickable(final boolean isClickable){
+	public void setClickable(final boolean isClickable) {
 		mMapView.setClickable(isClickable);
 	}
 
 	/**
 	 * Sets double tap zoom
+	 * 
 	 * @param isDoubleTapZoonEnabled
 	 * @author ricky barrette
 	 */
-	public void setDoubleTapZoonEnabled(final boolean isDoubleTapZoonEnabled){
+	public void setDoubleTapZoonEnabled(final boolean isDoubleTapZoonEnabled) {
 		mMapView.setDoubleTapZoonEnabled(isDoubleTapZoonEnabled);
 	}
 
 	/**
 	 * Sets the center of the map to the provided point
+	 * 
 	 * @param point
 	 * @author ricky barrette
 	 */
-	public boolean setMapCenter(final GeoPoint point){
-		if(point == null)
+	public boolean setMapCenter(final GeoPoint point) {
+		if (point == null)
 			return false;
 		mMapView.getController().setCenter(point);
 		return true;
@@ -176,19 +188,21 @@ public abstract class BaseMapFragment extends Fragment {
 
 	/**
 	 * Sets the view of the map. true is sat, false is map
+	 * 
 	 * @param isSat
 	 * @author ricky barrette
 	 */
-	public void setSatellite(final boolean isSat){
+	public void setSatellite(final boolean isSat) {
 		mMapView.setSatellite(isSat);
 	}
 
 	/**
 	 * Sets the zoom level of the map
+	 * 
 	 * @param zoom
 	 * @author ricky barrette
 	 */
-	public void setZoom(final int zoom){
+	public void setZoom(final int zoom) {
 		mMapView.getController().setZoom(zoom);
 	}
 }

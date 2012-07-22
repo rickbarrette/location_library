@@ -26,8 +26,9 @@ import android.util.Log;
 import com.TwentyCodes.android.debug.Debug;
 
 /**
- * Due to this bug http://code.google.com/p/android/issues/detail?id=8816 google's Geocoder class does not function in android 2.2+.
- * I found this source in one of the comments mentioning that it is a work around.
+ * Due to this bug http://code.google.com/p/android/issues/detail?id=8816
+ * google's Geocoder class does not function in android 2.2+. I found this
+ * source in one of the comments mentioning that it is a work around.
  * 
  * @author ricky barrette
  */
@@ -37,7 +38,9 @@ public class ReverseGeocoder {
 
 	/**
 	 * Performs a google maps search for the address
-	 * @param address to search
+	 * 
+	 * @param address
+	 *            to search
 	 * @return JSON Array of google place marks
 	 * @throws IOException
 	 * @throws JSONException
@@ -49,7 +52,7 @@ public class ReverseGeocoder {
 		final StringBuffer response = new StringBuffer();
 		final HttpClient client = new DefaultHttpClient();
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, urlStr);
 		final HttpResponse hr = client.execute(new HttpGet(urlStr));
 		final HttpEntity entity = hr.getEntity();
@@ -60,7 +63,7 @@ public class ReverseGeocoder {
 		while ((buff = br.readLine()) != null)
 			response.append(buff);
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, response.toString());
 
 		return new JSONObject(response.toString()).getJSONArray("Placemark");
@@ -68,17 +71,18 @@ public class ReverseGeocoder {
 
 	/**
 	 * Performs a google maps search for the closest address to the location
+	 * 
 	 * @param lat
 	 * @param lon
 	 * @return string address, or lat, lon if search fails
 	 * @author ricky barrette
 	 */
-	public static String getAddressFromLocation(final  Location location) {
+	public static String getAddressFromLocation(final Location location) {
 		final String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
 		final StringBuffer response = new StringBuffer();
 		final HttpClient client = new DefaultHttpClient();
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, urlStr);
 		try {
 			final HttpResponse hr = client.execute(new HttpGet(urlStr));
@@ -93,19 +97,18 @@ public class ReverseGeocoder {
 			e.printStackTrace();
 		}
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, response.toString());
-
 
 		JSONArray responseArray = null;
 		try {
 			responseArray = new JSONObject(response.toString()).getJSONArray("Placemark");
 		} catch (final JSONException e) {
-			return location.getLatitude() +", "+ location.getLongitude() +" +/- "+ location.getAccuracy()+"m";
+			return location.getLatitude() + ", " + location.getLongitude() + " +/- " + location.getAccuracy() + "m";
 		}
 
-		if(Debug.DEBUG)
-			Log.d(TAG,responseArray.length() + " result(s)");
+		if (Debug.DEBUG)
+			Log.d(TAG, responseArray.length() + " result(s)");
 
 		try {
 			final JSONObject jsl = responseArray.getJSONObject(0);
@@ -114,23 +117,24 @@ public class ReverseGeocoder {
 			e.printStackTrace();
 		}
 
-		return location.getLatitude() +", "+ location.getLongitude() +" +/- "+ location.getAccuracy()+"m";
+		return location.getLatitude() + ", " + location.getLongitude() + " +/- " + location.getAccuracy() + "m";
 	}
 
 	/**
 	 * Performs a google maps search for the address
+	 * 
 	 * @param location
 	 * @return JSON Array on google place marks nearby
 	 * @author ricky barrette
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public static JSONArray getFromLocation(final  Location location) throws IOException, JSONException {
+	public static JSONArray getFromLocation(final Location location) throws IOException, JSONException {
 		final String urlStr = "http://maps.google.com/maps/geo?q=" + location.getLatitude() + "," + location.getLongitude() + "&output=json&sensor=false";
 		final StringBuffer response = new StringBuffer();
 		final HttpClient client = new DefaultHttpClient();
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, urlStr);
 		final HttpResponse hr = client.execute(new HttpGet(urlStr));
 		final HttpEntity entity = hr.getEntity();
@@ -141,7 +145,7 @@ public class ReverseGeocoder {
 		while ((buff = br.readLine()) != null)
 			response.append(buff);
 
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(TAG, response.toString());
 
 		return new JSONObject(response.toString()).getJSONArray("Placemark");

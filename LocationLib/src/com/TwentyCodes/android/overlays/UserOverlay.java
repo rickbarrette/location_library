@@ -12,9 +12,10 @@ import com.google.android.maps.MapView;
 
 /**
  * This is the standard version of the UserOverlay.
+ * 
  * @author ricky barrette
  */
-public class UserOverlay extends BaseUserOverlay{
+public class UserOverlay extends BaseUserOverlay {
 
 	private final AndroidGPS mAndroidGPS;
 

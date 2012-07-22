@@ -18,7 +18,9 @@ import com.TwentyCodes.android.debug.Debug;
 import com.google.android.maps.GeoPoint;
 
 /**
- * This class will be used for gathering location using android's location services
+ * This class will be used for gathering location using android's location
+ * services
+ * 
  * @author ricky barrette
  */
 public class AndroidGPS implements LocationListener {
@@ -31,6 +33,7 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * Creates a new SkyHookFallback
+	 * 
 	 * @author ricky barrette
 	 */
 	public AndroidGPS(final Context context) {
@@ -40,10 +43,11 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * Remove updates from androids location services
+	 * 
 	 * @author ricky barrette
 	 */
-	public void disableLocationUpdates(){
-		if(Debug.DEBUG)
+	public void disableLocationUpdates() {
+		if (Debug.DEBUG)
 			Log.d(TAG, "disableLocationUpdates()");
 		mListener = null;
 		mLocationManager.removeUpdates(this);
@@ -52,10 +56,11 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * request periodic location updates from androids location services
+	 * 
 	 * @author ricky barrette
 	 */
 	public void enableLocationUpdates(final GeoPointLocationListener listener) {
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(SkyHook.TAG, "enableLocationUpdates()");
 		if (mListener == null) {
 			mListener = listener;
@@ -65,13 +70,14 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * Attempts to enable periodic location updates
+	 * 
 	 * @param listener
 	 * @author ricky barrette
 	 */
 	public void enableLocationUpdates(final LocationListener listener) {
-		if(Debug.DEBUG)
+		if (Debug.DEBUG)
 			Log.d(SkyHook.TAG, "enableLocationUpdates()");
-		if(mLocationListener == null){
+		if (mLocationListener == null) {
 			mLocationListener = listener;
 			requestUpdates();
 		}
@@ -79,18 +85,19 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see android.location.LocationListener#onLocationChanged(android.location.Location)
 	 * @param location
 	 * @author ricky barrette
 	 */
 	@Override
 	public void onLocationChanged(final Location location) {
-		if(mListener != null) {
-			mListener.onLocationChanged(new GeoPoint( (int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), (int) location.getAccuracy());
+		if (mListener != null) {
+			mListener.onLocationChanged(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), (int) location.getAccuracy());
 			mListener.onFirstFix(isFirstFix);
 		}
 
-		if(mLocationListener != null)
+		if (mLocationListener != null)
 			mLocationListener.onLocationChanged(location);
 
 		isFirstFix = false;
@@ -98,6 +105,7 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
 	 * @param arg0
 	 * @author ricky barrette
@@ -110,6 +118,7 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
 	 * @param arg0
 	 * @author ricky barrette
@@ -121,7 +130,9 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * (non-Javadoc)
-	 * @see android.location.LocationListener#onStatusChanged(java.lang.String, int, android.os.Bundle)
+	 * 
+	 * @see android.location.LocationListener#onStatusChanged(java.lang.String,
+	 *      int, android.os.Bundle)
 	 * @param arg0
 	 * @param arg1
 	 * @param arg2
@@ -134,6 +145,7 @@ public class AndroidGPS implements LocationListener {
 
 	/**
 	 * Request updates from android location services
+	 * 
 	 * @author ricky barrette
 	 */
 	private void requestUpdates() {

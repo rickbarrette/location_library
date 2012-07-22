@@ -17,26 +17,30 @@ import com.TwentyCodes.android.location.R;
 import com.TwentyCodes.android.overlays.DirectionsOverlay;
 
 /**
- * this is a custom listview adaptor that wills a listview that has 2 textviews in each row.
+ * this is a custom listview adaptor that wills a listview that has 2 textviews
+ * in each row.
+ * 
  * @author ricky barrette
  */
 public class DirectionsAdapter extends BaseAdapter {
 
 	/**
 	 * this class will hold the TextViews
+	 * 
 	 * @author ricky barrette
 	 */
 	class ViewHolder {
 		TextView text;
 		TextView text2;
 	}
-	private final LayoutInflater mInflater;
 
+	private final LayoutInflater mInflater;
 
 	private final DirectionsOverlay mDirections;
 
 	/**
 	 * Creates a new DirectionsAdapter
+	 * 
 	 * @author ricky barrette
 	 */
 	public DirectionsAdapter(final Context context, final DirectionsOverlay directions) {
@@ -46,6 +50,7 @@ public class DirectionsAdapter extends BaseAdapter {
 
 	/**
 	 * returns the size of the main list
+	 * 
 	 * @see android.widget.Adapter#getCount()
 	 * @return
 	 * @author ricky barrette
@@ -57,6 +62,7 @@ public class DirectionsAdapter extends BaseAdapter {
 
 	/**
 	 * (non-Javadoc)
+	 * 
 	 * @see android.widget.Adapter#getItem(int)
 	 * @param position
 	 * @return
@@ -69,6 +75,7 @@ public class DirectionsAdapter extends BaseAdapter {
 
 	/**
 	 * returns the current position in the list
+	 * 
 	 * @see android.widget.Adapter#getItemId(int)
 	 * @param position
 	 * @return
@@ -81,7 +88,9 @@ public class DirectionsAdapter extends BaseAdapter {
 
 	/**
 	 * inflates the row from xml, and sets the textviews to their intended vales
-	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+	 * 
+	 * @see android.widget.Adapter#getView(int, android.view.View,
+	 *      android.view.ViewGroup)
 	 * @param position
 	 * @param convertView
 	 * @param parent
@@ -104,12 +113,12 @@ public class DirectionsAdapter extends BaseAdapter {
 		/**
 		 * Display the copyrights on the bottom of the directions list
 		 */
-		if (position == mDirections.getDirections().size()){
+		if (position == mDirections.getDirections().size()) {
 			holder.text.setText(mDirections.getCopyrights());
 			holder.text2.setText("");
 		} else {
 			holder.text.setText(Html.fromHtml(mDirections.getDirections().get(position)));
-			holder.text2.setText(mDirections.getDurations().get(position) +" : "+ mDirections.getDistances().get(position));
+			holder.text2.setText(mDirections.getDurations().get(position) + " : " + mDirections.getDistances().get(position));
 		}
 		return convertView;
 	}

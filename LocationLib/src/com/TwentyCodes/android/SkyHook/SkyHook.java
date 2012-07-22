@@ -22,12 +22,14 @@ import com.skyhookwireless.wps.WPSReturnCode;
 import com.skyhookwireless.wps.XPS;
 
 /**
- * this calls will be  used to create skyhook object that uses an listener interface to interact with the rest of location ringer
+ * this calls will be used to create skyhook object that uses an listener
+ * interface to interact with the rest of location ringer
+ * 
  * @author ricky barrette
  */
-public class SkyHook implements GeoPointLocationListener{
+public class SkyHook implements GeoPointLocationListener {
 
-	private class XPScallback implements WPSPeriodicLocationCallback  {
+	private class XPScallback implements WPSPeriodicLocationCallback {
 		@Override
 		public void done() {
 			mHandler.sendMessage(mHandler.obtainMessage(DONE_MESSAGE));
@@ -45,6 +47,7 @@ public class SkyHook implements GeoPointLocationListener{
 			return WPSContinuation.WPS_CONTINUE;
 		}
 	}
+
 	public static final String TAG = "Skyhook";
 	public static final String USERNAME = "cjyh95q32gsc";
 	public static final String USERNAME_FOR_TESTING = "twentycodes";
@@ -56,7 +59,7 @@ public class SkyHook implements GeoPointLocationListener{
 	private final XPS mXps;
 	private final Context mContext;
 	private GeoPointLocationListener mListener;
-	private long mPeriod = 0l; //period is in milliseconds for periodic updates
+	private long mPeriod = 0l; // period is in milliseconds for periodic updates
 	private final int mIterations = 0;
 	private WPSAuthentication mWPSAuthentication;
 	private static Handler mHandler;
@@ -71,29 +74,29 @@ public class SkyHook implements GeoPointLocationListener{
 	private boolean isFirstFix;
 
 	/*
-	 * this runnable will be used to check if we have location from skyhook,
-	 * if we dont, then we will us android's location services to fall back on.
+	 * this runnable will be used to check if we have location from skyhook, if
+	 * we dont, then we will us android's location services to fall back on.
 	 */
 	private final Runnable mFallBack = new Runnable() {
 		@Override
 		public void run() {
 			mHandler.removeCallbacks(mFallBack);
-			Log.d(TAG,"skyhook, "+ (hasLocation ? "is" : "isn't") +" working!");
+			Log.d(TAG, "skyhook, " + (hasLocation ? "is" : "isn't") + " working!");
 
-			if(! hasLocation && mSkyHookFallback == null && isEnabled){
-				Log.d(TAG,"falling back on android");
-				mSkyHookFallback  = new AndroidGPS(mContext);
+			if (!hasLocation && mSkyHookFallback == null && isEnabled) {
+				Log.d(TAG, "falling back on android");
+				mSkyHookFallback = new AndroidGPS(mContext);
 				mSkyHookFallback.enableLocationUpdates(SkyHook.this);
 				/*
 				 * Schedule another check, if skyhook is still enabled
 				 */
-				if(mXps != null)
-					mHandler.postDelayed(mFallBack, mFallBackDelay );
+				if (mXps != null)
+					mHandler.postDelayed(mFallBack, mFallBackDelay);
 
 			} else {
-				Log.d(TAG,"already fell back on android");
-				if(mSkyHookFallback != null) {
-					Log.d(TAG,"got location, picking up the slack");
+				Log.d(TAG, "already fell back on android");
+				if (mSkyHookFallback != null) {
+					Log.d(TAG, "got location, picking up the slack");
 					mSkyHookFallback.disableLocationUpdates();
 					mSkyHookFallback = null;
 				}
@@ -108,14 +111,15 @@ public class SkyHook implements GeoPointLocationListener{
 	private final Runnable mPeriodicUpdates = new Runnable() {
 		@Override
 		public void run() {
-			if(Debug.DEBUG)
-				Log.d(TAG,"geting location");
+			if (Debug.DEBUG)
+				Log.d(TAG, "geting location");
 			mXps.getXPSLocation(mWPSAuthentication, mIterations, XPS.EXACT_ACCURACY, mXPScallback);
 		}
 	};
 
 	/**
 	 * Constructors a new skyhook object
+	 * 
 	 * @param context
 	 * @author ricky barrette
 	 */
@@ -131,8 +135,10 @@ public class SkyHook implements GeoPointLocationListener{
 
 	/**
 	 * Constructors a new skyhook object
+	 * 
 	 * @param context
-	 * @param period between location updates in milliseconds
+	 * @param period
+	 *            between location updates in milliseconds
 	 * @author ricky barrette
 	 */
 	public SkyHook(final Context context, final long period) {
@@ -141,13 +147,15 @@ public class SkyHook implements GeoPointLocationListener{
 	}
 
 	/**
-	 * request current user location, note that the listeners onLocationChanged() will be call multiple times.
-	 * updates will stop once an accurate location is determined.
+	 * request current user location, note that the listeners
+	 * onLocationChanged() will be call multiple times. updates will stop once
+	 * an accurate location is determined.
+	 * 
 	 * @author Ricky Barrette
 	 */
-	public void getLoctaion(){
-		Log.d(TAG,"getLocation()");
-		if (mListener != null){
+	public void getLoctaion() {
+		Log.d(TAG, "getLocation()");
+		if (mListener != null) {
 			mWPSAuthentication = new WPSAuthentication(SkyHookRegistration.getUserName(mContext), REALM);
 			mHandler.post(mPeriodicUpdates);
 		}
@@ -155,13 +163,14 @@ public class SkyHook implements GeoPointLocationListener{
 
 	/**
 	 * Attempts to register the the listener for periodic updates
+	 * 
 	 * @author Ricky Barrette
 	 */
-	public void getUpdates(){
-		Log.d(TAG,"getUpdates()");
+	public void getUpdates() {
+		Log.d(TAG, "getUpdates()");
 		if (mListener != null) {
 
-			if(Debug.DEBUG)
+			if (Debug.DEBUG)
 				Log.i(TAG, "username: " + SkyHookRegistration.getUserName(mContext));
 
 			mWPSAuthentication = new WPSAuthentication(SkyHookRegistration.getUserName(mContext), REALM);
@@ -175,45 +184,47 @@ public class SkyHook implements GeoPointLocationListener{
 	 * @return true is skyhook is enabled
 	 * @author ricky barrette
 	 */
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return isEnabled;
 	}
 
 	@Override
 	public void onFirstFix(final boolean firstFix) {
-		if(mListener != null)
+		if (mListener != null)
 			mListener.onFirstFix(firstFix);
 	}
 
 	/**
-	 * called from our skyhook to android fall back class
-	 * (non-Javadoc)
-	 * @see com.TwentyCodes.android.location.GeoPointLocationListener#onLocationChanged(com.google.android.maps.GeoPoint, int)
+	 * called from our skyhook to android fall back class (non-Javadoc)
+	 * 
+	 * @see com.TwentyCodes.android.location.GeoPointLocationListener#onLocationChanged(com.google.android.maps.GeoPoint,
+	 *      int)
 	 * @author ricky barrette
 	 */
 	@Override
 	public void onLocationChanged(final GeoPoint point, final int accuracy) {
-		if(! hasLocation)
-			if(mListener != null)
+		if (!hasLocation)
+			if (mListener != null)
 				mListener.onLocationChanged(point, accuracy);
 	}
 
 	/**
-	 * Removes any current registration for location updates of the current activity
-	 * with the given LocationListener.  Following this call, updates will no longer
-	 * occur for this listener.
+	 * Removes any current registration for location updates of the current
+	 * activity with the given LocationListener. Following this call, updates
+	 * will no longer occur for this listener.
+	 * 
 	 * @param listener
 	 * @author ricky barrette
 	 */
 	public void removeUpdates() {
-		Log.d(TAG,"removeUpdates()");
+		Log.d(TAG, "removeUpdates()");
 		mHandler.removeCallbacks(mFallBack);
 		mListener = null;
 		isPeriodicEnabled = false;
-		if(mXps != null)
+		if (mXps != null)
 			mXps.abort();
-		if(mSkyHookFallback != null) {
-			Log.d(TAG,"disabling fallback");
+		if (mSkyHookFallback != null) {
+			Log.d(TAG, "disabling fallback");
 			mSkyHookFallback.disableLocationUpdates();
 			mSkyHookFallback = null;
 			isEnabled = false;
@@ -222,14 +233,15 @@ public class SkyHook implements GeoPointLocationListener{
 	}
 
 	/**
-	 * Used for receiving notifications from SkyHook when
-	 * the location has changed. These methods are called if the
-	 * LocationListener has been registered with the location manager service using the method.
+	 * Used for receiving notifications from SkyHook when the location has
+	 * changed. These methods are called if the LocationListener has been
+	 * registered with the location manager service using the method.
+	 * 
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setLocationListener(final GeoPointLocationListener listener){
-		Log.d(TAG,"setLocationListener()");
+	public void setLocationListener(final GeoPointLocationListener listener) {
+		Log.d(TAG, "setLocationListener()");
 		if (mListener == null)
 			mListener = listener;
 	}
@@ -240,63 +252,65 @@ public class SkyHook implements GeoPointLocationListener{
 			@Override
 			public void handleMessage(final Message msg) {
 				switch (msg.what) {
-					case LOCATION_MESSAGE:
-						if (msg.obj instanceof WPSLocation) {
-							final WPSLocation location = (WPSLocation) msg.obj;
-							if (mListener != null && location != null) {
+				case LOCATION_MESSAGE:
+					if (msg.obj instanceof WPSLocation) {
+						final WPSLocation location = (WPSLocation) msg.obj;
+						if (mListener != null && location != null) {
 
-								if(Debug.DEBUG)
-									Log.d(TAG,"got location "+ location.getLatitude() +", "+ location.getLongitude()+" +- "+ location.getHPE() +"m");
+							if (Debug.DEBUG)
+								Log.d(TAG, "got location " + location.getLatitude() + ", " + location.getLongitude() + " +- " + location.getHPE() + "m");
 
-								mListener.onLocationChanged(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), location.getHPE());
-								mListener.onFirstFix(isFirstFix);
-								hasLocation = true;
-								isFirstFix = false;
+							mListener.onLocationChanged(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), location.getHPE());
+							mListener.onFirstFix(isFirstFix);
+							hasLocation = true;
+							isFirstFix = false;
 
-							}
 						}
-						return;
+					}
+					return;
 
-					case ERROR_MESSAGE:
-						if( msg.obj instanceof WPSReturnCode) {
-							final WPSReturnCode code = (WPSReturnCode) msg.obj;
-							if ( code != null)
-								Log.w(TAG, code.toString());
-							hasLocation = false;
+				case ERROR_MESSAGE:
+					if (msg.obj instanceof WPSReturnCode) {
+						final WPSReturnCode code = (WPSReturnCode) msg.obj;
+						if (code != null)
+							Log.w(TAG, code.toString());
+						hasLocation = false;
 
-							/*
-							 * check to see if the error returned is an WPS_ERROR_UNAUTHORIZED
-							 * then check to see if this is the second occurrence of WPS_ERROR_UNAUTHORIZED,
-							 * if so we will stop skyhook's services to cut down the work load
-							 */
-							if(code == WPSReturnCode.WPS_ERROR_UNAUTHORIZED){
-								if (isUnauthorized){
-									isPeriodicEnabled = false;
-									mXps.abort();
-									//	                				mXps = null;
-								}
-								isUnauthorized = true;
+						/*
+						 * check to see if the error returned is an
+						 * WPS_ERROR_UNAUTHORIZED then check to see if this is
+						 * the second occurrence of WPS_ERROR_UNAUTHORIZED, if
+						 * so we will stop skyhook's services to cut down the
+						 * work load
+						 */
+						if (code == WPSReturnCode.WPS_ERROR_UNAUTHORIZED) {
+							if (isUnauthorized) {
+								isPeriodicEnabled = false;
+								mXps.abort();
+								// mXps = null;
 							}
-
-
-							/*
-							 * check to see if we already have a fall back Scheduled
-							 * if we dont, and there is not fallback already in place, then schedule one
-							 */
-							if(! isFallBackScheduled && mSkyHookFallback == null && isEnabled) {
-								Log.d(TAG, "scheduling fallback");
-								postDelayed(mFallBack, mFallBackDelay);
-								isFallBackScheduled = true;
-							}
+							isUnauthorized = true;
 						}
-						return;
 
-					case DONE_MESSAGE:
-						if (isPeriodicEnabled) {
-							postDelayed(mPeriodicUpdates, mPeriod);
-							Log.d(TAG,"done getting location");
+						/*
+						 * check to see if we already have a fall back Scheduled
+						 * if we dont, and there is not fallback already in
+						 * place, then schedule one
+						 */
+						if (!isFallBackScheduled && mSkyHookFallback == null && isEnabled) {
+							Log.d(TAG, "scheduling fallback");
+							postDelayed(mFallBack, mFallBackDelay);
+							isFallBackScheduled = true;
 						}
-						return;
+					}
+					return;
+
+				case DONE_MESSAGE:
+					if (isPeriodicEnabled) {
+						postDelayed(mPeriodicUpdates, mPeriod);
+						Log.d(TAG, "done getting location");
+					}
+					return;
 				}
 			}
 		};

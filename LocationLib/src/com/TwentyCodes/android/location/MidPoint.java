@@ -8,7 +8,9 @@ package com.TwentyCodes.android.location;
 import com.google.android.maps.GeoPoint;
 
 /**
- * This MidPoint object will hold the information form the calculations performed by GeoUtils.midPoint().
+ * This MidPoint object will hold the information form the calculations
+ * performed by GeoUtils.midPoint().
+ * 
  * @author ricky barrette
  */
 public class MidPoint {
@@ -21,6 +23,7 @@ public class MidPoint {
 
 	/**
 	 * Creates a new MidPoint
+	 * 
 	 * @author ricky barrette
 	 */
 	public MidPoint(final GeoPoint midPoint, final int minLatitude, final int minLongitude, final int maxLatitude, final int maxLongitude) {
@@ -33,19 +36,21 @@ public class MidPoint {
 
 	/**
 	 * returns the calculated midpoint
+	 * 
 	 * @return
 	 * @author ricky barrette
 	 */
-	public GeoPoint getMidPoint(){
+	public GeoPoint getMidPoint() {
 		return mMidPoint;
 	}
 
 	/**
 	 * zooms the provided map view to the span of this mid point
+	 * 
 	 * @param mMapView
 	 * @author ricky barrette
 	 */
-	public void zoomToSpan(final com.google.android.maps.MapView mMapView){
+	public void zoomToSpan(final com.google.android.maps.MapView mMapView) {
 		mMapView.getController().zoomToSpan(mMaxLatitude - mMinLatitude, mMaxLongitude - mMinLongitude);
 	}
 }
