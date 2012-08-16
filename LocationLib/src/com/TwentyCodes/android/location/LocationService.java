@@ -208,14 +208,18 @@ public class LocationService extends Service implements LocationListener {
 	 * @author ricky barrette
 	 */
 	private void parseIntent(final Intent intent) {
-
-		mIntent = intent;
-
-		if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
-			mPeriod = intent.getLongExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, LocationLibraryConstants.FAIL_SAFE_UPDATE_INVERVAL);
-
-		if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY))
-			mRequiredAccuracy = intent.getIntExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY, LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY);
+		if(intent == null){
+			this.stopSelf(mStartId);
+			Log.e(TAG, "LocationService intent was null, stopping selft: " + mStartId);
+		} else {
+			mIntent = intent;
+	
+			if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
+				mPeriod = intent.getLongExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, LocationLibraryConstants.FAIL_SAFE_UPDATE_INVERVAL);
+	
+			if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY))
+				mRequiredAccuracy = intent.getIntExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY, LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY);
+		}
 	}
 
 	/**
