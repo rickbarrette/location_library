@@ -1,4 +1,5 @@
 /**
+
  * AndroidGPS.java
  * @date Feb 3, 2011
  * @author ricky barrette
@@ -13,7 +14,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.TwentyCodes.android.SkyHook.SkyHook;
 import com.TwentyCodes.android.debug.Debug;
 import com.google.android.maps.GeoPoint;
 
@@ -61,7 +61,7 @@ public class AndroidGPS implements LocationListener {
 	 */
 	public void enableLocationUpdates(final GeoPointLocationListener listener) {
 		if (Debug.DEBUG)
-			Log.d(SkyHook.TAG, "enableLocationUpdates()");
+			Log.d(TAG, "enableLocationUpdates()");
 		if (mListener == null) {
 			mListener = listener;
 			requestUpdates();
@@ -76,7 +76,7 @@ public class AndroidGPS implements LocationListener {
 	 */
 	public void enableLocationUpdates(final LocationListener listener) {
 		if (Debug.DEBUG)
-			Log.d(SkyHook.TAG, "enableLocationUpdates()");
+			Log.d(TAG, "enableLocationUpdates()");
 		if (mLocationListener == null) {
 			mLocationListener = listener;
 			requestUpdates();

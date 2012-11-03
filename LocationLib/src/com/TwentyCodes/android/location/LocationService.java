@@ -5,8 +5,6 @@
  */
 package com.TwentyCodes.android.location;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -65,7 +63,6 @@ public class LocationService extends Service implements LocationListener {
 	}
 
 	private WakeLock mWakeLock;
-	protected long mPeriod = -1;
 	private Location mLocation;
 	private int mStartId;
 	private AndroidGPS mLocationManager;
@@ -153,8 +150,6 @@ public class LocationService extends Service implements LocationListener {
 		mLocationManager.disableLocationUpdates();
 		if (mWakeLock.isHeld())
 			mWakeLock.release();
-		if (mPeriod > -1)
-			registerwakeUp();
 	}
 
 	@Override
@@ -214,23 +209,8 @@ public class LocationService extends Service implements LocationListener {
 		} else {
 			mIntent = intent;
 	
-			if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES))
-				mPeriod = intent.getLongExtra(LocationLibraryConstants.INTENT_EXTRA_PERIOD_BETWEEN_UPDATES, LocationLibraryConstants.FAIL_SAFE_UPDATE_INVERVAL);
-	
 			if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY))
 				mRequiredAccuracy = intent.getIntExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY, LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY);
 		}
 	}
-
-	/**
-	 * registers this service to be waken up by android's alarm manager
-	 * 
-	 * @author ricky barrette
-	 */
-	private void registerwakeUp() {
-		Log.d(TAG, "registerwakeUp()");
-		final AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + mPeriod, PendingIntent.getService(this, REQUEST_CODE, mIntent, 0));
-	}
-
 }
