@@ -1,7 +1,21 @@
 /**
- * @author Twenty Codes, LLC
+ * LocationService.java
  * @author ricky barrette
  * @date Oct 28, 2010
+ * 
+ * Copyright 2012 Richard Barrette 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License
  */
 package com.TwentyCodes.android.location;
 
@@ -203,12 +217,12 @@ public class LocationService extends Service implements LocationListener {
 	 * @author ricky barrette
 	 */
 	private void parseIntent(final Intent intent) {
-		if(intent == null){
+		if (intent == null) {
 			this.stopSelf(mStartId);
 			Log.e(TAG, "LocationService intent was null, stopping selft: " + mStartId);
 		} else {
 			mIntent = intent;
-	
+
 			if (intent.hasExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY))
 				mRequiredAccuracy = intent.getIntExtra(LocationLibraryConstants.INTENT_EXTRA_REQUIRED_ACCURACY, LocationLibraryConstants.MINIMUM_REQUIRED_ACCURACY);
 		}
