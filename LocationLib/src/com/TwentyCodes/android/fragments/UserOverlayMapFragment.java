@@ -11,7 +11,7 @@ import com.TwentyCodes.android.location.LatLngListener;
 import com.TwentyCodes.android.location.MapView;
 import com.TwentyCodes.android.overlays.UserOverlay;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This is a MapFragment that maintains the UserOverlay
@@ -49,7 +49,7 @@ public class UserOverlayMapFragment extends MapFragment implements LatLngListene
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination() {
+	public LatLng getDestination() {
 		return mUserOverlay.getDestination();
 	}
 
@@ -57,7 +57,7 @@ public class UserOverlayMapFragment extends MapFragment implements LatLngListene
 	 * @return the users current location
 	 * @author ricky barrette
 	 */
-	public GeoPoint getUserLocation() {
+	public LatLng getUserLocation() {
 		return mUserOverlay.getUserLocation();
 	}
 
@@ -83,7 +83,7 @@ public class UserOverlayMapFragment extends MapFragment implements LatLngListene
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(final GeoPoint point, final int accuracy) {
+	public void onLocationChanged(final LatLng point, final int accuracy) {
 		if (mLatLngListener != null)
 			mLatLngListener.onLocationChanged(point, accuracy);
 	}
@@ -161,7 +161,7 @@ public class UserOverlayMapFragment extends MapFragment implements LatLngListene
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination) {
+	public void setDestination(final LatLng destination) {
 		mUserOverlay.setDestination(destination);
 	}
 
