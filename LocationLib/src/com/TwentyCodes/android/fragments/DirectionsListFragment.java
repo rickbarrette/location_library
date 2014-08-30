@@ -6,15 +6,14 @@
  */
 package com.TwentyCodes.android.fragments;
 
-import java.util.ArrayList;
-
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.TwentyCodes.android.overlays.DirectionsOverlay;
 import com.google.android.maps.GeoPoint;
+import android.app.ListFragment;
+
+import java.util.ArrayList;
 
 /**
  * This fragment will be used to display directions to the user. When a specific
@@ -91,7 +90,6 @@ public class DirectionsListFragment extends ListFragment {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
 	public void onStart() {
@@ -111,7 +109,7 @@ public class DirectionsListFragment extends ListFragment {
 	}
 
 	/**
-	 * Sets the text to be displayed while the list is empty
+	 * Sets the text to be displayed while the list is .gitkeep
 	 * 
 	 * @param text
 	 * @author ricky barrette

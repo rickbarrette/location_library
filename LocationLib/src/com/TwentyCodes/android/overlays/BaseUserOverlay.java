@@ -20,7 +20,7 @@ import android.util.Log;
 
 import com.TwentyCodes.android.debug.Debug;
 import com.TwentyCodes.android.location.CompassSensor.CompassListener;
-import com.TwentyCodes.android.location.GeoPointLocationListener;
+import com.TwentyCodes.android.location.LatLngListener;
 import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
 import com.google.android.maps.GeoPoint;
@@ -33,7 +33,7 @@ import com.google.android.maps.Projection;
  * 
  * @author ricky barrette
  */
-public abstract class BaseUserOverlay extends Overlay implements GeoPointLocationListener, CompassListener {
+public abstract class BaseUserOverlay extends Overlay implements LatLngListener, CompassListener {
 
 	/**
 	 * This thread is responsible for animating the user icon
@@ -114,7 +114,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	private final Context mContext;
 	private final MapView mMapView;
 	private boolean isFistFix = true;
-	private GeoPointLocationListener mListener;
+	private LatLngListener mListener;
 	public boolean isFollowingUser = true;
 	private final CompasOverlay mCompass;
 	private boolean isCompassEnabled;
@@ -441,7 +441,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @param listener
 	 * @author Ricky Barrette
 	 */
-	public void registerListener(final GeoPointLocationListener listener) {
+	public void registerListener(final LatLngListener listener) {
 		Log.d(TAG, "registerListener()");
 		if (mListener == null)
 			mListener = listener;

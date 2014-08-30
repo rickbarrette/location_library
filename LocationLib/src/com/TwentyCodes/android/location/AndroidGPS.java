@@ -13,9 +13,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.TwentyCodes.android.debug.Debug;
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This class will be used for gathering location using android's location
@@ -27,7 +26,7 @@ public class AndroidGPS implements LocationListener {
 
 	private static final String TAG = "AndroidGPS";
 	private final LocationManager mLocationManager;
-	private GeoPointLocationListener mListener;
+	private LatLngListener mListener;
 	private LocationListener mLocationListener;
 	private boolean isFirstFix;
 
@@ -59,7 +58,7 @@ public class AndroidGPS implements LocationListener {
 	 * 
 	 * @author ricky barrette
 	 */
-	public void enableLocationUpdates(final GeoPointLocationListener listener) {
+	public void enableLocationUpdates(final LatLngListener listener) {
 		if (Debug.DEBUG)
 			Log.d(TAG, "enableLocationUpdates()");
 		if (mListener == null) {
@@ -93,7 +92,7 @@ public class AndroidGPS implements LocationListener {
 	@Override
 	public void onLocationChanged(final Location location) {
 		if (mListener != null) {
-			mListener.onLocationChanged(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), (int) location.getAccuracy());
+			mListener.onLocationChanged(new LatLng(location.getLatitude(), location.getLongitude()), (int) location.getAccuracy());
 			mListener.onFirstFix(isFirstFix);
 		}
 
