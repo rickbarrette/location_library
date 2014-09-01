@@ -13,7 +13,7 @@
         android:id="@+id/mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:apiKey="0rKmsWMM0D-LWOndcfwrmW-S0OXlnQl2SJCMeTg" />
+        android:apiKey="0rKmsWMM0D-IRAEgcSZEqwZCs_8AUwxjYjj0bnA" />
 
     <ProgressBar
         android:id="@+id/mapProgressBar"

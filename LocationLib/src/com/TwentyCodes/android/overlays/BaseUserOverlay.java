@@ -20,33 +20,24 @@
 package com.TwentyCodes.android.overlays;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.graphics.Paint.Style;
-import android.graphics.Point;
-import android.graphics.RectF;
 import android.util.Log;
-
 import com.TwentyCodes.android.debug.Debug;
 import com.TwentyCodes.android.location.CompassSensor.CompassListener;
-import com.TwentyCodes.android.location.GeoPointLocationListener;
-import com.TwentyCodes.android.location.GeoUtils;
+import com.TwentyCodes.android.location.LatLngListener;
 import com.TwentyCodes.android.location.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.Projection;
 
 /**
  * This class will be used to build user overlays
  * 
  * @author ricky barrette
  */
-public abstract class BaseUserOverlay extends Overlay implements GeoPointLocationListener, CompassListener {
+public abstract class BaseUserOverlay extends Overlay implements LatLngListener, CompassListener {
 
 	/**
 	 * This thread is responsible for animating the user icon
@@ -123,11 +114,11 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	private AnimationThread mAnimationThread;
 	private float mBearing = 0;
 	private int mAccuracy;
-	private GeoPoint mPoint;
+	private LatLng mPoint;
 	private final Context mContext;
 	private final MapView mMapView;
 	private boolean isFistFix = true;
-	private GeoPointLocationListener mListener;
+	private LatLngListener mListener;
 	public boolean isFollowingUser = true;
 	private final CompasOverlay mCompass;
 	private boolean isCompassEnabled;
@@ -200,22 +191,22 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 */
 	@Override
 	public void draw(Canvas canvas, final MapView mapView, final boolean shadow) {
-		if (isEnabled && mPoint != null) {
-			final Point center = new Point();
-			final Point left = new Point();
-			final Projection projection = mapView.getProjection();
-			final GeoPoint leftGeo = GeoUtils.distanceFrom(mPoint, mAccuracy);
-			projection.toPixels(leftGeo, left);
-			projection.toPixels(mPoint, center);
-			canvas = drawAccuracyCircle(center, left, canvas);
-			canvas = drawUser(center, mBearing, canvas);
-			/*
-			 * the following log is used to demonstrate if the leftGeo point is
-			 * the correct
-			 */
-			if (Debug.DEBUG)
-				Log.d(TAG, GeoUtils.distanceKm(mPoint, leftGeo) * 1000 + "m");
-		}
+//		if (isEnabled && mPoint != null) {
+//			final Point center = new Point();
+//			final Point left = new Point();
+//			final Projection projection = mapView.getProjection();
+//			final LatLng leftGeo = GeoUtils.distanceFrom(mPoint, mAccuracy);
+//			projection.toPixels(leftGeo, left);
+//			projection.toPixels(mPoint, center);
+//			canvas = drawAccuracyCircle(center, left, canvas);
+//			canvas = drawUser(center, mBearing, canvas);
+//			/*
+//			 * the following log is used to demonstrate if the leftGeo point is
+//			 * the correct
+//			 */
+//			if (Debug.DEBUG)
+//				Log.d(TAG, GeoUtils.distanceKm(mPoint, leftGeo) * 1000 + "m");
+//		}
 		super.draw(canvas, mapView, shadow);
 	}
 
@@ -339,7 +330,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination() {
+	public LatLng getDestination() {
 		return mCompass.getDestination();
 	}
 
@@ -359,7 +350,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @return
 	 * @author ricky barrette
 	 */
-	public GeoPoint getUserLocation() {
+	public LatLng getUserLocation() {
 		return mPoint;
 	}
 
@@ -375,14 +366,12 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * called when the SkyHook location changes, this mthod is resposiable for
 	 * updating the overlay location and accuracy circle. (non-Javadoc)
 	 * 
-	 * @see com.TwentyCodes.android.SkyHook.GeoPointLocationListener.location.LocationListener#onLocationChanged(com.google.android.maps.GeoPoint,
-	 *      float)
 	 * @param point
 	 * @param accuracy
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(final GeoPoint point, final int accuracy) {
+	public void onLocationChanged(final LatLng point, final int accuracy) {
 
 		if (mCompass != null)
 			mCompass.setLocation(point);
@@ -391,13 +380,13 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 		 * if this is the first fix set map center the users location, and zoom
 		 * to the max zoom level
 		 */
-		if (point != null && isFistFix) {
-			mMapView.getController().setCenter(point);
-			mMapView.getController().setZoom(mMapView.getMaxZoomLevel() - 2);
-			if (mListener != null)
-				mListener.onFirstFix(true);
-			isFistFix = false;
-		}
+//		if (point != null && isFistFix) {
+//			mMapView.getController().setCenter(point);
+//			mMapView.getController().setZoom(mMapView.getMaxZoomLevel() - 2);
+//			if (mListener != null)
+//				mListener.onFirstFix(true);
+//			isFistFix = false;
+//		}
 
 		// update the users point, and accuracy for the UI
 		mPoint = point;
@@ -406,8 +395,8 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 		if (mListener != null)
 			mListener.onLocationChanged(point, accuracy);
 
-		if (isFollowingUser)
-			panToUserIfOffMap(point);
+//		if (isFollowingUser)
+//			panToUserIfOffMap(point);
 	}
 
 	/**
@@ -433,19 +422,19 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 */
 	private void panToUserIfOffMap(final GeoPoint user) {
 		final GeoPoint center = mMapView.getMapCenter();
-		final double distance = GeoUtils.distanceKm(center, user);
-		final double distanceLat = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6() + mMapView.getLatitudeSpan() / 2, center.getLongitudeE6()));
-		final double distanceLon = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6(), center.getLongitudeE6() + mMapView.getLongitudeSpan() / 2));
-
-		final double whichIsGreater = distanceLat > distanceLon ? distanceLat : distanceLon;
-
-		/**
-		 * if the user is one the map, keep them their else don't pan to user
-		 * unless they pan pack to them
-		 */
-		if (!(distance > whichIsGreater))
-			if (distance > distanceLat || distance > distanceLon)
-				mMapView.getController().animateTo(user);
+//		final double distance = GeoUtils.distanceKm(center, user);
+//		final double distanceLat = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6() + mMapView.getLatitudeSpan() / 2, center.getLongitudeE6()));
+//		final double distanceLon = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6(), center.getLongitudeE6() + mMapView.getLongitudeSpan() / 2));
+//
+//		final double whichIsGreater = distanceLat > distanceLon ? distanceLat : distanceLon;
+//
+//		/**
+//		 * if the user is one the map, keep them their else don't pan to user
+//		 * unless they pan pack to them
+//		 */
+//		if (!(distance > whichIsGreater))
+//			if (distance > distanceLat || distance > distanceLon)
+//				mMapView.getController().animateTo(user);
 	}
 
 	/**
@@ -454,7 +443,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * @param listener
 	 * @author Ricky Barrette
 	 */
-	public void registerListener(final GeoPointLocationListener listener) {
+	public void registerListener(final LatLngListener listener) {
 		Log.d(TAG, "registerListener()");
 		if (mListener == null)
 			mListener = listener;
@@ -488,7 +477,7 @@ public abstract class BaseUserOverlay extends Overlay implements GeoPointLocatio
 	 * 
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination) {
+	public void setDestination(final LatLng destination) {
 		if (mCompass != null)
 			mCompass.setDestination(destination);
 	}

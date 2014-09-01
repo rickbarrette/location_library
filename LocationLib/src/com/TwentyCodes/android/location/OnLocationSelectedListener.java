@@ -19,7 +19,7 @@
  */
 package com.TwentyCodes.android.location;
 
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This interface will be used to pass the selected location from the dialogs to
@@ -29,5 +29,5 @@ import com.google.android.maps.GeoPoint;
  */
 public interface OnLocationSelectedListener {
 
-	public void onLocationSelected(GeoPoint point);
+	public void onLocationSelected(LatLng point);
 }

@@ -20,10 +20,11 @@
 package com.TwentyCodes.android.fragments;
 
 import com.TwentyCodes.android.location.CompassSensor.CompassListener;
-import com.TwentyCodes.android.location.GeoPointLocationListener;
+import com.TwentyCodes.android.location.LatLngListener;
 import com.TwentyCodes.android.location.MapView;
 import com.TwentyCodes.android.overlays.UserOverlay;
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This is a MapFragment that maintains the UserOverlay
@@ -32,10 +33,10 @@ import com.google.android.maps.GeoPoint;
  * 
  * @author ricky barrette
  */
-public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointLocationListener, CompassListener {
+public class UserOverlayMapFragment extends MapFragment implements LatLngListener, CompassListener {
 
 	private UserOverlay mUserOverlay;
-	private GeoPointLocationListener mGeoPointLocationListener;
+	private LatLngListener mLatLngListener;
 	private CompassListener mCompassListener;
 
 	/**
@@ -61,7 +62,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination() {
+	public LatLng getDestination() {
 		return mUserOverlay.getDestination();
 	}
 
@@ -69,14 +70,13 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @return the users current location
 	 * @author ricky barrette
 	 */
-	public GeoPoint getUserLocation() {
+	public LatLng getUserLocation() {
 		return mUserOverlay.getUserLocation();
 	}
 
 	/**
 	 * Called when the compass is updated (non-Javadoc)
-	 * 
-	 * @see com.TwentyCodes.android.location.CompassListener#onCompassUpdate(float)
+	 *
 	 */
 	@Override
 	public void onCompassUpdate(final float bearing) {
@@ -86,8 +86,8 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 
 	@Override
 	public void onFirstFix(final boolean isFistFix) {
-		if (mGeoPointLocationListener != null)
-			mGeoPointLocationListener.onFirstFix(isFistFix);
+		if (mLatLngListener != null)
+			mLatLngListener.onFirstFix(isFistFix);
 	}
 
 	/**
@@ -96,17 +96,15 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @author ricky barrette
 	 */
 	@Override
-	public void onLocationChanged(final GeoPoint point, final int accuracy) {
-		if (mGeoPointLocationListener != null)
-			mGeoPointLocationListener.onLocationChanged(point, accuracy);
+	public void onLocationChanged(final LatLng point, final int accuracy) {
+		if (mLatLngListener != null)
+			mLatLngListener.onLocationChanged(point, accuracy);
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onMapViewCreate(com.TwentyCodes.android.location.MapView)
 	 */
-	@Override
 	public void onMapViewCreate(final MapView map) {
 		mUserOverlay = new UserOverlay(map, getActivity().getApplicationContext());
 		mUserOverlay.registerListener(this);
@@ -120,26 +118,24 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onPause()
 	 */
 	@Override
 	public void onPause() {
 		super.onPause();
 		mUserOverlay.disableMyLocation();
-		removeOverlay(mUserOverlay);
+//		removeOverlay(mUserOverlay);
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.TwentyCodes.android.fragments.BaseMapFragment#onResume()
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 		if (mUserOverlay != null) {
 			mUserOverlay.enableMyLocation();
-			addOverlay(mUserOverlay);
+//			addOverlay(mUserOverlay);
 		}
 	}
 
@@ -148,10 +144,10 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * 
 	 * @author ricky barrette
 	 */
-	public void reorderOverlays() {
-		getMap().getOverlays().remove(mUserOverlay);
-		getMap().getOverlays().add(mUserOverlay);
-	}
+//	public void reorderOverlays() {
+//		getMap().getOverlays().remove(mUserOverlay);
+//		getMap().getOverlays().add(mUserOverlay);
+//	}
 
 	/**
 	 * @param needleResId
@@ -178,7 +174,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination) {
+	public void setDestination(final LatLng destination) {
 		mUserOverlay.setDestination(destination);
 	}
 
@@ -186,7 +182,7 @@ public class UserOverlayMapFragment extends BaseMapFragment implements GeoPointL
 	 * @param listener
 	 * @author ricky barrette
 	 */
-	public void setGeoPointLocationListener(final GeoPointLocationListener listener) {
-		mGeoPointLocationListener = listener;
+	public void setGeoPointLocationListener(final LatLngListener listener) {
+		mLatLngListener = listener;
 	}
 }

@@ -21,18 +21,13 @@ package com.TwentyCodes.android.overlays;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Point;
+import android.graphics.*;
 import android.util.TypedValue;
-
 import com.TwentyCodes.android.location.CompassSensor;
 import com.TwentyCodes.android.location.CompassSensor.CompassListener;
 import com.TwentyCodes.android.location.GeoUtils;
 import com.TwentyCodes.android.location.R;
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
@@ -46,8 +41,8 @@ public class CompasOverlay extends Overlay implements CompassListener {
 
 	private float mBearing;
 	private final Context mContext;
-	private GeoPoint mDestination;
-	private GeoPoint mLocation;
+	private LatLng mDestination;
+	private LatLng mLocation;
 	private boolean isEnabled;
 	private final CompassSensor mCompassSensor;
 	private int mNeedleResId = R.drawable.needle_sm;
@@ -75,7 +70,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public CompasOverlay(final Context context, final GeoPoint destination) {
+	public CompasOverlay(final Context context, final LatLng destination) {
 		this(context);
 		mDestination = destination;
 	}
@@ -93,7 +88,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 *            dip
 	 * @author ricky barrette
 	 */
-	public CompasOverlay(final Context context, final GeoPoint destination, final int needleResId, final int backgroundResId, final int x, final int y) {
+	public CompasOverlay(final Context context, final LatLng destination, final int needleResId, final int backgroundResId, final int x, final int y) {
 		this(context, destination);
 		mX = convertDipToPx(x);
 		mY = convertDipToPx(y);
@@ -118,7 +113,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	/**
 	 * Converts dip to px
 	 * 
-	 * @param dip
+	 * @param i DIP
 	 * @return px
 	 * @author ricky barrette
 	 */
@@ -204,7 +199,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @return return the current destination
 	 * @author ricky barrette
 	 */
-	public GeoPoint getDestination() {
+	public LatLng getDestination() {
 		return mDestination;
 	}
 
@@ -212,7 +207,6 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * Called from the compass Sensor to update the current bearing
 	 * (non-Javadoc)
 	 * 
-	 * @see com.TwentyCodes.android.location.CompassListener#onCompassUpdate(float)
 	 * @author ricky barrette
 	 */
 	@Override
@@ -230,7 +224,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param destination
 	 * @author ricky barrette
 	 */
-	public void setDestination(final GeoPoint destination) {
+	public void setDestination(final LatLng destination) {
 		mDestination = destination;
 	}
 
@@ -254,7 +248,7 @@ public class CompasOverlay extends Overlay implements CompassListener {
 	 * @param location
 	 * @author ricky barrette
 	 */
-	public void setLocation(final GeoPoint location) {
+	public void setLocation(final LatLng location) {
 		mLocation = location;
 	}
 

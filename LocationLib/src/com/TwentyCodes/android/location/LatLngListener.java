@@ -19,15 +19,15 @@
  */
 package com.TwentyCodes.android.location;
 
-import com.google.android.maps.GeoPoint;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
- * this interface will be used to interface with skyhook sdk with the rest of
+ * this interface will be used to interface with the GPS sdk with the rest of
  * the application
  * 
  * @author ricky barrette
  */
-public interface GeoPointLocationListener {
+public interface LatLngListener {
 
 	/**
 	 * Called when first fix is aquired
@@ -44,5 +44,5 @@ public interface GeoPointLocationListener {
 	 * @param accuracy
 	 * @author ricky barrette
 	 */
-	public void onLocationChanged(GeoPoint point, int accuracy);
+	public void onLocationChanged(LatLng point, int accuracy);
 }

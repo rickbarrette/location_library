@@ -21,14 +21,9 @@
  */
 package com.TwentyCodes.android.location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.graphics.Point;
-
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 
 /**
  * This class contains common tools for computing common geological problems
@@ -71,18 +66,14 @@ public class GeoUtils {
 	 * degrees East of true north
 	 * 
 	 * @param p1
-	 *            source geopoint
+	 *            source LatLng
 	 * @param p2
-	 *            destination geopoint
+	 *            destination LatLng
 	 * @return the bearing of p2 in relationship from p1 in degrees East
 	 * @author Google Inc.
 	 */
-	public static Double bearing(final GeoPoint p1, final GeoPoint p2) {
-		final double lat1 = p1.getLatitudeE6() / MILLION;
-		final double lon1 = p1.getLongitudeE6() / MILLION;
-		final double lat2 = p2.getLatitudeE6() / MILLION;
-		final double lon2 = p2.getLongitudeE6() / MILLION;
-		return bearing(lat1, lon1, lat2, lon2);
+	public static Double bearing(final LatLng p1, final LatLng p2) {
+		return bearing(p1.latitude, p1.longitude, p2.latitude, p2.longitude);
 	}
 
 	/**
@@ -100,7 +91,7 @@ public class GeoUtils {
 	 * @return Degrees East of dest location
 	 * @author ricky barrette
 	 */
-	public static float calculateBearing(final GeoPoint user, final GeoPoint dest, float bearing) {
+	public static float calculateBearing(final LatLng user, final LatLng dest, float bearing) {
 
 		if (user == null || dest == null)
 			return bearing;
@@ -116,24 +107,24 @@ public class GeoUtils {
 	}
 
 	/**
-	 * Calculates a geopoint x meters away of the geopoint supplied. The new
-	 * geopoint shares the same latitude as geopoint point, this way they are on
+	 * Calculates a LatLng x meters away of the LatLng supplied. The new
+	 * LatLng shares the same latitude as LatLng point, this way they are on
 	 * the same latitude arc.
 	 * 
 	 * @param point
-	 *            central geopoint
+	 *            central LatLng
 	 * @param distance
-	 *            in meters from the geopoint
-	 * @return geopoint that is x meters away from the geopoint supplied
+	 *            in meters from the LatLng
+	 * @return LatLng that is x meters away from the LatLng supplied
 	 * @author ricky barrette
 	 */
-	public static GeoPoint distanceFrom(final GeoPoint point, double distance) {
+	public static LatLng distanceFrom(final LatLng point, double distance) {
 		// convert meters into kilometers
 		distance = distance / 1000;
 
-		// convert lat and lon of geopoint to radians
-		final double lat1Rad = Math.toRadians(point.getLatitudeE6() / 1e6);
-		final double lon1Rad = Math.toRadians(point.getLongitudeE6() / 1e6);
+		// convert lat and lon of LatLng to radians
+		final double lat1Rad = Math.toRadians(point.latitude);
+		final double lon1Rad = Math.toRadians(point.longitude);
 
 		/*
 		 * kilometers =
@@ -149,7 +140,7 @@ public class GeoUtils {
 		 * NOTE: sec(x) = 1/cos(x)
 		 * 
 		 * NOTE: that lat2Rad is = lat1Rad because we want to keep the new
-		 * geopoint on the same lat arc therefore i saw no need to create a new
+		 * LatLng on the same lat arc therefore i saw no need to create a new
 		 * variable for lat2Rad, and simply inputed lat1Rad in place of lat2Rad
 		 * in the equation
 		 * 
@@ -159,8 +150,8 @@ public class GeoUtils {
 		 */
 		final double lon2Rad = lon1Rad + Math.acos(Math.cos(distance / 6371) * (1 / Math.cos(lat1Rad)) * (1 / Math.cos(lat1Rad)) - Math.tan(lat1Rad) * Math.tan(lat1Rad));
 
-		// return a geopoint that is x meters away from the geopoint supplied
-		return new GeoPoint(point.getLatitudeE6(), (int) (Math.toDegrees(lon2Rad) * 1e6));
+		// return a LatLng that is x meters away from the LatLng supplied
+		return new LatLng(point.latitude, (int) (Math.toDegrees(lon2Rad) * 1e6));
 	}
 
 	/**
@@ -194,16 +185,12 @@ public class GeoUtils {
 	 * @return the distance between to p1 and p2
 	 * @author Google Inc.
 	 */
-	public static double distanceKm(final GeoPoint p1, final GeoPoint p2) {
+	public static double distanceKm(final LatLng p1, final LatLng p2) {
 		// if we are handed a null, return -1 so we don't break
 		if (p1 == null || p2 == null)
 			return -1;
 
-		final double lat1 = p1.getLatitudeE6() / MILLION;
-		final double lon1 = p1.getLongitudeE6() / MILLION;
-		final double lat2 = p2.getLatitudeE6() / MILLION;
-		final double lon2 = p2.getLongitudeE6() / MILLION;
-		return distanceKm(lat1, lon1, lat2, lon2);
+		return distanceKm(p1.latitude, p1.longitude, p2.latitude, p2.longitude);
 	}
 
 	/**
@@ -254,71 +241,80 @@ public class GeoUtils {
 	 * @return true if the circles intersect
 	 * @author ricky barrette
 	 */
-	public static boolean isIntersecting(final GeoPoint userPoint, final float accuracyRadius, final GeoPoint locationPoint, final float locationRadius,
+	public static boolean isIntersecting(final LatLng userPoint, final float accuracyRadius, final LatLng locationPoint, final float locationRadius,
 			final float fudgeFactor) {
 		if (accuracyRadius + locationRadius - fudgeFactor > distanceKm(locationPoint, userPoint))
 			return true;
 		return false;
 	}
 
-	/**
-	 * determines when the specified point is off the map
-	 * 
-	 * @param point
-	 * @return true is the point is off the map
-	 * @author ricky barrette
-	 */
-	public static boolean isPointOffMap(final MapView map, final GeoPoint point) {
-		if (map == null)
-			return false;
-		if (point == null)
-			return false;
-		final GeoPoint center = map.getMapCenter();
-		final double distance = GeoUtils.distanceKm(center, point);
-		final double distanceLat = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6() + map.getLatitudeSpan() / 2, center.getLongitudeE6()));
-		final double distanceLon = GeoUtils.distanceKm(center, new GeoPoint(center.getLatitudeE6(), center.getLongitudeE6() + map.getLongitudeSpan() / 2));
-		if (distance > distanceLat || distance > distanceLon)
-			return true;
-		return false;
-	}
-
-	/**
-	 * computes a geopoint the is the central geopoint between p1 and p1
-	 * 
-	 * @param p1
-	 *            first geopoint
-	 * @param p2
-	 *            second geopoint
-	 * @return a MidPoint object
-	 * @author ricky barrette
-	 */
-	public static MidPoint midPoint(final GeoPoint p1, final GeoPoint p2) {
-		int minLatitude = (int) (+81 * 1E6);
-		int maxLatitude = (int) (-81 * 1E6);
-		int minLongitude = (int) (+181 * 1E6);
-		int maxLongitude = (int) (-181 * 1E6);
-		final List<Point> mPoints = new ArrayList<Point>();
-		int latitude = p1.getLatitudeE6();
-		int longitude = p1.getLongitudeE6();
-		if (latitude != 0 && longitude != 0) {
-			minLatitude = minLatitude > latitude ? latitude : minLatitude;
-			maxLatitude = maxLatitude < latitude ? latitude : maxLatitude;
-			minLongitude = minLongitude > longitude ? longitude : minLongitude;
-			maxLongitude = maxLongitude < longitude ? longitude : maxLongitude;
-			mPoints.add(new Point(latitude, longitude));
-		}
-
-		latitude = p2.getLatitudeE6();
-		longitude = p2.getLongitudeE6();
-		if (latitude != 0 && longitude != 0) {
-			minLatitude = minLatitude > latitude ? latitude : minLatitude;
-			maxLatitude = maxLatitude < latitude ? latitude : maxLatitude;
-			minLongitude = minLongitude > longitude ? longitude : minLongitude;
-			maxLongitude = maxLongitude < longitude ? longitude : maxLongitude;
-			mPoints.add(new Point(latitude, longitude));
-		}
-		return new MidPoint(new GeoPoint((maxLatitude + minLatitude) / 2, (maxLongitude + minLongitude) / 2), minLatitude, minLongitude, maxLatitude, maxLongitude);
-	}
+//	/**
+//	 * determines when the specified point is off the map
+//	 *
+//	 * @param point
+//	 * @return true is the point is off the map
+//	 * @author ricky barrette
+//	 */
+//	public static boolean isPointOffMap(final GoogleMap map, final LatLng point) {
+//
+//		VisibleRegion vr = map.getProjection().getVisibleRegion();
+//		double left = vr.latLngBounds.southwest.longitude;
+//		double top = vr.latLngBounds.northeast.latitude;
+//		double right = vr.latLngBounds.northeast.longitude;
+//		double bottom = vr.latLngBounds.southwest.latitude;
+//
+//		if (map == null)
+//			return false;
+//		if (point == null)
+//			return false;
+//		final LatLng center = map.getCameraPosition().target;
+//		final double distance = GeoUtils.distanceKm(center, point);
+//		final double distanceLat = GeoUtils.distanceKm(center, new LatLng(center.latitude + map.getLatitudeSpan() / 2, center.longitude));
+//		final double distanceLon = GeoUtils.distanceKm(center, new LatLng(center.latitude, center.longitude + map.getLongitudeSpan() / 2));
+//		if (distance > distanceLat || distance > distanceLon)
+//			return true;
+//		return false;
+//
+//		return map.getProjection().toScreenLocation()
+//	}
+//
+//	/**
+//	 * computes a LatLng the is the central LatLng between p1 and p1
+//	 *
+//	 * @param p1
+//	 *            first LatLng
+//	 * @param p2
+//	 *            second LatLng
+//	 * @return a MidPoint object
+//	 * @author ricky barrette
+//	 */
+//	public static MidPoint midpoint(final LatLng p1, final LatLng p2) {
+////		double minLatitude = +81 * 1E6;
+////		double maxLatitude = -81 * 1E6;
+////		double minLongitude = +181 * 1E6;
+////		double maxLongitude = -181 * 1E6;
+////		final List<Point> mPoints = new ArrayList<Point>();
+////		if (p1.latitude != 0 && p1.longitude != 0) {
+////			minLatitude = minLatitude > p1.latitude ? p1.latitude : minLatitude;
+////			maxLatitude = maxLatitude < p1.latitude ? p1.latitude : maxLatitude;
+////			minLongitude = minLongitude > p1.longitude ? p1.longitude : minLongitude;
+////			maxLongitude = maxLongitude < p1.longitude ? p1.longitude : maxLongitude;
+////			mPoints.add(new Point(p1.latitude, p1.longitude));
+////		}
+////
+////		if (p2.latitude != 0 && p2.longitude != 0) {
+////			minLatitude = minLatitude > p2.latitude ? p2.latitude : minLatitude;
+////			maxLatitude = maxLatitude < p2.latitude ? p2.latitude : maxLatitude;
+////			minLongitude = minLongitude > p2.longitude ? p2.longitude : minLongitude;
+////			maxLongitude = maxLongitude < p2.longitude ? p2.longitude : maxLongitude;
+////			mPoints.add(new Point(p2.latitude, p2.longitude));
+////		}
+////		return new MidPoint(new LatLng((maxLatitude + minLatitude) / 2, (maxLongitude + minLongitude) / 2), minLatitude, minLongitude, maxLatitude, maxLongitude);
+//		LatLngBounds.Builder latLngBounds = new LatLngBounds.Builder();
+//		latLngBounds.include(p1);
+//		latLngBounds.include(p2);
+//		return new MidPoint(latLngBounds.build().getCenter()
+//	}
 
 	/**
 	 * converts radians to bearing
