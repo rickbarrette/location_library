@@ -60,7 +60,7 @@ public class ReverseGeocoder {
 	 * @author ricky barrette
 	 */
 	public static JSONArray addressSearch(final String address) throws IOException, JSONException {
-		String urlStr = "http://maps.google.com/maps/geo?q=" + address + "&output=json&sensor=false";
+		String urlStr = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
 		urlStr = urlStr.replace(' ', '+');
 		final StringBuffer response = new StringBuffer();
 		final HttpClient client = new DefaultHttpClient();
@@ -79,7 +79,7 @@ public class ReverseGeocoder {
 		if (Debug.DEBUG)
 			Log.d(TAG, response.toString());
 
-		return new JSONObject(response.toString()).getJSONArray("Placemark");
+		return new JSONObject(response.toString()).getJSONArray("results");
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class ReverseGeocoder {
 
 		JSONArray responseArray = null;
 		try {
-			responseArray = new JSONObject(response.toString()).getJSONArray("Placemark");
+			responseArray = new JSONObject(response.toString()).getJSONArray("results");
 		} catch (final JSONException e) {
 			return location.getLatitude() + ", " + location.getLongitude() + " +/- " + location.getAccuracy() + "m";
 		}
