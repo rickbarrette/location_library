@@ -102,7 +102,8 @@ public class LocationService extends Service implements LocationListener {
 	 * @author ricky barrette
 	 */
 	private void broadcastLocation() {
-		Log.d(TAG, "broadcastLocation()");
+		if(Debug.DEBUG)
+			Log.d(TAG, "broadcastLocation()");
 		if (mLocation != null) {
 			final Intent locationUpdate = new Intent();
 			if (mIntent.getAction() != null)
