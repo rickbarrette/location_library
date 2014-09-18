@@ -133,9 +133,7 @@ public class GeoUtils {
 		 * 
 		 * we are solving this equation for lon2Rad
 		 * 
-		 * lon2Rad =
-		 * lon1Rad+acos(cos(meters/6371)sec(lat1Rad)sec(lat2Rad)-tan(lat1Rad
-		 * )tan(lat2Rad))
+		 * lon2Rad = lon1Rad+acos(cos(meters/6371)sec(lat1Rad)sec(lat2Rad)-tan(lat1Rad)tan(lat2Rad))
 		 * 
 		 * NOTE: sec(x) = 1/cos(x)
 		 * 
@@ -148,10 +146,35 @@ public class GeoUtils {
 		 * device, and the distanceKm() from google and has been proven to be
 		 * damn close
 		 */
-		final double lon2Rad = lon1Rad + Math.acos(Math.cos(distance / 6371) * (1 / Math.cos(lat1Rad)) * (1 / Math.cos(lat1Rad)) - Math.tan(lat1Rad) * Math.tan(lat1Rad));
+		final double lon2Rad = lon1Rad + Math.acos(Math.cos(distance / 6371) * sec(lat1Rad) * sec(lat1Rad) - Math.tan(lat1Rad) * Math.tan(lat1Rad));
 
 		// return a LatLng that is x meters away from the LatLng supplied
-		return new LatLng(point.latitude, (int) (Math.toDegrees(lon2Rad) * 1e6));
+		return new LatLng(point.latitude, Math.toDegrees(lon2Rad));
+	}
+
+	public static LatLng distanceFrom(final LatLng point, final double distance, final float bearing) {
+		final double dist = distance / 6371;
+		final double brng = Math.toRadians(bearing);
+
+		final double lat1 = Math.toRadians(point.latitude);
+		final double lon1 = Math.toRadians(point.longitude);
+
+		final double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
+
+		final double lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
+
+//		if (isNaN(lat2) || isNaN(lon2))
+//			return null;
+		return new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2));
+	}
+
+	/**
+	 * compute secant
+	 * @param theta angle in radians
+	 * @return secant of theta.
+	 */
+	public static double sec ( double theta ){
+		return 1.0 / Math.cos( theta );
 	}
 
 	/**
